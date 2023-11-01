@@ -1,0 +1,49 @@
+import {useEffect, useRef, useState} from "react";
+import {currentJson, JsonNode, runtime} from "../../data";
+import RenderJsonNode from "./RenderJsonNode";
+import {checkJson} from "../../utils/createInitJson";
+
+/**
+ * 编辑区域面板
+ *
+ * At 2023/10/31
+ * By TangJiaHui
+ */
+export default function Editor () {
+  const dom = useRef<HTMLDivElement>(null);
+  const [json, setJson] = useState<JsonNode[]>([]);
+
+  function initJson () {
+    const localJsonStr: string = localStorage.getItem('json') || '[]';
+    const json: JsonNode[] = checkJson(JSON.parse(localJsonStr));
+    setJson(currentJson.setJson(json));
+  }
+
+  function initRuntime () {
+    runtime.editor.setJson = setJson;
+    runtime.editor.domRef = dom
+  }
+
+  useEffect(() => {
+    initJson();
+    initRuntime();
+  }, [])
+
+  return (
+    <div
+      ref={dom}
+      style={{width: '100%', height: '100%', background: 'white', position: 'relative'}}
+    >
+      {
+        json.map((jsonNode: JsonNode) => {
+          return (
+            <RenderJsonNode
+              key={jsonNode.id}
+              jsonNode={jsonNode}
+            />
+          )
+        })
+      }
+    </div>
+  )
+}
