@@ -6,7 +6,7 @@
  */
 import {currentJson, JsonNode} from "./currentJson";
 
-interface Runtime {
+interface CurrentPanels {
   // 编辑区域
   editor: {
     // 更新json
@@ -18,13 +18,13 @@ interface Runtime {
   }
 }
 
-export const runtime: Runtime = {
+export const currentPanels: CurrentPanels = {
   editor: {
     setJson: undefined,
     domRef: undefined,
     refreshJson (newJson?: JsonNode[]) {
       if (newJson) currentJson.setJson(newJson)
-      runtime.editor.setJson?.([...currentJson.getJson()]);
+      currentPanels.editor.setJson?.([...currentJson.getJson()]);
     }
   }
 }

@@ -4,7 +4,7 @@ import {
   Instance,
   JsonNode,
   RegisterComponent,
-  runtime
+  currentPanels
 } from "../../../data";
 import {useEffect, useMemo, useRef} from "react";
 import {createJsonNode, getComponentByCId} from "../../../utils";
@@ -44,7 +44,7 @@ export default function RenderJsonNode (props: IProps) {
       boxSizing: 'border-box',
       pointerEvents: 'none'
     },
-    getContainerFn: () => runtime.editor.domRef?.current,
+    getContainerFn: () => currentPanels.editor.domRef?.current,
     getChildFn: () => getTargetDomRef?.current?.()
   })
 
@@ -55,7 +55,7 @@ export default function RenderJsonNode (props: IProps) {
       boxSizing: 'border-box',
       pointerEvents: 'none'
     },
-    getContainerFn: () => runtime.editor.domRef?.current,
+    getContainerFn: () => currentPanels.editor.domRef?.current,
     getChildFn: () => getTargetDomRef?.current?.()
   })
 
@@ -74,7 +74,7 @@ export default function RenderJsonNode (props: IProps) {
         props.jsonNode.children = []
       }
       props?.jsonNode?.children?.push?.(jsonNode);
-      runtime.editor.refreshJson();
+      currentPanels.editor.refreshJson();
     }
   }
 

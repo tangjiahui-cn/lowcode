@@ -1,7 +1,7 @@
 import {Button, message, Space} from "antd";
 import {page} from "./style";
 import {RocketTwoTone} from "@ant-design/icons";
-import {currentJson, runtime} from "../../data";
+import {currentJson, currentPanels} from "../../data";
 import {createInitJson} from "../../utils/createInitJson";
 
 /**
@@ -13,7 +13,7 @@ import {createInitJson} from "../../utils/createInitJson";
 export default function Config () {
   function handleClear () {
     const INIT_JSON = createInitJson();
-    runtime?.editor?.setJson?.(currentJson.setJson(INIT_JSON));
+    currentPanels?.editor?.setJson?.(currentJson.setJson(INIT_JSON));
     localStorage.setItem('json', JSON.stringify(INIT_JSON))
     message.success('清空成功')
   }

@@ -1,6 +1,6 @@
 import * as React from "react";
 import {DomType, getChildDomRect} from "./getChildDomRect";
-import {runtime} from "../data";
+import {currentPanels} from "../data";
 import {css} from "class-css";
 import {throttle} from "lodash";
 
@@ -42,7 +42,7 @@ export function createWrapBox (
     if (mountDom) {
       return;
     }
-    const editorDom = runtime.editor.domRef?.current as HTMLDivElement;
+    const editorDom = currentPanels.editor.domRef?.current as HTMLDivElement;
     mountDom = document.createElement('div');
     mountDom.className = css({
       position: 'absolute',

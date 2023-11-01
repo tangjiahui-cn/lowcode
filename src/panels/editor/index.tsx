@@ -1,5 +1,5 @@
 import {useEffect, useRef, useState} from "react";
-import {currentJson, JsonNode, runtime} from "../../data";
+import {currentJson, JsonNode, currentPanels} from "../../data";
 import RenderJsonNode from "./RenderJsonNode";
 import {checkJson} from "../../utils/createInitJson";
 
@@ -19,14 +19,14 @@ export default function Editor () {
     setJson(currentJson.setJson(json));
   }
 
-  function initRuntime () {
-    runtime.editor.setJson = setJson;
-    runtime.editor.domRef = dom
+  function initCurrentPanels () {
+    currentPanels.editor.setJson = setJson;
+    currentPanels.editor.domRef = dom
   }
 
   useEffect(() => {
     initJson();
-    initRuntime();
+    initCurrentPanels();
   }, [])
 
   return (
