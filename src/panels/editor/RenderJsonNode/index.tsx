@@ -118,7 +118,7 @@ export default function RenderJsonNode (props: IProps) {
           e.preventDefault();
           e.stopPropagation();
           // 不能重复选中同一个元素
-          if (currentSelectedInstance.isSelect(instanceRef.current?.id)) {
+          if (currentSelectedInstance.isSelected(instanceRef.current?.id)) {
             return;
           }
           // 取消上一个选中元素

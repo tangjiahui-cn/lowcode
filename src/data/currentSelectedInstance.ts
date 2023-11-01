@@ -14,9 +14,9 @@ interface CurrentSelectedInstance {
   // 获取当前选中实例
   get: () => Instance | undefined;
   // 是否已经选中
-  isSelect: (id: string) => boolean;
+  isSelected: (id: string) => boolean;
   // 是否未选中
-  isNotSelect: (id: string) => boolean;
+  isNotSelected: (id: string) => boolean;
 }
 
 let ins: Instance | undefined;
@@ -30,10 +30,10 @@ export const currentSelectedInstance: CurrentSelectedInstance = {
   get () : Instance | undefined {
     return ins;
   },
-  isSelect (id: string) : boolean {
+  isSelected (id: string) : boolean {
     return ins?.id === id;
   },
-  isNotSelect (id: string): boolean {
+  isNotSelected (id: string): boolean {
     return ins?.id !== id;
   }
 }
