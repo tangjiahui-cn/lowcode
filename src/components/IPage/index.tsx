@@ -12,7 +12,8 @@ export default {
   defaultStyle: {
     position: 'relative',
     height: '100%',
-    width: '100%'
+    width: '100%',
+    overflowY: 'auto'
   },
   cType: 'sys',
 } as RegisterComponent;
