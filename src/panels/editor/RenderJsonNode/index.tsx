@@ -115,6 +115,8 @@ export default function RenderJsonNode (props: IProps) {
       }}
       events={{
         onPointerDown (e) {
+          e.preventDefault();
+          e.stopPropagation();
           // 不能重复选中同一个元素
           if (currentSelectedInstance.isSelect(instanceRef.current?.id)) {
             return;
@@ -125,8 +127,6 @@ export default function RenderJsonNode (props: IProps) {
           currentSelectedInstance.set(instanceRef.current);
           // 新的选中元素操作
           instanceRef.current.handleSelect();
-          e.preventDefault();
-          e.stopPropagation();
         },
         onPointerEnter () {
           // 旧的栈顶元素取消经过
@@ -146,10 +146,10 @@ export default function RenderJsonNode (props: IProps) {
           e.stopPropagation()
         },
         onDrop (e) {
+          e.stopPropagation()
           // 仅容器节点可以放置其他元素
           if (!props?.jsonNode?.isContainer) return;
           handleDrop(e);
-          e.stopPropagation()
         }
       }}
     >
