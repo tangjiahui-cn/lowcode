@@ -1,6 +1,6 @@
 import {Button, message, Space} from "antd";
 import {page} from "./style";
-import {RocketTwoTone} from "@ant-design/icons";
+import {GithubOutlined, RocketTwoTone} from "@ant-design/icons";
 import {currentJson, currentPanels} from "../../data";
 import {createInitJson} from "../../utils/createInitJson";
 
@@ -11,6 +11,10 @@ import {createInitJson} from "../../utils/createInitJson";
  * By TangJiaHui
  */
 export default function Config () {
+  function handleJumpGithub () {
+    window.open('https://github.com/tangjiahui-cn/lowcode-engine')
+  }
+
   function handleClear () {
     const INIT_JSON = createInitJson();
     currentPanels?.editor?.setJson?.(currentJson.setJson(INIT_JSON));
@@ -32,10 +36,19 @@ export default function Config () {
   return (
     <div className={page}>
       <Space style={{userSelect:'none'}}>
-        <RocketTwoTone style={{fontSize: 22}}/>
-        <b style={{fontSize: '1.25em'}}>低代码引擎</b>
+        <RocketTwoTone style={{fontSize: 24}}/>
+        <b style={{fontSize: '1.5em'}}>低代码引擎</b>
       </Space>
       <Space>
+        <GithubOutlined
+          onClick={handleJumpGithub}
+          style={{
+            fontSize: '1.25em',
+            verticalAlign: 'middle',
+            paddingRight: 10,
+            cursor: 'pointer'
+          }}
+        />
         <Button onClick={handleClear}>清空</Button>
         <Button onClick={handlePreview}>预览</Button>
         <Button onClick={handleSave} type={'primary'}>保存</Button>

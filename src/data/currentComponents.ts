@@ -1,11 +1,11 @@
-import * as React from "react";
-
 /**
  * 当前注册的组件库
  *
  * At 2023/10/31
  * By TangJiaHui
  */
+import * as React from "react";
+
 export type Base = {
   x: string;
   y: string;
@@ -13,11 +13,13 @@ export type Base = {
   h: string;
 }
 
+// 组件私有属性
 export type AttributesProps<T> = {
   attributes: T;
   onChange: (attributes: T) => void;
 }
 
+// 模板组件属性
 export type TemplateProps<Attributes, E = any> = {
   getDomFn: (fn: () => (E | null)) => void;
   // 属性
@@ -37,12 +39,15 @@ export type TemplateProps<Attributes, E = any> = {
   children?: React.ReactNode;
 }
 
+// 模板组件类型
 export type TemplateType = React.FunctionComponent<TemplateProps<any>>
 
+// 自定义组件类型
 export type RegisterComponent = {
   cId: string;  // 组件类型id
   name?: string; // 组件名称
   icon?: string; // 组件占位图标
+  isPage?: boolean; // 是否是页面组件（根组件唯一）
   isContainer?: boolean;  // 是否是容器类组件（可以嵌套children）
   template: TemplateType; // 组件模板
   attributeTemplate?: any; // 组件私有属性模板
@@ -54,7 +59,7 @@ export type RegisterComponent = {
   defaultBase?: Base; // 默认基础属性
 }
 
-interface currentComponents {
+interface CurrentComponents {
   // 添加一个组件
   add: (component: RegisterComponent) => void;
   // 移出一个组件
@@ -66,7 +71,7 @@ interface currentComponents {
 }
 
 const components: Map<string, RegisterComponent> = new Map();
-export const currentComponents: currentComponents = {
+export const currentComponents: CurrentComponents = {
   add (component: RegisterComponent) {
     components.set(component.cId, component);
   },

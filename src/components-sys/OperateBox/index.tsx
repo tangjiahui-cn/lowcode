@@ -7,6 +7,11 @@ import {btn} from './style'
  */
 
 interface IProps {
+  // 是否显示按钮
+  show?: {
+    showSelectParent?: boolean;
+    showDelete?: boolean;
+  };
   // 选中父级组件
   onSelectParent?: () => void;
   // 点击删除
@@ -14,18 +19,23 @@ interface IProps {
 }
 
 export default function OperateBox(props: IProps) {
+  const mergeShow = {
+    showSelectParent: props?.show?.showSelectParent ?? true,
+    showDelete: props?.show?.showDelete ?? true
+  }
+
   return (
     <Space size={0}>
-      <ArrowUpOutlined
+      {mergeShow?.showSelectParent && <ArrowUpOutlined
         className={btn}
         style={{color: 'white'}}
         onClick={props?.onSelectParent}
-      />
-      <DeleteOutlined
+      />}
+      {mergeShow?.showDelete && <DeleteOutlined
         className={btn}
         style={{color: 'white'}}
         onClick={props?.onDelete}
-      />
+      />}
     </Space>
   )
 }

@@ -76,6 +76,10 @@ export default function RenderJsonNode (props: IProps) {
   const operateBoxRef = useOperateBox({
     ...commonOptions,
     children: <OperateBox
+      show={{
+        showSelectParent: !!props?.parentJsonNode,
+        showDelete: !props?.jsonNode?.isPage
+      }}
       onDelete={() => handleDelete(props?.jsonNode?.id)}
       onSelectParent={() => handleSelectParent()}
     />

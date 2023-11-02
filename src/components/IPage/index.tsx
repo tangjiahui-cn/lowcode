@@ -6,6 +6,7 @@ export default {
   cId: 'i-page',
   name: '页面',
   icon: undefined,
+  isPage: true,
   isContainer: true,
   template: Template,
   attributeTemplate: Attributes,

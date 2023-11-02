@@ -8,6 +8,7 @@ export function createJsonNode (component: RegisterComponent) : JsonNode {
     cType: component.cType,
     name: component?.name,
     attributes: component?.defaultAttributes,
-    isContainer: component?.isContainer
+    isContainer: component?.isContainer,
+    isPage: component?.isPage
   }
 }
