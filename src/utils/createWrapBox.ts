@@ -2,6 +2,8 @@ import * as React from "react";
 import {DomType, getChildDomRect} from "./getChildDomRect";
 import {css} from "class-css";
 import {throttle} from "lodash";
+import {globalEvent, globalVariable} from "../data";
+import {EVENT} from "../enum";
 
 /**
  * 获取包裹盒子元素
@@ -29,7 +31,7 @@ export function createWrapBox (
       ...style,
       ...getChildDomRect(container, child),
     })
-  }, 4)
+  }, globalVariable.eventThrottleDelay)
 
   // 挂载wrap-box
   function mount () {
@@ -47,8 +49,12 @@ export function createWrapBox (
       ...style,
       ...getChildDomRect(container, child),
     })
+
     container?.appendChild(mountDom);
+    // 窗口变化时重置UI
     window.addEventListener('resize', resize)
+    // 组件滚动时重置UI
+    globalEvent.on(EVENT, resize)
   }
 
   // 移出 wrap-box
@@ -63,6 +69,7 @@ export function createWrapBox (
     container.removeChild(mountDom)
     mountDom = null;
     window.removeEventListener('resize', resize)
+    globalEvent.remove(EVENT, resize)
   }
 
   return {

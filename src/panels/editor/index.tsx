@@ -32,7 +32,12 @@ export default function Editor () {
   return (
     <div
       ref={dom}
-      style={{width: '100%', height: '100%', background: 'white', position: 'relative'}}
+      style={{
+        width: '100%',
+        height: '100%',
+        background: 'white',
+        position: 'relative',
+      }}
     >
       {
         json.map((jsonNode: JsonNode) => {

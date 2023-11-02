@@ -4,7 +4,7 @@ import {
   Instance,
   JsonNode,
   RegisterComponent,
-  currentPanels, globalEvent,
+  currentPanels, globalEvent, globalVariable,
 } from "../../../data";
 import {useEffect, useMemo, useRef, useState} from "react";
 import {createJsonNode, getComponentByCId} from "../../../utils";
@@ -15,9 +15,15 @@ import {DRAG, ERROR, EVENT} from "../../../enum";
 import {currentHoverInstanceStack} from "../../../data/currentHoverInstanceStack";
 import {useOperateBox} from "../../../hooks/useOperateBox";
 import OperateBox from "../../../components-sys/OperateBox";
+import {throttle} from "lodash";
+
+const notifyScroll = throttle((payload) => {
+  globalEvent.notify(EVENT, payload)
+}, globalVariable.eventThrottleDelay)
 
 interface IProps {
   jsonNode: JsonNode;
+  parentJsonNode?: JsonNode;
 }
 
 /**
@@ -69,8 +75,27 @@ export default function RenderJsonNode (props: IProps) {
 
   const operateBoxRef = useOperateBox({
     ...commonOptions,
-    children: <OperateBox />
+    children: <OperateBox
+      onDelete={() => handleDelete(props?.jsonNode?.id)}
+      onSelectParent={() => handleSelectParent()}
+    />
   })
+
+  function handleDelete (id: string) {
+    if (!props?.parentJsonNode?.children?.length) return;
+    // 父节点删除当前节点
+    props.parentJsonNode.children = props.parentJsonNode.children.filter(jsonNode => jsonNode.id !== id)
+    // 刷新json
+    currentPanels.editor.refreshJson();
+  }
+
+  function handleSelectParent () {
+    if (!props?.parentJsonNode) return;
+    // 当前节点取消选中
+    instanceRef.current.handleUnSelect();
+    // 父节点选中
+    currentInstances.getIns(props?.parentJsonNode?.id)?.handleSelect?.();
+  }
 
   function handleDrop (e: React.DragEvent<HTMLDivElement>) {
     const newData = e.dataTransfer.getData(DRAG.NEW);
@@ -130,9 +155,7 @@ export default function RenderJsonNode (props: IProps) {
 
   useEffect(() => {
     currentInstances.add(instanceRef.current);
-    return () => {
-      currentInstances.delete(instanceRef.current.id);
-    }
+    return currentInstances.delete(instanceRef.current.id);
   }, [])
 
   return (
@@ -144,6 +167,9 @@ export default function RenderJsonNode (props: IProps) {
         ...component.defaultStyle
       }}
       events={{
+        onScroll (event) {
+          notifyScroll({event, jsonNode: props?.jsonNode})
+        },
         onPointerDown (e) {
           e.preventDefault();
           e.stopPropagation();
@@ -188,6 +214,7 @@ export default function RenderJsonNode (props: IProps) {
           <RenderJsonNode
             key={child.id}
             jsonNode={child}
+            parentJsonNode={props?.jsonNode}
           />
         )
       })}

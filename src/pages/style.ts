@@ -31,9 +31,10 @@ export const pageBodyLeft = css({
 
 export const pageBodyMid = css({
   flex: 1,
-  padding: 20,
-  overflow: 'auto',
-  background: 'whitesmoke'
+  padding: 24,
+  // overflow: 'auto',
+  background: 'whitesmoke',
+  minWidth: 200
 })
 
 export const pageBodyRight = css({

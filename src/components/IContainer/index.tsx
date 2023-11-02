@@ -13,7 +13,7 @@ export default {
   },
   defaultStyle: {
     position: 'relative',
-    // padding: 16
+    padding: 16
   },
   cType: 'layout',
 } as RegisterComponent;

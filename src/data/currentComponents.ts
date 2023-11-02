@@ -31,6 +31,7 @@ export type TemplateProps<Attributes, E = any> = {
     onPointerLeave?: React.PointerEventHandler<E>;
     onDragOver?: React.DragEventHandler<E>;
     onDrop?: React.DragEventHandler<E>;
+    onScroll?: React.UIEventHandler<E>
   },
   // 子元素
   children?: React.ReactNode;

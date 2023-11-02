@@ -16,6 +16,8 @@ type ReturnType = MutableRefObject<{
   mount: () => void;
   // 从容器上删除包裹元素
   remove: () => void;
+  // 重置位置
+  resize: () => void;
 }>
 
 export function useOperateBox (options: IOptions): ReturnType {
