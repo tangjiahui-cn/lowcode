@@ -13,6 +13,8 @@ import {useWrapBox} from "../../../hooks/useWrapBox";
 import * as React from "react";
 import {DRAG, ERROR, EVENT} from "../../../enum";
 import {currentHoverInstanceStack} from "../../../data/currentHoverInstanceStack";
+import {useOperateBox} from "../../../hooks/useOperateBox";
+import OperateBox from "../../../components-sys/OperateBox";
 
 interface IProps {
   jsonNode: JsonNode;
@@ -39,6 +41,11 @@ export default function RenderJsonNode (props: IProps) {
   // 属性值
   const [attributes, setAttributes] = useState<any>(props?.jsonNode.attributes);
 
+  const commonOptions = {
+    getContainerFn: () => currentPanels.editor.domRef?.current,
+    getChildFn: () => getTargetDomRef?.current?.()
+  }
+
   // TODO: 修改wrap-box的方式
   const focusPanelRef = useWrapBox({
     style: {
@@ -47,9 +54,8 @@ export default function RenderJsonNode (props: IProps) {
       boxSizing: 'border-box',
       pointerEvents: 'none'
     },
-    getContainerFn: () => currentPanels.editor.domRef?.current,
-    getChildFn: () => getTargetDomRef?.current?.()
-  })
+    ...commonOptions
+  }, [attributes])
 
   const hoverPanelRef = useWrapBox({
     style: {
@@ -58,8 +64,12 @@ export default function RenderJsonNode (props: IProps) {
       boxSizing: 'border-box',
       pointerEvents: 'none'
     },
-    getContainerFn: () => currentPanels.editor.domRef?.current,
-    getChildFn: () => getTargetDomRef?.current?.()
+    ...commonOptions
+  })
+
+  const operateBoxRef = useOperateBox({
+    ...commonOptions,
+    children: <OperateBox />
   })
 
   function handleDrop (e: React.DragEvent<HTMLDivElement>) {
@@ -101,15 +111,16 @@ export default function RenderJsonNode (props: IProps) {
       handleSelect () {
         // 挂载wrap-box
         focusPanelRef?.current?.mount()
+        operateBoxRef?.current?.mount()
         globalEvent.notify(EVENT.SELECTED_COMPONENT, props?.jsonNode)
       },
       handleUnSelect () {
         // 取消挂载wrap-box
         focusPanelRef?.current?.remove()
+        operateBoxRef?.current?.remove()
       },
       handleSetAttributes (attributes: any) {
         setAttributes(attributes)
-        focusPanelRef.current?.resize();
         if (props?.jsonNode) {
           props.jsonNode.attributes = attributes;
         }

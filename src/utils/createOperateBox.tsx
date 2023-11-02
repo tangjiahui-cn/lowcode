@@ -1,35 +1,17 @@
 import * as React from "react";
 import {DomType, getChildDomRect} from "./getChildDomRect";
 import {css} from "class-css";
-import {throttle} from "lodash";
+import {createRoot} from "react-dom/client";
 
 /**
  * 获取包裹盒子元素
  */
-export function createWrapBox (
-  style: React.CSSProperties,
+export function createOperateBox (
   getContainerDom: () => DomType,
-  getChildDom: () => DomType
+  getChildDom: () => DomType,
+  children: React.ReactNode
 ) {
   let mountDom: DomType = null;
-
-  const resize = throttle(() => {
-    if (!mountDom) {
-      return;
-    }
-
-    const container = getContainerDom();
-    const child = getChildDom();
-    if (!container || !child) {
-      throw new Error('containerDom is not found')
-    }
-
-    mountDom.className = css({
-      position: 'absolute',
-      ...style,
-      ...getChildDomRect(container, child),
-    })
-  }, 4)
 
   // 挂载wrap-box
   function mount () {
@@ -41,14 +23,27 @@ export function createWrapBox (
     if (mountDom) {
       return;
     }
+    const sizeInfo = getChildDomRect(container, child);
     mountDom = document.createElement('div');
     mountDom.className = css({
-      position: 'absolute',
-      ...style,
-      ...getChildDomRect(container, child),
+      position: "absolute",
+      left: sizeInfo.left,
+      top: sizeInfo.top,
+      width: 0,
+      height: 0,
     })
+
+    createRoot(mountDom).render(
+      <div
+        className={css({
+          transform: 'translate(0, -100%)'
+        })}
+      >
+        {children}
+      </div>
+    )
+
     container?.appendChild(mountDom);
-    window.addEventListener('resize', resize)
   }
 
   // 移出 wrap-box
@@ -62,12 +57,10 @@ export function createWrapBox (
     }
     container.removeChild(mountDom)
     mountDom = null;
-    window.removeEventListener('resize', resize)
   }
 
   return {
     mount,
     remove,
-    resize
   }
 }

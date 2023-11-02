@@ -11,18 +11,19 @@ interface IOptions {
   getChildFn: () => DomType;
 }
 
-type ReturnType = {
+type ReturnType = MutableRefObject<{
   // 挂载包裹元素到容器上
   mount: () => void;
   // 从容器上删除包裹元素
   remove: () => void;
   // 调整包裹元素位置
   resize: () => void;
-}
+}>
 
-export function useWrapBox (options: IOptions): MutableRefObject<ReturnType> {
+export function useWrapBox (options: IOptions, effect: any[] = []): ReturnType {
   const wrapIns = useRef(createWrapBox(options.style, options.getContainerFn, options.getChildFn));
   // 组件销毁时清空
   useEffect(() => wrapIns.current.remove, [])
+  useEffect(() => wrapIns.current.resize(), effect)
   return wrapIns;
 }
