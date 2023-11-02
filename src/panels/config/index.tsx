@@ -1,4 +1,4 @@
-import {Button, message, Space} from "antd";
+import {Button, message, notification, Space} from "antd";
 import {page} from "./style";
 import {GithubOutlined, RocketTwoTone} from "@ant-design/icons";
 import {currentJson, currentPanels, globalVariable, MODE} from "../../data";
@@ -39,6 +39,10 @@ export default function Config () {
 
     // 开发模式（重置状态）
     if (mode === MODE.DEV) {
+      notification.info({
+        message: '切换到开发模式',
+        duration: 1.2,
+      })
       currentPanels.editor.setJson?.([]);
       setTimeout(() => {
         currentPanels.editor.refreshJson()
@@ -48,6 +52,10 @@ export default function Config () {
 
     // 预览模式
     if (mode === MODE.PREVIEW) {
+      notification.info({
+        message: '切换到预览模式',
+        duration: 1.2,
+      })
       const jsonCopy: any[] = cloneDeep(currentJson.getJson())
       currentPanels?.editor?.setJson?.(jsonCopy);
       return
