@@ -27,8 +27,8 @@ export default function Attributes () {
 
   function handleSelect (payload: JsonNode) {
     setJsonNode(payload);
-    setComponent(currentComponents.getComponent(payload.cId));
-    setInstance(currentInstances.getIns(payload.id));
+    setComponent(currentComponents.getComponent(payload?.cId));
+    setInstance(currentInstances.getIns(payload?.id));
   }
 
   function handleAttributes (attributes: any) {

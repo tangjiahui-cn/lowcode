@@ -67,7 +67,7 @@ interface CurrentComponents {
   // 获取所拥有的所有组件
   getAllComponents: (cType?: string) => RegisterComponent[];
   // 获取一个指定的组件
-  getComponent: (cId: string) => (RegisterComponent | undefined);
+  getComponent: (cId?: string) => (RegisterComponent | undefined);
 }
 
 const components: Map<string, RegisterComponent> = new Map();
@@ -84,7 +84,7 @@ export const currentComponents: CurrentComponents = {
       ? componentList.filter(x => x.cType === cType)
       : componentList
   },
-  getComponent (cId: string) : RegisterComponent | undefined {
-    return components.get(cId)
+  getComponent (cId?: string) : RegisterComponent | undefined {
+    return cId ? components.get(cId) : undefined
   }
 }

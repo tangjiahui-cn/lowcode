@@ -175,6 +175,7 @@ export default function RenderJsonNode (props: IProps) {
       operateBoxRef.current.remove()
       currentSelectedInstance.clear()
       currentHoverInstanceStack.clear()
+      globalEvent.notify(EVENT.SELECTED_COMPONENT, undefined)
     }
   }, [isPreview])
 

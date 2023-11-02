@@ -23,7 +23,7 @@ interface currentInstances {
   // 新增一个实例
   add: (ins: Instance) => void;
   // 获取一个指定实例
-  getIns: (id: string) => (Instance | undefined);
+  getIns: (id?: string) => (Instance | undefined);
   // 获取所有实例
   getAllIns: () => Instance[];
   // 删除一个指定实例
@@ -35,8 +35,8 @@ export const currentInstances: currentInstances = {
   add (ins) {
     insList.set(ins.id, ins);
   },
-  getIns (id: string) {
-    return insList.get(id);
+  getIns (id?: string) {
+    return id ? insList.get(id) : undefined;
   },
   getAllIns () {
     return [...insList.values()]
