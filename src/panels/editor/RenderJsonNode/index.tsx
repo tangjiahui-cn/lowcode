@@ -98,10 +98,16 @@ export default function RenderJsonNode (props: IProps) {
 
   function handleSelectParent () {
     if (!props?.parentJsonNode) return;
+    const parentInstance = currentInstances.getIns(props?.parentJsonNode?.id);
     // 当前节点取消选中
     instanceRef.current.handleUnSelect();
-    // 父节点选中
-    currentInstances.getIns(props?.parentJsonNode?.id)?.handleSelect?.();
+
+    if (parentInstance) {
+      // 设置新的选中元素
+      currentSelectedInstance.set(parentInstance);
+      // 父节点选中
+      parentInstance?.handleSelect?.();
+    }
   }
 
   function handleDrop (e: React.DragEvent<HTMLDivElement>) {
