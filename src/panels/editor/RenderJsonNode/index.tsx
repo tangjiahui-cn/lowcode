@@ -98,16 +98,9 @@ export default function RenderJsonNode (props: IProps) {
 
   function handleSelectParent () {
     if (!props?.parentJsonNode) return;
-    const parentInstance = currentInstances.getIns(props?.parentJsonNode?.id);
-    // 当前节点取消选中
-    instanceRef.current.handleUnSelect();
-
-    if (parentInstance) {
-      // 设置新的选中元素
-      currentSelectedInstance.set(parentInstance);
-      // 父节点选中
-      parentInstance?.handleSelect?.();
-    }
+    currentInstances
+      .getIns(props?.parentJsonNode?.id)
+      ?.handleSelect?.();
   }
 
   function handleDrop (e: React.DragEvent<HTMLDivElement>) {
@@ -147,6 +140,9 @@ export default function RenderJsonNode (props: IProps) {
         hoverPanelRef.current.remove()
       },
       handleSelect () {
+        // 取消上一个选中元素，并设置新的选中元素
+        currentSelectedInstance.get()?.handleUnSelect?.();
+        currentSelectedInstance.set(instanceRef.current);
         // 挂载wrap-box
         focusPanelRef?.current?.mount()
         operateBoxRef?.current?.mount()
@@ -201,10 +197,6 @@ export default function RenderJsonNode (props: IProps) {
           if (currentSelectedInstance.isSelected(instanceRef.current?.id)) {
             return;
           }
-          // 取消上一个选中元素
-          currentSelectedInstance.get()?.handleUnSelect?.();
-          // 设置新的选中元素
-          currentSelectedInstance.set(instanceRef.current);
           // 新的选中元素操作
           instanceRef.current.handleSelect();
         },

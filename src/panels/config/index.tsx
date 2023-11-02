@@ -6,6 +6,7 @@ import {createInitJson} from "../../utils/createInitJson";
 import ModeButtonGroup from "../../components-sys/ModeButtonGroup";
 import {useState} from "react";
 import {useUpdateEffect} from "ahooks";
+import {cloneDeep} from "lodash";
 
 /**
  * 全局配置面板
@@ -35,12 +36,20 @@ export default function Config () {
 
   function handleChangeMode (mode: MODE) {
     globalVariable.setMode(mode);
+
+    // 开发模式（重置状态）
     if (mode === MODE.DEV) {
-      currentPanels.editor.refreshJson();
+      currentPanels.editor.setJson?.([]);
+      setTimeout(() => {
+        currentPanels.editor.refreshJson()
+      })
       return
     }
+
+    // 预览模式
     if (mode === MODE.PREVIEW) {
-      currentPanels.editor.refreshJson();
+      const jsonCopy: any[] = cloneDeep(currentJson.getJson())
+      currentPanels?.editor?.setJson?.(jsonCopy);
       return
     }
   }
