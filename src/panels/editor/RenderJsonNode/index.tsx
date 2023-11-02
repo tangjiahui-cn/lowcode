@@ -16,6 +16,7 @@ import {currentHoverInstanceStack} from "../../../data/currentHoverInstanceStack
 import {useOperateBox} from "../../../hooks/useOperateBox";
 import OperateBox from "../../../components-sys/OperateBox";
 import {throttle} from "lodash";
+import {useUpdateEffect} from "ahooks";
 
 const notifyScroll = throttle((payload) => {
   globalEvent.notify(EVENT, payload)
@@ -34,12 +35,14 @@ interface IProps {
  */
 export default function RenderJsonNode (props: IProps) {
   const {jsonNode} = props;
+  const isPreview = globalVariable.isPreview()
 
   // 获取元素DOM节点
   const getTargetDomRef = useRef<() => any>();
-  // 实例
+  // 当前实例
   const instanceRef = useRef<Instance>(getInstance());
 
+  // 当前jsonNode对应组件
   const component: RegisterComponent = useMemo(() => {
     return getComponentByCId(jsonNode?.cId)
   }, [jsonNode?.cId])
@@ -162,6 +165,17 @@ export default function RenderJsonNode (props: IProps) {
     return () => currentInstances.delete(instanceRef.current.id);
   }, [])
 
+  // 开启预览模式，清空状态
+  useUpdateEffect(() => {
+    if (isPreview) {
+      focusPanelRef.current.remove()
+      hoverPanelRef.current.remove()
+      operateBoxRef.current.remove()
+      currentSelectedInstance.clear()
+      currentHoverInstanceStack.clear()
+    }
+  }, [isPreview])
+
   return (
     <component.template
       getDomFn={(fn: any) => getTargetDomRef.current = fn}
@@ -170,7 +184,7 @@ export default function RenderJsonNode (props: IProps) {
         cursor: 'default',
         ...component.defaultStyle
       }}
-      events={{
+      events={isPreview ? undefined : {
         onScroll (event) {
           notifyScroll({event, jsonNode: props?.jsonNode})
         },

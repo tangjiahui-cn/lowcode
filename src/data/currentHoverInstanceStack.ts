@@ -13,9 +13,11 @@ interface CurrentHoverInstanceStack {
   pop: () => Instance | undefined;
   // 获取栈顶实例
   getStackTop: () => Instance | undefined;
+  // 清空栈
+  clear: () => void;
 }
 
-const insStack: Instance[] = [];
+let insStack: Instance[] = [];
 export const currentHoverInstanceStack: CurrentHoverInstanceStack = {
   push (ins) {
     insStack.push(ins);
@@ -25,6 +27,9 @@ export const currentHoverInstanceStack: CurrentHoverInstanceStack = {
   },
   getStackTop () {
     return insStack[insStack.length - 1];
+  },
+  clear () {
+    insStack = []
   }
 }
 

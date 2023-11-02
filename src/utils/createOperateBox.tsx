@@ -17,14 +17,10 @@ export function createOperateBox (
   let mountDom: DomType = null;
 
   const resize = throttle(() => {
-    if (!mountDom) {
-      return;
-    }
-
     const container = getContainerDom();
     const child = getChildDom();
-    if (!container || !child) {
-      throw new Error('containerDom is not found')
+    if (!container || !child || !mountDom) {
+      return;
     }
 
     const sizeInfo = getChildDomRect(container, child);
@@ -41,10 +37,7 @@ export function createOperateBox (
   function mount () {
     const container = getContainerDom();
     const child = getChildDom();
-    if (!container || !child) {
-      throw new Error('containerDom is not found')
-    }
-    if (mountDom) {
+    if (!container || !child || mountDom) {
       return;
     }
     const sizeInfo = getChildDomRect(container, child);
@@ -77,10 +70,7 @@ export function createOperateBox (
   // 移出 operate-box
   function remove () {
     const container = getContainerDom();
-    if (!container) {
-      throw new Error('containerDom is not found')
-    }
-    if (!mountDom) {
+    if (!mountDom || !container) {
       return;
     }
 

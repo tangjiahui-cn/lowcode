@@ -16,14 +16,10 @@ export function createWrapBox (
   let mountDom: DomType = null;
 
   const resize = throttle(() => {
-    if (!mountDom) {
-      return;
-    }
-
     const container = getContainerDom();
     const child = getChildDom();
-    if (!container || !child) {
-      throw new Error('containerDom is not found')
+    if (!container || !child || !mountDom) {
+      return;
     }
 
     mountDom.className = css({
@@ -37,12 +33,10 @@ export function createWrapBox (
   function mount () {
     const container = getContainerDom();
     const child = getChildDom();
-    if (!container || !child) {
-      throw new Error('containerDom is not found')
-    }
-    if (mountDom) {
+    if (!container || !child || mountDom) {
       return;
     }
+
     mountDom = document.createElement('div');
     mountDom.className = css({
       position: 'absolute',
@@ -60,10 +54,7 @@ export function createWrapBox (
   // 移出 wrap-box
   function remove () {
     const container = getContainerDom();
-    if (!container) {
-      throw new Error('containerDom is not found')
-    }
-    if (!mountDom) {
+    if (!mountDom || !container) {
       return;
     }
     container.removeChild(mountDom)

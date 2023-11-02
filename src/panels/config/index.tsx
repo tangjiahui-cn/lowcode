@@ -1,8 +1,11 @@
 import {Button, message, Space} from "antd";
 import {page} from "./style";
 import {GithubOutlined, RocketTwoTone} from "@ant-design/icons";
-import {currentJson, currentPanels} from "../../data";
+import {currentJson, currentPanels, globalVariable, MODE} from "../../data";
 import {createInitJson} from "../../utils/createInitJson";
+import ModeButtonGroup from "../../components-sys/ModeButtonGroup";
+import {useState} from "react";
+import {useUpdateEffect} from "ahooks";
 
 /**
  * 全局配置面板
@@ -11,6 +14,8 @@ import {createInitJson} from "../../utils/createInitJson";
  * By TangJiaHui
  */
 export default function Config () {
+  const [mode, setMode] = useState<MODE>(MODE.DEV)
+
   function handleJumpGithub () {
     window.open('https://github.com/tangjiahui-cn/lowcode-engine')
   }
@@ -22,16 +27,27 @@ export default function Config () {
     message.success('清空成功')
   }
 
-  function handlePreview () {
-    handleSave();
-    // ...
-  }
-
   function handleSave () {
     const jsonStr = JSON.stringify(currentJson.getJson())
     localStorage.setItem('json', jsonStr)
     message.success('保存成功')
   }
+
+  function handleChangeMode (mode: MODE) {
+    globalVariable.setMode(mode);
+    if (mode === MODE.DEV) {
+      currentPanels.editor.refreshJson();
+      return
+    }
+    if (mode === MODE.PREVIEW) {
+      currentPanels.editor.refreshJson();
+      return
+    }
+  }
+
+  useUpdateEffect(() => {
+    handleChangeMode(mode)
+  }, [mode])
 
   return (
     <div className={page}>
@@ -39,6 +55,10 @@ export default function Config () {
         <RocketTwoTone style={{fontSize: 24}}/>
         <b style={{fontSize: '1.5em'}}>低代码引擎</b>
       </Space>
+      <ModeButtonGroup
+        value={mode}
+        onChange={setMode}
+      />
       <Space>
         <GithubOutlined
           onClick={handleJumpGithub}
@@ -50,7 +70,6 @@ export default function Config () {
           }}
         />
         <Button onClick={handleClear}>清空</Button>
-        <Button onClick={handlePreview}>预览</Button>
         <Button onClick={handleSave} type={'primary'}>保存</Button>
       </Space>
     </div>
