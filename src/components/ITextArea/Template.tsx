@@ -24,6 +24,7 @@ export default function (props: TemplateProps<Attributes, HTMLTextAreaElement>) 
       ref={ref}
       style={props?.style}
       placeholder={'请输入'}
+      value={props?.attributes?.value}
       {...props?.events}
     >
       {props?.attributes?.value}

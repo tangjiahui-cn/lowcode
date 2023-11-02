@@ -26,9 +26,10 @@ export default function (props: AttributesProps<IButtonAttributes>) {
 
   return (
     <Space style={{width: '100%'}} direction={'vertical'}>
-      <Space>
+      <div style={{display: 'flex', alignItems: 'center'}}>
         文字：
         <Input
+          style={{flex: 1}}
           value={attributes?.value}
           onChange={e => {
             handleChange({
@@ -37,12 +38,13 @@ export default function (props: AttributesProps<IButtonAttributes>) {
             })
           }}
         />
-      </Space>
-      <Space>
+      </div>
+      <div style={{display: 'flex', alignItems: 'center'}}>
         类型：
         <Select
+          style={{flex: 1}}
           options={buttonTypeOptions}
-          value={attributes?.type}
+          value={attributes?.type || 'default'}
           onChange={(type) => {
             handleChange({
               ...attributes,
@@ -50,7 +52,7 @@ export default function (props: AttributesProps<IButtonAttributes>) {
             })
           }}
         />
-      </Space>
+      </div>
     </Space>
   )
 }

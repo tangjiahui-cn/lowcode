@@ -1,11 +1,7 @@
-import {Attributes} from "./Template";
-import {Input, Space} from "antd";
+import {Attributes, levelList} from "./Template";
+import {Input, Select, Space} from "antd";
 import {useEffect, useState} from "react";
-
-export interface IProps {
-  attributes: Attributes;
-  onChange: (attributes: Attributes) => void;
-}
+import {AttributesProps} from "../../data";
 
 /**
  * 按钮私有属性面板
@@ -13,8 +9,10 @@ export interface IProps {
  * At 2023/10/31
  * By TangJiaHui
  */
-export default function (props: IProps) {
-  const [attributes, setAttributes] = useState(props?.attributes);
+
+const labelStyle = {flex: '0 0 80px'}
+export default function (props: AttributesProps<Attributes>) {
+  const [attributes, setAttributes] = useState<Attributes>(props.attributes);
 
   function handleChange (attributes: Attributes) {
     setAttributes(attributes);
@@ -27,18 +25,33 @@ export default function (props: IProps) {
 
   return (
     <Space style={{width: '100%'}} direction={'vertical'}>
-      <Space>
-        文字：
+      <div style={{display: 'flex', alignItems: 'center'}}>
+        <div style={labelStyle}>标题：</div>
         <Input
-          value={attributes?.value}
+          style={{flex: 1}}
+          value={attributes?.title}
           onChange={e => {
             handleChange({
-              ...attributes,
-              value: e.target.value
+              ...(attributes || {}),
+              title: e.target.value
             })
           }}
         />
-      </Space>
+      </div>
+      <div style={{display: 'flex', alignItems: 'center'}}>
+        <div style={labelStyle}>标题级别：</div>
+        <Select
+          style={{flex: 1}}
+          value={attributes.titleLevel}
+          options={levelList.map(level => ({label: level, value: level}))}
+          onChange={titleLevel => {
+            handleChange({
+              ...(attributes || {}),
+              titleLevel
+            })
+          }}
+        />
+      </div>
     </Space>
   )
 }

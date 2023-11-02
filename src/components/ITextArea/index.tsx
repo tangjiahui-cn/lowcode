@@ -8,9 +8,6 @@ export default {
   icon: undefined,
   template: Template,
   attributeTemplate: Attributes,
-  defaultAttributes: {
-    value: '请输入'
-  },
   cType: 'base',
 } as RegisterComponent;
 

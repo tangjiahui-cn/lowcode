@@ -5,12 +5,17 @@ import Attributes from "./Attributes";
 export default {
   cId: 'i-container',
   name: '容器',
-  icon: undefined,
+  isContainer: true,
   template: Template,
   attributeTemplate: Attributes,
-  defaultBase: {},
-  defaultAttributes: {},
-  cType: 'layout'
+  defaultAttributes: {
+    titleLevel: 'h1'
+  },
+  defaultStyle: {
+    position: 'relative',
+    // padding: 16
+  },
+  cType: 'layout',
 } as RegisterComponent;
 
 

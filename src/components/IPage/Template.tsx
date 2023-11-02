@@ -28,7 +28,7 @@ export default function (props: TemplateProps<Attributes, HTMLDivElement>) {
       }}
       {...props?.events}
     >
-      {props?.attributes?.title && <div>{props?.attributes?.title}</div>}
+      {props?.attributes?.title && <h1>{props?.attributes?.title}</h1>}
       {props?.children}
     </div>
   )

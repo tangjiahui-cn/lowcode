@@ -16,10 +16,13 @@ type ReturnType = {
   mount: () => void;
   // 从容器上删除包裹元素
   remove: () => void;
+  // 调整包裹元素位置
+  resize: () => void;
 }
 
 export function useWrapBox (options: IOptions): MutableRefObject<ReturnType> {
   const wrapIns = useRef(createWrapBox(options.style, options.getContainerFn, options.getChildFn));
+  // 组件销毁时清空
   useEffect(() => wrapIns.current.remove, [])
   return wrapIns;
 }

@@ -9,7 +9,8 @@ export default {
   template: Template,
   attributeTemplate: Attributes,
   defaultAttributes: {
-    value: '按钮'
+    value: '按钮',
+    type: 'default'
   },
   cType: 'base',
 } as RegisterComponent;

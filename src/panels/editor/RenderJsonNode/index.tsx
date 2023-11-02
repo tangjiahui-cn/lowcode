@@ -4,14 +4,14 @@ import {
   Instance,
   JsonNode,
   RegisterComponent,
-  currentPanels
+  currentPanels, globalEvent,
 } from "../../../data";
-import {useEffect, useMemo, useRef} from "react";
+import {useEffect, useMemo, useRef, useState} from "react";
 import {createJsonNode, getComponentByCId} from "../../../utils";
 import {currentSelectedInstance} from "../../../data/currentSelectedInstance";
 import {useWrapBox} from "../../../hooks/useWrapBox";
 import * as React from "react";
-import {DRAG, ERROR} from "../../../enum";
+import {DRAG, ERROR, EVENT} from "../../../enum";
 import {currentHoverInstanceStack} from "../../../data/currentHoverInstanceStack";
 
 interface IProps {
@@ -35,6 +35,9 @@ export default function RenderJsonNode (props: IProps) {
   const component: RegisterComponent = useMemo(() => {
     return getComponentByCId(jsonNode?.cId)
   }, [jsonNode?.cId])
+
+  // 属性值
+  const [attributes, setAttributes] = useState<any>(props?.jsonNode.attributes);
 
   // TODO: 修改wrap-box的方式
   const focusPanelRef = useWrapBox({
@@ -61,6 +64,12 @@ export default function RenderJsonNode (props: IProps) {
 
   function handleDrop (e: React.DragEvent<HTMLDivElement>) {
     const newData = e.dataTransfer.getData(DRAG.NEW);
+
+    if (currentSelectedInstance.isSelected?.(props?.jsonNode?.id)) {
+      setTimeout(() => {
+        focusPanelRef.current.resize();
+      })
+    }
 
     // 新建一个实例
     if (newData) {
@@ -92,23 +101,33 @@ export default function RenderJsonNode (props: IProps) {
       handleSelect () {
         // 挂载wrap-box
         focusPanelRef?.current?.mount()
+        globalEvent.notify(EVENT.SELECTED_COMPONENT, props?.jsonNode)
       },
       handleUnSelect () {
         // 取消挂载wrap-box
         focusPanelRef?.current?.remove()
       },
+      handleSetAttributes (attributes: any) {
+        setAttributes(attributes)
+        focusPanelRef.current?.resize();
+        if (props?.jsonNode) {
+          props.jsonNode.attributes = attributes;
+        }
+      }
     }
   }
 
   useEffect(() => {
     currentInstances.add(instanceRef.current);
-    return () => currentInstances.delete(instanceRef.current.id);
+    return () => {
+      currentInstances.delete(instanceRef.current.id);
+    }
   }, [])
 
   return (
     <component.template
       getDomFn={(fn: any) => getTargetDomRef.current = fn}
-      attributes={component.defaultAttributes}
+      attributes={attributes}
       style={{
         cursor: 'default',
         ...component.defaultStyle

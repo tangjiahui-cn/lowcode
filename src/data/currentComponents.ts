@@ -18,10 +18,10 @@ export type AttributesProps<T> = {
   onChange: (attributes: T) => void;
 }
 
-export type TemplateProps<T, E = any> = {
+export type TemplateProps<Attributes, E = any> = {
   getDomFn: (fn: () => (E | null)) => void;
   // 属性
-  attributes?: T;
+  attributes?: Attributes;
   // 样式
   style?: React.CSSProperties;
   // 事件

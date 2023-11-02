@@ -24,7 +24,8 @@ export default function Config () {
   }
 
   function handleSave () {
-    localStorage.setItem('json', JSON.stringify(currentJson.getJson()))
+    const jsonStr = JSON.stringify(currentJson.getJson())
+    localStorage.setItem('json', jsonStr)
     message.success('保存成功')
   }
 

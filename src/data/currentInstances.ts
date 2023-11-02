@@ -15,6 +15,8 @@ export type Instance = {
   handleSelect: () => void;
   // 取消选中实例
   handleUnSelect: () => void;
+  // 修改 attributes
+  handleSetAttributes: (attributes: any) => void;
 }
 
 interface currentInstances {

@@ -69,6 +69,7 @@ export function createWrapBox (
 
   return {
     mount,
-    remove
+    remove,
+    resize
   }
 }
