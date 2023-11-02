@@ -5,16 +5,21 @@ export const btn = css({
   color: '#5594e7',
   userSelect: 'none',
   transition: 'all .3s',
-  padding: '4px 0',
+  boxSizing: 'border-box',
+  padding: '4px 8px',
+  border: '1px solid transparent',
   '&:hover': {
-    background: '#e6ebf5'
+    background: '#e6ebf5',
+    textDecoration: 'underline'
   }
 })
 
 export const btnSelect = css({
   color: 'gray',
   cursor: 'default',
+  border: '1px solid #e8e8e8',
   '&:hover': {
-    background: 'transparent'
+    background: 'transparent',
+    textDecoration: 'none'
   }
 })

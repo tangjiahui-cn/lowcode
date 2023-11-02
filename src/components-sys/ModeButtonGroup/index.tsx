@@ -14,7 +14,7 @@ interface IProps {
 }
 
 export default function (props: IProps) {
-  return <Space size={16}>
+  return <Space size={0}>
     {
       options?.map(option => {
         return (
