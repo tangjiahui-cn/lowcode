@@ -1,6 +1,6 @@
 import {TemplateProps} from "../../data";
 import React, {useEffect, useMemo, useRef} from "react";
-import DropHereEmpty from "./DropHereEmpty";
+import DropHereEmpty from "../../components-sys/DropHereEmpty";
 
 export const levelList: string[] = ['h1','h2','h3','h4','h5','h6']
 export interface Attributes {
@@ -40,7 +40,7 @@ export default function (props: TemplateProps<Attributes, HTMLDivElement>) {
     >
       {props?.attributes?.title && TitleTag}
       {props?.children}
-      {!props?.children && <DropHereEmpty />}
+      {!props?.children?.length && <DropHereEmpty />}
     </div>
   )
 }

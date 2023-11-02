@@ -36,7 +36,7 @@ export type TemplateProps<Attributes, E = any> = {
     onScroll?: React.UIEventHandler<E>
   },
   // 子元素
-  children?: React.ReactNode;
+  children?: React.ReactNode[];
 }
 
 // 模板组件类型
