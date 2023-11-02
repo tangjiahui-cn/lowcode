@@ -155,7 +155,7 @@ export default function RenderJsonNode (props: IProps) {
 
   useEffect(() => {
     currentInstances.add(instanceRef.current);
-    return currentInstances.delete(instanceRef.current.id);
+    return () => currentInstances.delete(instanceRef.current.id);
   }, [])
 
   return (
