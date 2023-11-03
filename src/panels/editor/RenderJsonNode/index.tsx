@@ -17,6 +17,7 @@ import {useOperateBox} from "../../../hooks/useOperateBox";
 import OperateBox from "../../../components-sys/OperateBox";
 import {throttle} from "lodash";
 import {useUpdateEffect} from "ahooks";
+import {img} from "../../index";
 
 const notifyScroll = throttle((payload) => {
   globalEvent.notify(EVENT, payload)
@@ -33,6 +34,8 @@ interface IProps {
  * At 2023/11/01
  * By TangJiaHui
  */
+// 父jsonNode （仅用于节点拖拽时赋值）
+let _parentJsonNode: JsonNode | undefined;
 export default function RenderJsonNode (props: IProps) {
   const {jsonNode} = props;
   const isPreview = globalVariable.isPreview()
@@ -80,8 +83,14 @@ export default function RenderJsonNode (props: IProps) {
     ...commonOptions,
     children: <OperateBox
       show={{
+        showDrag: !props?.jsonNode?.isPage,
         showSelectParent: !!props?.parentJsonNode,
         showDelete: !props?.jsonNode?.isPage
+      }}
+      onDragEnd={() => _parentJsonNode = undefined}
+      onDragStart={(e) => {
+        _parentJsonNode = props?.parentJsonNode
+        handleDragStart(e)
       }}
       onDelete={() => handleDelete(props?.jsonNode?.id)}
       onSelectParent={() => handleSelectParent()}
@@ -101,6 +110,13 @@ export default function RenderJsonNode (props: IProps) {
     currentInstances
       .getIns(props?.parentJsonNode?.id)
       ?.handleSelect?.();
+  }
+
+  function handleDragStart (e: React.DragEvent<HTMLSpanElement>) {
+    e.dataTransfer.setDragImage(img, 0, 0)
+    e.dataTransfer.setData(DRAG.MOVE, JSON.stringify({
+      jsonNode: props?.jsonNode,
+    }))
   }
 
   function handleDrop (e: React.DragEvent<HTMLDivElement>) {
@@ -125,6 +141,38 @@ export default function RenderJsonNode (props: IProps) {
       }
       props?.jsonNode?.children?.push?.(jsonNode);
       currentPanels.editor.refreshJson();
+      return
+    }
+
+    // 组件间移动
+    const moveData = e.dataTransfer.getData(DRAG.MOVE);
+    if (moveData) {
+      const {jsonNode: moveJsonNode} = JSON.parse(moveData || "{}");
+
+      // 如果移动到自身则取消
+      if (!moveJsonNode || (moveJsonNode?.id === props?.jsonNode.id)) {
+        return;
+      }
+
+      // 从json数组中删除上一个拖拽节点
+      if (!_parentJsonNode) {
+        throw new Error('_parentJsonNode is not correctly set.')
+      }
+
+      _parentJsonNode.children = _parentJsonNode.children?.filter(jsonNode => {
+        return jsonNode.id !== moveJsonNode.id
+      })
+
+      // 拖拽节点放在当前节点下
+      props?.jsonNode?.children
+        ? props?.jsonNode?.children?.push(moveJsonNode)
+        : (props.jsonNode.children = [moveJsonNode])
+
+      // 刷新json列表
+      currentPanels.editor.refreshJson();
+
+      // 重置父节点缓存
+      _parentJsonNode = undefined;
     }
   }
 
