@@ -3,7 +3,7 @@ import {ButtonType} from "antd/es/button";
 import {TemplateProps} from "../../data";
 import {useEffect, useRef} from "react";
 
-export interface IButtonAttributes {
+export interface Attributes {
   type: ButtonType;
   value: string;
 }
@@ -14,7 +14,7 @@ export interface IButtonAttributes {
  * At 2023/10/31
  * By TangJiaHui
  */
-export default function (props: TemplateProps<IButtonAttributes, HTMLButtonElement>) {
+export default function (props: TemplateProps<Attributes, HTMLButtonElement>) {
   const domRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {

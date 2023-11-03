@@ -1,6 +1,7 @@
 import type {RegisterComponent} from "../../data";
 import Template from "./Template";
 import Attributes from "./Attributes";
+import {CType} from "../../enum/component";
 
 export default {
   cId: 'i-container',
@@ -15,7 +16,7 @@ export default {
     position: 'relative',
     padding: 16
   },
-  cType: 'layout',
+  cType: CType.LAYOUT
 } as RegisterComponent;
 
 

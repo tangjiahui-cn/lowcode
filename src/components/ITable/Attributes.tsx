@@ -1,10 +1,7 @@
 import {Attributes} from "./Template";
-import {Input, Select, Space} from "antd";
+import {Input, Space} from "antd";
 import {useEffect, useState} from "react";
 import {AttributesProps} from "../../data";
-
-const buttonTypeOptions = ['primary', 'default', 'dashed', 'text']
-  .map(type => ({label: type, value: type}))
 
 /**
  * 按钮私有属性面板
@@ -27,28 +24,14 @@ export default function (props: AttributesProps<Attributes>) {
   return (
     <Space style={{width: '100%'}} direction={'vertical'}>
       <div style={{display: 'flex', alignItems: 'center'}}>
-        文字：
+        标题标题：
         <Input
           style={{flex: 1}}
-          value={attributes?.value}
+          value={attributes?.title}
           onChange={e => {
             handleChange({
               ...(attributes || {}),
-              value: e.target.value
-            })
-          }}
-        />
-      </div>
-      <div style={{display: 'flex', alignItems: 'center'}}>
-        类型：
-        <Select
-          style={{flex: 1}}
-          options={buttonTypeOptions}
-          value={attributes?.type || 'default'}
-          onChange={(type) => {
-            handleChange({
-              ...attributes,
-              type
+              title: e.target.value
             })
           }}
         />

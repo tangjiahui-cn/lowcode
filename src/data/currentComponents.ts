@@ -5,6 +5,7 @@
  * By TangJiaHui
  */
 import * as React from "react";
+import {CType} from "../enum/component";
 
 export type Base = {
   x: string;
@@ -53,7 +54,7 @@ export type RegisterComponent = {
   attributeTemplate?: any; // 组件私有属性模板
   defaultStyle?: React.CSSProperties; // 默认样式属性
   defaultAttributes?: any; // 默认私有属性
-  cType: string; // 组件类型（代办同一类组件，用于分类）
+  cType: CType; // 组件类型（代办同一类组件，用于分类）
 
   /**** 将要抛弃的属性 ****/
   defaultBase?: Base; // 默认基础属性

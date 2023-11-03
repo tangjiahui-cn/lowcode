@@ -4,15 +4,11 @@ import Attributes from "./Attributes";
 import {CType} from "../../enum/component";
 
 export default {
-  cId: 'i-button',
-  name: '按钮',
+  cId: 'i-table',
+  name: '表格',
   icon: undefined,
   template: Template,
   attributeTemplate: Attributes,
-  defaultAttributes: {
-    value: '按钮',
-    type: 'default'
-  },
   cType: CType.BASE
 } as RegisterComponent;
 

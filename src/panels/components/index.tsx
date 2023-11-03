@@ -5,6 +5,7 @@ import {img} from "../index";
 import * as React from "react";
 import {useEffect, useState} from "react";
 import {DRAG} from "../../enum";
+import {CType} from "../../enum/component";
 
 /**
  * 组件树面板
@@ -41,8 +42,8 @@ export default function Components () {
   }
 
   useEffect(() => {
-    setBaseComponents(currentComponents.getAllComponents('base'))
-    setLayoutComponents(currentComponents.getAllComponents('layout'))
+    setBaseComponents(currentComponents.getAllComponents(CType.BASE))
+    setLayoutComponents(currentComponents.getAllComponents(CType.LAYOUT))
   }, [])
 
   return (
