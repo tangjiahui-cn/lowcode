@@ -5,4 +5,8 @@ export const EVENT = {
   SELECTED_COMPONENT: Symbol(),
   // 滚动事件
   SCROLL: Symbol(),
+  // 修改属性
+  SET_ATTRIBUTES: Symbol(),
+  // 更新JSON编辑器
+  JSON_EDITOR: Symbol()
 }

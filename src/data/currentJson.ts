@@ -30,6 +30,8 @@ interface CurrentJson {
   getJson: () => JsonNode[];
   // 设置 json
   setJson: (newJson: JsonNode[]) => JsonNode[];
+  // 更新某个节点
+  updateJsonNode: (jsonNode: JsonNode) => void;
 }
 
 let json: JsonNode[] = [];
@@ -39,5 +41,22 @@ export const currentJson: CurrentJson = {
   },
   setJson (newJson: JsonNode[]) {
     return json = newJson
+  },
+  updateJsonNode (jsonNode: JsonNode) {
+    update(json, jsonNode)
+
+    // 遍历更新节点
+    function update(json: JsonNode[] = [], jsonNode: JsonNode) {
+      if (!json.length) return;
+      for (let i = 0; i < json.length; i++) {
+        const current = json[i];
+        if (current.id === jsonNode.id) {
+          Object.assign(current, jsonNode)
+          return;
+        } else {
+          update(current?.children, jsonNode);
+        }
+      }
+    }
   }
 };

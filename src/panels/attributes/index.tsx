@@ -1,8 +1,9 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {currentComponents, currentInstances, globalEvent, Instance, JsonNode, RegisterComponent} from "../../data";
 import {EVENT} from "../../enum";
 import {Tabs} from "antd";
 import {attributesEmptyStyle, attributesStyle} from "./style";
+import {useRegisterGlobalEvent} from "../../hooks/useRegisterGlobalEvent";
 
 const tabOptions = [
   {label: '属性', value: '1'},
@@ -33,12 +34,10 @@ export default function Attributes () {
 
   function handleAttributes (attributes: any) {
     instance?.handleSetAttributes?.(attributes);
+    globalEvent.notify(EVENT.SET_ATTRIBUTES, attributes)
   }
 
-  useEffect(() => {
-    globalEvent.on(EVENT.SELECTED_COMPONENT, handleSelect);
-    return () => globalEvent.remove(EVENT.SELECTED_COMPONENT, handleSelect)
-  }, [])
+  useRegisterGlobalEvent(EVENT.SELECTED_COMPONENT, handleSelect)
 
   return component ? (
     <div className={attributesStyle}>

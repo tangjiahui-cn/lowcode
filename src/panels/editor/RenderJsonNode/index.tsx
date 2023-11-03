@@ -4,7 +4,7 @@ import {
   Instance,
   JsonNode,
   RegisterComponent,
-  currentPanels, globalEvent, globalVariable,
+  currentPanels, globalEvent, globalVariable, currentJson,
 } from "../../../data";
 import {useEffect, useMemo, useRef, useState} from "react";
 import {createJsonNode, getComponentByCId} from "../../../utils";
@@ -238,12 +238,21 @@ export default function RenderJsonNode (props: IProps) {
         if (props?.jsonNode) {
           props.jsonNode.attributes = attributes;
         }
+        // 只更新json中某个节点（不更新整个组件树）
+        currentJson.updateJsonNode(props?.jsonNode);
+        // 更新json编辑器
+        globalEvent.notify(EVENT.JSON_EDITOR, currentJson.getJson())
       }
     }
   }
 
   useUpdateEffect(() => {
     setAttributes(props?.jsonNode?.attributes)
+
+    // 节点更新时，更新属性面板
+    if (currentSelectedInstance.isSelected(props?.jsonNode?.id)) {
+      globalEvent.notify(EVENT.SELECTED_COMPONENT, props?.jsonNode)
+    }
   }, [props?.jsonNode?.attributes])
 
   useEffect(() => {

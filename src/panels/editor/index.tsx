@@ -12,6 +12,8 @@ import {checkJson} from "../../utils/createInitJson";
 export default function Editor () {
   const dom = useRef<HTMLDivElement>(null);
   const [json, setJson] = useState<JsonNode[]>([]);
+  const jsonRef = useRef(json);
+  jsonRef.current = json;
 
   function initJson () {
     const localJsonStr: string = localStorage.getItem('json') || '[]';
@@ -20,7 +22,11 @@ export default function Editor () {
   }
 
   function initCurrentPanels () {
-    currentPanels.editor.setJson = setJson;
+    currentPanels.editor.setJson = json => {
+      currentJson.setJson(json)
+      setJson(json)
+    };
+
     currentPanels.editor.domRef = dom
   }
 

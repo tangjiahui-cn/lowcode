@@ -23,10 +23,11 @@ export const currentPanels: CurrentPanels = {
     setJson: undefined,
     domRef: undefined,
     refreshJson (newJson?: JsonNode[]) {
-      // 设置json
-      if (newJson) currentJson.setJson(newJson)
-      // 触发 setJson [setState] 更新整个页面
-      currentPanels.editor.setJson?.([...currentJson.getJson()]);
+      const target = newJson || [...currentJson.getJson()]
+      // // 设置json
+      currentJson.setJson(target)
+      // // 触发 setJson 更新整个页面
+      currentPanels.editor.setJson?.(target);
     }
   }
 }
