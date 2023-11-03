@@ -4,12 +4,8 @@ import {useEffect, useState} from "react";
 import {AttributesProps} from "../../data";
 
 /**
- * 按钮私有属性面板
- *
- * At 2023/10/31
- * By TangJiaHui
+ * 属性面板
  */
-
 const labelStyle = {flex: '0 0 80px'}
 export default function (props: AttributesProps<Attributes>) {
   const [attributes, setAttributes] = useState<Attributes>(props.attributes);

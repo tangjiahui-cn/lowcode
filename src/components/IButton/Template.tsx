@@ -9,10 +9,7 @@ export interface Attributes {
 }
 
 /**
- * 按钮
- *
- * At 2023/10/31
- * By TangJiaHui
+ * 组件模板
  */
 export default function (props: TemplateProps<Attributes, HTMLButtonElement>) {
   const domRef = useRef<HTMLButtonElement>(null);

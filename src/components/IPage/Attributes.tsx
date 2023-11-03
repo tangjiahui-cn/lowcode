@@ -4,10 +4,7 @@ import {AttributesProps} from "../../data";
 import {Attributes} from "./Template";
 
 /**
- * 按钮私有属性面板
- *
- * At 2023/10/31
- * By TangJiaHui
+ * 属性面板
  */
 export default function (props: AttributesProps<Attributes>) {
   const [attributes, setAttributes] = useState<Attributes>(props.attributes);

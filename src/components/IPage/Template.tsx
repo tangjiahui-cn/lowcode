@@ -4,11 +4,9 @@ import {useEffect, useRef} from "react";
 export interface Attributes {
   title: string;
 }
+
 /**
- * 按钮
- *
- * At 2023/10/31
- * By TangJiaHui
+ * 组件模板
  */
 export default function (props: TemplateProps<Attributes, HTMLDivElement>) {
   const domRef = useRef<HTMLDivElement>(null);
