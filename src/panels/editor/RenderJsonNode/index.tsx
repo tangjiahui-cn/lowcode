@@ -101,8 +101,11 @@ export default function RenderJsonNode (props: IProps) {
     if (!props?.parentJsonNode?.children?.length) return;
     // 父节点删除当前节点
     props.parentJsonNode.children = props.parentJsonNode.children.filter(jsonNode => jsonNode.id !== id)
+
     // 刷新json
     currentPanels.editor.refreshJson();
+
+    globalEvent.notify(EVENT.JSON_EDITOR, currentJson.getJson())
   }
 
   function handleSelectParent () {
@@ -184,6 +187,7 @@ export default function RenderJsonNode (props: IProps) {
     setTimeout(() => {
       currentInstances.getIns(moveJsonNode?.id)?.handleSelect?.();
     })
+    globalEvent.notify(EVENT.JSON_EDITOR, currentJson.getJson())
   }
 
   function handleDrop (e: React.DragEvent<HTMLDivElement>) {

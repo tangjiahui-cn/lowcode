@@ -43,6 +43,7 @@ export const currentJson: CurrentJson = {
     return json = newJson
   },
   updateJsonNode (jsonNode: JsonNode) {
+    if (!jsonNode) return;
     update(json, jsonNode)
 
     // 遍历更新节点
