@@ -43,7 +43,7 @@ export default function RenderJsonNode (props: IProps) {
   // 获取元素DOM节点
   const getTargetDomRef = useRef<() => any>();
   // 当前实例
-  const instanceRef = useRef<Instance>(getInstance());
+  const instanceRef = useRef<Instance>();
 
   // 当前jsonNode对应组件
   const component: RegisterComponent = useMemo(() => {
@@ -260,9 +260,10 @@ export default function RenderJsonNode (props: IProps) {
   }, [props?.jsonNode?.attributes])
 
   useEffect(() => {
+    instanceRef.current = getInstance();
     currentInstances.add(instanceRef.current);
-    return () => currentInstances.delete(instanceRef.current.id);
-  }, [])
+    return () => currentInstances.delete(instanceRef.current?.id);
+  }, [props?.jsonNode])
 
   // 开启预览模式，清空状态
   useUpdateEffect(() => {
@@ -296,7 +297,7 @@ export default function RenderJsonNode (props: IProps) {
             return;
           }
           // 新的选中元素操作
-          instanceRef.current.handleSelect();
+          instanceRef.current?.handleSelect?.();
         },
         onPointerEnter () {
           // 旧的栈顶元素取消经过

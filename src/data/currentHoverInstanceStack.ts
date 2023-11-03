@@ -8,7 +8,7 @@ import type {Instance} from "./currentInstances";
 
 interface CurrentHoverInstanceStack {
   // 插入栈一个实例
-  push: (ins: Instance) => void;
+  push: (ins?: Instance) => void;
   // 弹出一个实例
   pop: () => Instance | undefined;
   // 获取栈顶实例
@@ -20,7 +20,9 @@ interface CurrentHoverInstanceStack {
 let insStack: Instance[] = [];
 export const currentHoverInstanceStack: CurrentHoverInstanceStack = {
   push (ins) {
-    insStack.push(ins);
+    if (ins) {
+      insStack.push(ins);
+    }
   },
   pop () {
     return insStack.pop();

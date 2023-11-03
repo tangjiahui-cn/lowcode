@@ -27,7 +27,7 @@ interface currentInstances {
   // 获取所有实例
   getAllIns: () => Instance[];
   // 删除一个指定实例
-  delete: (id: string) => void;
+  delete: (id?: string) => void;
 }
 
 const insList: Map<string, Instance> = new Map();
@@ -41,7 +41,9 @@ export const currentInstances: currentInstances = {
   getAllIns () {
     return [...insList.values()]
   },
-  delete (id: string) {
-    insList.delete(id);
+  delete (id?: string) {
+    if (id) {
+      insList.delete(id);
+    }
   }
 }
