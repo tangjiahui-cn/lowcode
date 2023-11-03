@@ -22,11 +22,7 @@ export default function Editor () {
   }
 
   function initCurrentPanels () {
-    currentPanels.editor.setJson = json => {
-      currentJson.setJson(json)
-      setJson(json)
-    };
-
+    currentPanels.editor.setJson = setJson;
     currentPanels.editor.domRef = dom
   }
 

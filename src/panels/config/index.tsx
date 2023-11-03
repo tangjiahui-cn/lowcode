@@ -25,13 +25,13 @@ export default function Config () {
     const INIT_JSON = createInitJson();
     currentPanels?.editor?.setJson?.(currentJson.setJson(INIT_JSON));
     localStorage.setItem('json', JSON.stringify(INIT_JSON))
-    message.success('清空成功')
+    message.success('清空成功', 0.3)
   }
 
   function handleSave () {
     const jsonStr = JSON.stringify(currentJson.getJson())
     localStorage.setItem('json', jsonStr)
-    message.success('保存成功')
+    message.success('保存成功', 0.3)
   }
 
   function handleChangeMode (mode: MODE) {
@@ -43,10 +43,9 @@ export default function Config () {
         message: '切换到开发模式',
         duration: 1.2,
       })
-      currentPanels.editor.setJson?.([]);
-      setTimeout(() => {
-        currentPanels.editor.refreshJson()
-      })
+
+      currentPanels.editor?.setJson?.([])
+      setTimeout(() => currentPanels.editor.refreshJson())
       return
     }
 

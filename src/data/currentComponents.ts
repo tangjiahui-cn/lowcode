@@ -6,6 +6,8 @@
  */
 import * as React from "react";
 import {CType} from "../enum/component";
+import {globalVariable} from "./globalVariable";
+import {DOMAttributes} from "react";
 
 export type Base = {
   x: string;
@@ -28,16 +30,16 @@ export type TemplateProps<Attributes, E = any> = {
   // 样式
   style?: React.CSSProperties;
   // 事件
-  events?: {
-    onPointerDown?: React.PointerEventHandler<E>;
-    onPointerEnter?: React.PointerEventHandler<E>;
-    onPointerLeave?: React.PointerEventHandler<E>;
-    onDragOver?: React.DragEventHandler<E>;
-    onDrop?: React.DragEventHandler<E>;
-    onScroll?: React.UIEventHandler<E>
-  },
+  events?: DOMAttributes<E>;
   // 子元素
   children?: React.ReactNode[];
+}
+
+// 开发环境事件拦截
+export function getEvent (injectEvent?: DOMAttributes<any>, events?: DOMAttributes<any>) {
+  return globalVariable.isDev()
+    ? injectEvent
+    : events
 }
 
 // 模板组件类型

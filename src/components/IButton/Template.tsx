@@ -1,6 +1,6 @@
 import {Button} from "antd";
 import {ButtonType} from "antd/es/button";
-import {TemplateProps} from "../../data";
+import {getEvent, TemplateProps} from "../../data";
 import {useEffect, useRef} from "react";
 
 export interface Attributes {
@@ -23,7 +23,7 @@ export default function (props: TemplateProps<Attributes, HTMLButtonElement>) {
       ref={domRef}
       style={props?.style}
       type={props?.attributes?.type}
-      {...props?.events}
+      {...getEvent(props?.events)}
     >
       {props?.attributes?.value}
     </Button>
