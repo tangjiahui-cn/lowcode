@@ -1,57 +1,27 @@
-import {currentComponents, RegisterComponent} from '../../data'
-import {Space} from "antd";
-import {container, block} from "./style";
-import {img} from "../index";
-import * as React from "react";
-import {useEffect, useState} from "react";
-import {DRAG} from "../../enum";
-import {CType} from "../../enum/component";
+import ComponentMenu from "./ComponentMenu";
+import MenuList, {MenuType} from "./MenuList";
+import {useState} from "react";
+import JsonEditorMenu from "./JsonEditorMenu";
+
 
 /**
- * 组件树面板
- *
- * At 2023/10/31
- * By TangJiaHui
+ * 左侧菜单项
  */
-export default function Components () {
-  const [baseComponents, setBaseComponents] = useState<RegisterComponent[]>([]);
-  const [layoutComponents, setLayoutComponents] = useState<RegisterComponent[]>([]);
-
-  function handleDragStart (e: React.DragEvent<HTMLDivElement>, component: RegisterComponent) {
-    e.dataTransfer.setDragImage(img, 0, 0)
-    e.dataTransfer.setData(DRAG.NEW, JSON.stringify({
-      cId: component.cId
-    }))
-  }
-
-  function renderComponents (components: RegisterComponent[]) {
-    return components.map((component: RegisterComponent) => {
-      return (
-        <div
-          key={component.cId}
-          className={block}
-          draggable
-          onDragStart={e => {
-            handleDragStart(e, component)
-          }}
-        >
-          {component.name}
-        </div>
-      )
-    })
-  }
-
-  useEffect(() => {
-    setBaseComponents(currentComponents.getAllComponents(CType.BASE))
-    setLayoutComponents(currentComponents.getAllComponents(CType.LAYOUT))
-  }, [])
+export default function () {
+  const [menuType, setMenuType] = useState<MenuType>(MenuType.componentList);
 
   return (
-    <Space className={container} direction={'vertical'}>
-      <div style={{fontWeight: 800, padding: '8px 8px 0'}}>基础组件</div>
-      <div>{renderComponents(baseComponents)}</div>
-      <div style={{fontWeight: 800, padding: '8px 8px 0'}}>布局容器</div>
-      <div>{renderComponents(layoutComponents)}</div>
-    </Space>
+    <div style={{display: 'flex', height: '100%', overflowY: 'hidden'}}>
+      <div style={{borderRight: '1px solid #e8e8e8', overflowY: 'auto'}}>
+        <MenuList
+          value={menuType}
+          onChange={setMenuType}
+        />
+      </div>
+      <div style={{flex: 1, overflowY: 'auto'}}>
+        {menuType === MenuType.componentList && <ComponentMenu />}
+        {menuType === MenuType.jsonEditor && <JsonEditorMenu />}
+      </div>
+    </div>
   )
 }

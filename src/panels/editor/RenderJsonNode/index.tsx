@@ -116,7 +116,74 @@ export default function RenderJsonNode (props: IProps) {
     e.dataTransfer.setDragImage(img, 0, 0)
     e.dataTransfer.setData(DRAG.MOVE, JSON.stringify({
       jsonNode: props?.jsonNode,
+      parentJsonNode: props?.parentJsonNode
     }))
+  }
+
+  // 插入一个新的节点
+  function insertNewNode (newJsonNode: JsonNode) {
+    const component = currentComponents.getComponent(newJsonNode?.cId);
+    if (!component) {
+      throw new Error(ERROR.NOT_FOUND_COMPONENT)
+    }
+    const jsonNode = createJsonNode(component);
+    if (!props?.jsonNode?.children) {
+      props.jsonNode.children = []
+    }
+    props?.jsonNode?.children?.push?.(jsonNode);
+    currentPanels.editor.refreshJson();
+    // 选中拖拽节点
+    setTimeout(() => {
+      currentInstances.getIns(jsonNode?.id)?.handleSelect?.();
+    })
+  }
+
+  // 移动节点
+  function moveNode (moveData: {
+    jsonNode: JsonNode;
+    parentJsonNode: JsonNode;
+  }) {
+    const {
+      jsonNode: moveJsonNode,
+      parentJsonNode: moveParentNode
+    } = moveData;
+
+    if (!moveJsonNode ||
+      // 移动容器到自身，取消
+      (moveJsonNode?.id === props?.jsonNode.id) ||
+      // 在同一个容器内移动
+      (moveParentNode?.id === props?.jsonNode?.id)
+    ) {
+      return;
+    }
+
+    // 从json数组中删除上一个拖拽节点
+    if (!_parentJsonNode) {
+      throw new Error('_parentJsonNode is not correctly set.')
+    }
+
+    _parentJsonNode.children = _parentJsonNode.children?.filter(jsonNode => {
+      return jsonNode.id !== moveJsonNode.id
+    })
+
+    // 清空所有选中节点
+    currentSelectedInstance.clear()
+
+    // 拖拽节点放在当前节点下
+    props?.jsonNode?.children
+      ? props?.jsonNode?.children?.push(moveJsonNode)
+      : (props.jsonNode.children = [moveJsonNode])
+
+    // 刷新json列表
+    currentPanels.editor.refreshJson();
+
+    // 重置父节点缓存
+    _parentJsonNode = undefined;
+
+    // 选中拖拽节点
+    setTimeout(() => {
+      currentInstances.getIns(moveJsonNode?.id)?.handleSelect?.();
+    })
   }
 
   function handleDrop (e: React.DragEvent<HTMLDivElement>) {
@@ -130,49 +197,14 @@ export default function RenderJsonNode (props: IProps) {
 
     // 新建一个实例
     if (newData) {
-      const {cId} = JSON.parse(newData)
-      const component = currentComponents.getComponent(cId);
-      if (!component) {
-        throw new Error(ERROR.NOT_FOUND_COMPONENT)
-      }
-      const jsonNode = createJsonNode(component);
-      if (!props?.jsonNode?.children) {
-        props.jsonNode.children = []
-      }
-      props?.jsonNode?.children?.push?.(jsonNode);
-      currentPanels.editor.refreshJson();
+      insertNewNode(JSON.parse(newData))
       return
     }
 
     // 组件间移动
     const moveData = e.dataTransfer.getData(DRAG.MOVE);
     if (moveData) {
-      const {jsonNode: moveJsonNode} = JSON.parse(moveData || "{}");
-
-      // 如果移动到自身则取消
-      if (!moveJsonNode || (moveJsonNode?.id === props?.jsonNode.id)) {
-        return;
-      }
-
-      // 从json数组中删除上一个拖拽节点
-      if (!_parentJsonNode) {
-        throw new Error('_parentJsonNode is not correctly set.')
-      }
-
-      _parentJsonNode.children = _parentJsonNode.children?.filter(jsonNode => {
-        return jsonNode.id !== moveJsonNode.id
-      })
-
-      // 拖拽节点放在当前节点下
-      props?.jsonNode?.children
-        ? props?.jsonNode?.children?.push(moveJsonNode)
-        : (props.jsonNode.children = [moveJsonNode])
-
-      // 刷新json列表
-      currentPanels.editor.refreshJson();
-
-      // 重置父节点缓存
-      _parentJsonNode = undefined;
+      moveNode(JSON.parse(moveData || "{}"))
     }
   }
 
@@ -209,6 +241,10 @@ export default function RenderJsonNode (props: IProps) {
       }
     }
   }
+
+  useUpdateEffect(() => {
+    setAttributes(props?.jsonNode?.attributes)
+  }, [props?.jsonNode?.attributes])
 
   useEffect(() => {
     currentInstances.add(instanceRef.current);

@@ -10,6 +10,7 @@ import IButton from './IButton';
 import ITextArea from './ITextArea';
 import IContainer from './IContainer';
 import ITable from './ITable';
+import IText from './IText';
 
 export function registerComponents () {
   currentComponents.add(IPage);
@@ -17,4 +18,5 @@ export function registerComponents () {
   currentComponents.add(ITextArea);
   currentComponents.add(IContainer);
   currentComponents.add(ITable);
+  currentComponents.add(IText);
 }

@@ -45,6 +45,7 @@ export default function Editor () {
             <RenderJsonNode
               key={jsonNode.id}
               jsonNode={jsonNode}
+              parentJsonNode={undefined}
             />
           )
         })

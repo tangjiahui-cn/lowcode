@@ -21,14 +21,14 @@ export default function (props: AttributesProps<Attributes>) {
   return (
     <Space style={{width: '100%'}} direction={'vertical'}>
       <div style={{display: 'flex', alignItems: 'center'}}>
-        标题：
+        文字：
         <Input
           style={{flex: 1}}
-          value={attributes?.title}
+          value={attributes?.value}
           onChange={e => {
             handleChange({
               ...(attributes || {}),
-              title: e.target.value
+              value: e.target.value
             })
           }}
         />
