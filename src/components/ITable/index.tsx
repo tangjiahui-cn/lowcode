@@ -1,7 +1,7 @@
-import type {RegisterComponent} from "../../data";
-import Template from "./Template";
-import Attributes from "./Attributes";
-import {CType} from "../../enum/component";
+import type { RegisterComponent } from '../../data';
+import Template from './Template';
+import Attributes from './Attributes';
+import { CType } from '../../enum/component';
 
 export default {
   cId: 'i-table',
@@ -11,6 +11,3 @@ export default {
   attributeTemplate: Attributes,
   cType: CType.DISPLAY,
 } as RegisterComponent;
-
-
-

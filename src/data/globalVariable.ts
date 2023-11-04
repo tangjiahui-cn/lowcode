@@ -1,9 +1,9 @@
-import {globalEvent} from "./globalEvent";
-import {EVENT} from "../enum";
+import { globalEvent } from './globalEvent';
+import { EVENT } from '../enum';
 
 export enum MODE {
   DEV = '1', // 开发模式
-  PREVIEW = '2' // 预览模式
+  PREVIEW = '2', // 预览模式
 }
 
 /**
@@ -12,7 +12,7 @@ export enum MODE {
 export interface GlobalVariable {
   mode: MODE; // 模式
   maxZIndex: number; // 最大zIndex
-  eventThrottleDelay: number;  // 触发事件节流延时
+  eventThrottleDelay: number; // 触发事件节流延时
 
   setMaxZIndex: (zIndex: number) => void; // 设置最大zIndex
   setMode: (mode: MODE) => void; // 设置模式
@@ -29,16 +29,16 @@ export const globalVariable: GlobalVariable = {
     if (zIndex < globalVariable.maxZIndex) {
       return;
     }
-    globalVariable.maxZIndex = zIndex
-    globalEvent.notify(EVENT.SET_MAX_Z_INDEX, zIndex)
+    globalVariable.maxZIndex = zIndex;
+    globalEvent.notify(EVENT.SET_MAX_Z_INDEX, zIndex);
   },
   setMode: (mode: MODE) => {
-    globalVariable.mode = mode
+    globalVariable.mode = mode;
   },
-  isDev () {
+  isDev() {
     return globalVariable.mode === MODE.DEV;
   },
-  isPreview () {
+  isPreview() {
     return globalVariable.mode === MODE.PREVIEW;
-  }
-}
+  },
+};

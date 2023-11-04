@@ -1,13 +1,13 @@
-import {currentComponents, JsonNode} from "../data";
-import {createJsonNode} from "./createJsonNode";
+import { currentComponents, JsonNode } from '../data';
+import { createJsonNode } from './createJsonNode';
 
 /**
  * 创建一个包含初始Page的JSON
  */
-export function createInitJson () : JsonNode[] {
+export function createInitJson(): JsonNode[] {
   const component = currentComponents.getComponent('i-page');
   if (!component) {
-    throw new Error('page component is not found.')
+    throw new Error('page component is not found.');
   }
   return [createJsonNode(component)];
 }
@@ -15,7 +15,7 @@ export function createInitJson () : JsonNode[] {
 /**
  * 检查JSON格式是否正确
  */
-export function checkJson (json: JsonNode[]) : JsonNode[] {
+export function checkJson(json: JsonNode[]): JsonNode[] {
   if (json?.length) return json;
   return createInitJson();
 }

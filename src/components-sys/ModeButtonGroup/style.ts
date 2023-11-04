@@ -1,4 +1,4 @@
-import {css} from "class-css";
+import { css } from 'class-css';
 
 export const btn = css({
   cursor: 'pointer',
@@ -10,9 +10,9 @@ export const btn = css({
   border: '1px solid transparent',
   '&:hover': {
     background: '#e6ebf5',
-    textDecoration: 'underline'
-  }
-})
+    textDecoration: 'underline',
+  },
+});
 
 export const btnSelect = css({
   color: 'gray',
@@ -20,6 +20,6 @@ export const btnSelect = css({
   border: '1px solid #e8e8e8',
   '&:hover': {
     background: 'transparent',
-    textDecoration: 'none'
-  }
-})
+    textDecoration: 'none',
+  },
+});

@@ -17,13 +17,13 @@ export type Instance = {
   handleUnSelect: () => void;
   // 修改 attributes
   handleSetAttributes: (attributes: any) => void;
-}
+};
 
 interface currentInstances {
   // 新增一个实例
   add: (ins: Instance) => void;
   // 获取一个指定实例
-  getIns: (id?: string) => (Instance | undefined);
+  getIns: (id?: string) => Instance | undefined;
   // 获取所有实例
   getAllIns: () => Instance[];
   // 删除一个指定实例
@@ -32,18 +32,18 @@ interface currentInstances {
 
 const insList: Map<string, Instance> = new Map();
 export const currentInstances: currentInstances = {
-  add (ins) {
+  add(ins) {
     insList.set(ins.id, ins);
   },
-  getIns (id?: string) {
+  getIns(id?: string) {
     return id ? insList.get(id) : undefined;
   },
-  getAllIns () {
-    return [...insList.values()]
+  getAllIns() {
+    return [...insList.values()];
   },
-  delete (id?: string) {
+  delete(id?: string) {
     if (id) {
       insList.delete(id);
     }
-  }
-}
+  },
+};

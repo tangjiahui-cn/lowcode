@@ -1,7 +1,7 @@
-import type {RegisterComponent} from "../../data";
-import Template from "./Template";
-import Attributes from "./Attributes";
-import {CType} from "../../enum/component";
+import type { RegisterComponent } from '../../data';
+import Template from './Template';
+import Attributes from './Attributes';
+import { CType } from '../../enum/component';
 
 export default {
   cId: 'i-page',
@@ -16,10 +16,7 @@ export default {
     height: '100%',
     width: '100%',
     overflowY: 'auto',
-    padding: 16
+    padding: 16,
   },
-  cType: CType.SYS
+  cType: CType.SYS,
 } as RegisterComponent;
-
-
-

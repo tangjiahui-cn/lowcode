@@ -1,4 +1,4 @@
-import {css} from "class-css";
+import { css } from 'class-css';
 
 export const pageStyle = css({
   position: 'absolute',
@@ -9,35 +9,35 @@ export const pageStyle = css({
   height: '100%',
   display: 'flex',
   flexDirection: 'column',
-  overflow: 'hidden'
-})
+  overflow: 'hidden',
+});
 
 export const pageHead = css({
   flex: '0 0 48px',
-  borderBottom: '1px solid #e8e8e8'
-})
+  borderBottom: '1px solid #e8e8e8',
+});
 
 export const pageBody = css({
   flex: 1,
   display: 'flex',
-  overflow: 'hidden'
-})
+  overflow: 'hidden',
+});
 
 export const pageBodyLeft = css({
   flex: '0 0 300px',
   borderRight: '1px solid #e8e8e8',
-  overflowY: 'auto'
-})
+  overflowY: 'auto',
+});
 
 export const pageBodyMid = css({
   flex: 1,
   padding: 24,
   // overflow: 'auto',
   background: 'whitesmoke',
-  minWidth: 200
-})
+  minWidth: 200,
+});
 
 export const pageBodyRight = css({
   flex: '0 0 300px',
-  borderLeft: '1px solid #e8e8e8'
-})
+  borderLeft: '1px solid #e8e8e8',
+});

@@ -1,0 +1,12 @@
+*.yaml
+*.json
+
+node_modules
+*ignore
+LICENSE
+*.md
+*.d.ts
+*.rc
+
+public/
+.husky/

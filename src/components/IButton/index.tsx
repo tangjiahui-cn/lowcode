@@ -1,7 +1,7 @@
-import type {RegisterComponent} from "../../data";
-import Template from "./Template";
-import Attributes from "./Attributes";
-import {CType} from "../../enum/component";
+import type { RegisterComponent } from '../../data';
+import Template from './Template';
+import Attributes from './Attributes';
+import { CType } from '../../enum/component';
 
 export default {
   cId: 'i-button',
@@ -11,10 +11,7 @@ export default {
   attributeTemplate: Attributes,
   defaultAttributes: {
     value: '按钮',
-    type: 'default'
+    type: 'default',
   },
-  cType: CType.BASE
+  cType: CType.BASE,
 } as RegisterComponent;
-
-
-

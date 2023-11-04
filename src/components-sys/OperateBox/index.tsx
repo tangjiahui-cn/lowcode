@@ -1,6 +1,6 @@
-import {Space} from "antd";
-import {ArrowUpOutlined, DeleteOutlined, DragOutlined} from "@ant-design/icons";
-import {btn} from './style'
+import { Space } from 'antd';
+import { ArrowUpOutlined, DeleteOutlined, DragOutlined } from '@ant-design/icons';
+import { btn } from './style';
 
 /**
  * 操作工具盒
@@ -28,28 +28,30 @@ export default function OperateBox(props: IProps) {
   const mergeShow = {
     showDrag: props?.show?.showDrag ?? true,
     showSelectParent: props?.show?.showSelectParent ?? true,
-    showDelete: props?.show?.showDelete ?? true
-  }
+    showDelete: props?.show?.showDelete ?? true,
+  };
 
   return (
     <Space size={0}>
-      {mergeShow.showDrag && <DragOutlined
-        draggable
-        className={btn}
-        style={{color: 'white'}}
-        onDragEnd={props?.onDragEnd}
-        onDragStart={props?.onDragStart}
-      />}
-      {mergeShow?.showSelectParent && <ArrowUpOutlined
-        className={btn}
-        style={{color: 'white'}}
-        onClick={props?.onSelectParent}
-      />}
-      {mergeShow?.showDelete && <DeleteOutlined
-        className={btn}
-        style={{color: 'white'}}
-        onClick={props?.onDelete}
-      />}
+      {mergeShow.showDrag && (
+        <DragOutlined
+          draggable
+          className={btn}
+          style={{ color: 'white' }}
+          onDragEnd={props?.onDragEnd}
+          onDragStart={props?.onDragStart}
+        />
+      )}
+      {mergeShow?.showSelectParent && (
+        <ArrowUpOutlined
+          className={btn}
+          style={{ color: 'white' }}
+          onClick={props?.onSelectParent}
+        />
+      )}
+      {mergeShow?.showDelete && (
+        <DeleteOutlined className={btn} style={{ color: 'white' }} onClick={props?.onDelete} />
+      )}
     </Space>
-  )
+  );
 }

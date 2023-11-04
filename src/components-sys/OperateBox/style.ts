@@ -1,4 +1,4 @@
-import {css} from "class-css";
+import { css } from 'class-css';
 
 export const btn = css({
   background: '#3877ec',
@@ -6,6 +6,6 @@ export const btn = css({
   padding: '4px 4px',
   cursor: 'pointer',
   '&:hover': {
-    background: '#5789e8'
-  }
+    background: '#5789e8',
+  },
 });

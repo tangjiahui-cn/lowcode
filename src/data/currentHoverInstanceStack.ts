@@ -4,7 +4,7 @@
  * At 2023/11/01
  * By TangJiaHui
  */
-import type {Instance} from "./currentInstances";
+import type { Instance } from './currentInstances';
 
 interface CurrentHoverInstanceStack {
   // 插入栈一个实例
@@ -19,19 +19,18 @@ interface CurrentHoverInstanceStack {
 
 let insStack: Instance[] = [];
 export const currentHoverInstanceStack: CurrentHoverInstanceStack = {
-  push (ins) {
+  push(ins) {
     if (ins) {
       insStack.push(ins);
     }
   },
-  pop () {
+  pop() {
     return insStack.pop();
   },
-  getStackTop () {
+  getStackTop() {
     return insStack[insStack.length - 1];
   },
-  clear () {
-    insStack = []
-  }
-}
-
+  clear() {
+    insStack = [];
+  },
+};

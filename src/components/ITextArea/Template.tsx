@@ -1,6 +1,6 @@
-import {Input} from "antd";
-import {TemplateProps} from "../../data";
-import {useEffect, useRef, useState} from "react";
+import { Input } from 'antd';
+import { TemplateProps } from '../../data';
+import { useEffect, useRef, useState } from 'react';
 
 export interface Attributes {
   value: string;
@@ -11,15 +11,15 @@ export interface Attributes {
  */
 export default function (props: TemplateProps<Attributes, HTMLTextAreaElement>) {
   const ref = useRef<any>(null);
-  const [attributes, setAttributes] = useState<Attributes | undefined>(props?.attributes)
+  const [attributes, setAttributes] = useState<Attributes | undefined>(props?.attributes);
 
   useEffect(() => {
-    setAttributes(props?.attributes)
-  }, [props?.attributes])
+    setAttributes(props?.attributes);
+  }, [props?.attributes]);
 
   useEffect(() => {
     props?.getDomFn?.(() => ref.current?.resizableTextArea?.textArea);
-  }, [])
+  }, []);
 
   return (
     <Input.TextArea
@@ -27,13 +27,15 @@ export default function (props: TemplateProps<Attributes, HTMLTextAreaElement>) 
       style={props?.style}
       placeholder={'请输入'}
       value={attributes?.value}
-      onChange={e => setAttributes({
-        ...attributes,
-        value: e.target.value
-      })}
+      onChange={(e) =>
+        setAttributes({
+          ...attributes,
+          value: e.target.value,
+        })
+      }
       {...props?.events}
     >
       {attributes?.value}
     </Input.TextArea>
-  )
+  );
 }

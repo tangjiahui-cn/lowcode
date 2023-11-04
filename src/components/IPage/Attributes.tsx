@@ -1,7 +1,7 @@
-import {Input, Space} from "antd";
-import {useEffect, useState} from "react";
-import {AttributesProps} from "../../data";
-import {Attributes} from "./Template";
+import { Input, Space } from 'antd';
+import { useEffect, useState } from 'react';
+import { AttributesProps } from '../../data';
+import { Attributes } from './Template';
 
 /**
  * 属性面板
@@ -9,29 +9,29 @@ import {Attributes} from "./Template";
 export default function (props: AttributesProps<Attributes>) {
   const [attributes, setAttributes] = useState<Attributes>(props.attributes);
 
-  function handleChange (attributes: Attributes) {
+  function handleChange(attributes: Attributes) {
     setAttributes(attributes);
     props?.onChange?.(attributes);
   }
 
   useEffect(() => {
-    setAttributes(props?.attributes)
-  }, [props?.attributes])
+    setAttributes(props?.attributes);
+  }, [props?.attributes]);
 
   return (
-    <Space style={{width: '100%'}} direction={'vertical'}>
+    <Space style={{ width: '100%' }} direction={'vertical'}>
       <Space>
         标题：
         <Input
           value={attributes?.title}
-          onChange={e => {
+          onChange={(e) => {
             handleChange({
               ...(attributes || {}),
-              title: e.target.value
-            })
+              title: e.target.value,
+            });
           }}
         />
       </Space>
     </Space>
-  )
+  );
 }

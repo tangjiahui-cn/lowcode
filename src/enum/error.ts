@@ -1,3 +1,3 @@
 export const ERROR = {
-  NOT_FOUND_COMPONENT: 'component is not found.'
-}
+  NOT_FOUND_COMPONENT: 'component is not found.',
+};

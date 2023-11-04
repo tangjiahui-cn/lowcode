@@ -1,7 +1,7 @@
-import {Button} from "antd";
-import {ButtonType} from "antd/es/button";
-import {getEvent, TemplateProps} from "../../data";
-import {useEffect, useRef} from "react";
+import { Button } from 'antd';
+import { ButtonType } from 'antd/es/button';
+import { getEvent, TemplateProps } from '../../data';
+import { useEffect, useRef } from 'react';
 
 export interface Attributes {
   type: ButtonType;
@@ -16,7 +16,7 @@ export default function (props: TemplateProps<Attributes, HTMLButtonElement>) {
 
   useEffect(() => {
     props?.getDomFn?.(() => domRef.current);
-  }, [])
+  }, []);
 
   return (
     <Button
@@ -27,5 +27,5 @@ export default function (props: TemplateProps<Attributes, HTMLButtonElement>) {
     >
       {props?.attributes?.value}
     </Button>
-  )
+  );
 }

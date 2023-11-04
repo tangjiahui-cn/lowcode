@@ -1,5 +1,5 @@
-import {TemplateProps} from "../../data";
-import {useEffect, useRef} from "react";
+import { TemplateProps } from '../../data';
+import { useEffect, useRef } from 'react';
 
 export interface Attributes {
   value: string;
@@ -13,15 +13,11 @@ export default function (props: TemplateProps<Attributes, HTMLSpanElement>) {
 
   useEffect(() => {
     props?.getDomFn?.(() => domRef.current);
-  }, [])
+  }, []);
 
   return (
-    <span
-      ref={domRef}
-      style={props?.style}
-      {...props?.events}
-    >
+    <span ref={domRef} style={props?.style} {...props?.events}>
       {props?.attributes?.value}
     </span>
-  )
+  );
 }

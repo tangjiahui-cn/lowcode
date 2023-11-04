@@ -1,8 +1,8 @@
-import {css} from "class-css";
+import { css } from 'class-css';
 
 export const container = css({
-  width: '100%'
-})
+  width: '100%',
+});
 
 export const block = css({
   width: '50%',
@@ -22,6 +22,6 @@ export const block = css({
     borderRight: '1px solid #e8e8e8',
   },
   '&:hover': {
-    background: '#f6f6f6'
-  }
-})
+    background: '#f6f6f6',
+  },
+});

@@ -1,4 +1,3 @@
-
 export enum CType {
   BASE = 'base', // 基础组件
   DISPLAY = 'display', // 展示类组件

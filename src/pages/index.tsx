@@ -1,15 +1,14 @@
-import {pageBody, pageBodyLeft, pageBodyMid, pageBodyRight, pageHead, pageStyle} from "./style";
-import Config from "../panels/config";
-import Components from "../panels/components";
-import Editor from "../panels/editor";
-import Attributes from "../panels/attributes";
+import { pageBody, pageBodyLeft, pageBodyMid, pageBodyRight, pageHead, pageStyle } from './style';
+import Config from '../panels/config';
+import Components from '../panels/components';
+import Editor from '../panels/editor';
+import Attributes from '../panels/attributes';
 /**
  * 演示页面
  *
  * At 2023/10/31
  * By TangJiaHui
  */
-
 
 export default function App() {
   return (

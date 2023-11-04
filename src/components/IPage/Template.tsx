@@ -1,5 +1,5 @@
-import {TemplateProps} from "../../data";
-import {useEffect, useRef} from "react";
+import { TemplateProps } from '../../data';
+import { useEffect, useRef } from 'react';
 
 export interface Attributes {
   title: string;
@@ -13,7 +13,7 @@ export default function (props: TemplateProps<Attributes, HTMLDivElement>) {
 
   useEffect(() => {
     props?.getDomFn?.(() => domRef.current);
-  }, [])
+  }, []);
 
   return (
     <div
@@ -22,12 +22,12 @@ export default function (props: TemplateProps<Attributes, HTMLDivElement>) {
         position: 'relative',
         width: '100%',
         height: '100%',
-        ...props?.style
+        ...props?.style,
       }}
       {...props?.events}
     >
       {props?.attributes?.title && <h1>{props?.attributes?.title}</h1>}
       {props?.children}
     </div>
-  )
+  );
 }

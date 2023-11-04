@@ -1,7 +1,7 @@
-import type {RegisterComponent} from "../../data";
-import Template from "./Template";
-import Attributes from "./Attributes";
-import {CType} from "../../enum/component";
+import type { RegisterComponent } from '../../data';
+import Template from './Template';
+import Attributes from './Attributes';
+import { CType } from '../../enum/component';
 
 export default {
   cId: 'i-text',
@@ -10,10 +10,7 @@ export default {
   template: Template,
   attributeTemplate: Attributes,
   defaultAttributes: {
-    value: '一段文字'
+    value: '一段文字',
   },
-  cType: CType.BASE
+  cType: CType.BASE,
 } as RegisterComponent;
-
-
-

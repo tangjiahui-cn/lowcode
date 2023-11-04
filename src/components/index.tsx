@@ -4,7 +4,7 @@
  * At 2023/10/31
  * By TangJiaHui
  */
-import {currentComponents} from "../data";
+import { currentComponents } from '../data';
 import IPage from './IPage';
 import IButton from './IButton';
 import ITextArea from './ITextArea';
@@ -12,7 +12,7 @@ import IContainer from './IContainer';
 import ITable from './ITable';
 import IText from './IText';
 
-export function registerComponents () {
+export function registerComponents() {
   currentComponents.add(IPage);
   currentComponents.add(IButton);
   currentComponents.add(ITextArea);

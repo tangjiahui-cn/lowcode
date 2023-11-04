@@ -6,10 +6,10 @@
  */
 export type IEventFn = (payload?: any) => void;
 export type IEvent = {
-  type: any;  // 事件类型
+  type: any; // 事件类型
   callback: IEventFn; // 事件回调函数
   once?: boolean; // 是否仅监听一次
-}
+};
 
 export interface GlobalEvent {
   // 注册监听事件
@@ -25,44 +25,40 @@ export interface GlobalEvent {
 export const globalEvent: GlobalEvent = (() => {
   const eventMap: Map<any, IEvent[]> = new Map();
 
-  function on (type: unknown, callback: IEventFn, once?: boolean) {
+  function on(type: unknown, callback: IEventFn, once?: boolean) {
     const event: IEvent = {
       type,
       callback,
-      once
-    }
+      once,
+    };
     if (!eventMap.get(type)) {
-      eventMap.set(type, [])
+      eventMap.set(type, []);
     }
-    eventMap.get(type)?.push?.(event)
+    eventMap.get(type)?.push?.(event);
   }
 
-  function once (type: unknown, callback: IEventFn) {
+  function once(type: unknown, callback: IEventFn) {
     on(type, callback, true);
   }
 
-  function notify (type: unknown, payload: unknown) {
+  function notify(type: unknown, payload: unknown) {
     if (!eventMap.get(type)) return;
     const list = eventMap.get(type)?.filter((event: IEvent) => {
       event?.callback?.(payload);
-      return !event?.once
-    })
-    list?.length
-      ? eventMap.set(type, list)
-      : eventMap.delete(type)
+      return !event?.once;
+    });
+    list?.length ? eventMap.set(type, list) : eventMap.delete(type);
   }
 
-  function remove (type: unknown, callback?: IEventFn) {
+  function remove(type: unknown, callback?: IEventFn) {
     if (!eventMap.get(type)) return;
     if (callback) {
       const list = eventMap.get(type)?.filter((event: IEvent) => {
         return event.callback !== callback;
-      })
-      list?.length
-        ? eventMap.set(type, list)
-        : eventMap.delete(type)
+      });
+      list?.length ? eventMap.set(type, list) : eventMap.delete(type);
     } else {
-      eventMap.delete(type)
+      eventMap.delete(type);
     }
   }
 
@@ -70,6 +66,6 @@ export const globalEvent: GlobalEvent = (() => {
     on,
     notify,
     once,
-    remove
-  }
-})()
+    remove,
+  };
+})();

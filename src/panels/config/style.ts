@@ -1,4 +1,4 @@
-import {css} from "class-css";
+import { css } from 'class-css';
 
 export const page = css({
   display: 'flex',
@@ -6,5 +6,5 @@ export const page = css({
   alignContent: 'flex-start',
   justifyContent: 'space-between',
   padding: '0 8px',
-  height: '100%'
-})
+  height: '100%',
+});

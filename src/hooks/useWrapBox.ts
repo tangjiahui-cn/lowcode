@@ -1,5 +1,5 @@
-import {createWrapBox, DomType} from "../utils";
-import {MutableRefObject, useEffect, useRef} from "react";
+import { createWrapBox, DomType } from '../utils';
+import { MutableRefObject, useEffect, useRef } from 'react';
 
 /**
  * 控制子节点的包裹元素显示（在容器中的绝对定位位置）
@@ -18,12 +18,12 @@ type ReturnType = MutableRefObject<{
   remove: () => void;
   // 调整包裹元素位置
   resize: () => void;
-}>
+}>;
 
-export function useWrapBox (options: IOptions, effect: any[] = []): ReturnType {
+export function useWrapBox(options: IOptions, effect: any[] = []): ReturnType {
   const wrapIns = useRef(createWrapBox(options.style, options.getContainerFn, options.getChildFn));
   // 组件销毁时清空
-  useEffect(() => wrapIns.current.remove, [])
-  useEffect(() => wrapIns.current.resize(), effect)
+  useEffect(() => wrapIns.current.remove, []);
+  useEffect(() => wrapIns.current.resize(), effect);
   return wrapIns;
 }

@@ -1,9 +1,9 @@
-import {css} from "class-css";
+import { css } from 'class-css';
 
-const color = '#cecece'
+const color = '#cecece';
 export const attributesStyle = css({
-  padding: '0 16px 16px'
-})
+  padding: '0 16px 16px',
+});
 
 export const attributesEmptyStyle = css({
   display: 'flex',
@@ -11,5 +11,5 @@ export const attributesEmptyStyle = css({
   justifyContent: 'center',
   height: '100%',
   fontSize: 18,
-  color
-})
+  color,
+});

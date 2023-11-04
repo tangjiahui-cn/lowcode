@@ -1,17 +1,17 @@
-import * as React from "react";
-import {DomType, getChildDomRect} from "./getChildDomRect";
-import {css} from "class-css";
-import {throttle} from "lodash";
-import {globalEvent, globalVariable} from "../data";
-import {EVENT} from "../enum";
+import * as React from 'react';
+import { DomType, getChildDomRect } from './getChildDomRect';
+import { css } from 'class-css';
+import { throttle } from 'lodash';
+import { globalEvent, globalVariable } from '../data';
+import { EVENT } from '../enum';
 
 /**
  * 获取包裹盒子元素
  */
-export function createWrapBox (
+export function createWrapBox(
   style: React.CSSProperties,
   getContainerDom: () => DomType,
-  getChildDom: () => DomType
+  getChildDom: () => DomType,
 ) {
   let mountDom: DomType = null;
 
@@ -26,11 +26,11 @@ export function createWrapBox (
       position: 'absolute',
       ...style,
       ...getChildDomRect(container, child),
-    })
-  }, globalVariable.eventThrottleDelay)
+    });
+  }, globalVariable.eventThrottleDelay);
 
   // 挂载wrap-box
-  function mount () {
+  function mount() {
     const container = getContainerDom();
     const child = getChildDom();
     if (!container || !child || mountDom) {
@@ -42,30 +42,30 @@ export function createWrapBox (
       position: 'absolute',
       ...style,
       ...getChildDomRect(container, child),
-    })
+    });
 
     container?.appendChild(mountDom);
     // 窗口变化时重置UI
-    window.addEventListener('resize', resize)
+    window.addEventListener('resize', resize);
     // 组件滚动时重置UI
-    globalEvent.on(EVENT, resize)
+    globalEvent.on(EVENT, resize);
   }
 
   // 移出 wrap-box
-  function remove () {
+  function remove() {
     const container = getContainerDom();
     if (!mountDom || !container) {
       return;
     }
-    container.removeChild(mountDom)
+    container.removeChild(mountDom);
     mountDom = null;
-    window.removeEventListener('resize', resize)
-    globalEvent.remove(EVENT, resize)
+    window.removeEventListener('resize', resize);
+    globalEvent.remove(EVENT, resize);
   }
 
   return {
     mount,
     remove,
-    resize
-  }
+    resize,
+  };
 }
