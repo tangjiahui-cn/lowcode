@@ -11,61 +11,49 @@ export type IEvent = {
   once?: boolean; // 是否仅监听一次
 };
 
-export interface GlobalEvent {
-  // 注册监听事件
-  on: (type: unknown, callback: IEventFn, once?: boolean) => void;
-  // 注册监听事件 (执行一次后销毁）
-  once: (type: unknown, callback: IEventFn) => void;
-  // 发布事件
-  notify: (type: unknown, payload: unknown) => void;
-  // 移除事件。(不传callback移出type的所有回调事件)
-  remove: (type: unknown, callback?: IEventFn) => void;
-}
+export class EventEmitter {
+  private eventMap: Map<any, IEvent[]> = new Map();
 
-export const globalEvent: GlobalEvent = (() => {
-  const eventMap: Map<any, IEvent[]> = new Map();
-
-  function on(type: unknown, callback: IEventFn, once?: boolean) {
+  // 注册事件
+  public on(type: unknown, callback: IEventFn, once?: boolean) {
     const event: IEvent = {
       type,
       callback,
       once,
     };
-    if (!eventMap.get(type)) {
-      eventMap.set(type, []);
+    if (!this.eventMap.get(type)) {
+      this.eventMap.set(type, []);
     }
-    eventMap.get(type)?.push?.(event);
+    this.eventMap.get(type)?.push?.(event);
   }
 
-  function once(type: unknown, callback: IEventFn) {
-    on(type, callback, true);
+  // 注册事件一次（执行一次后销毁）
+  public once(type: unknown, callback: IEventFn) {
+    this.on(type, callback, true);
   }
 
-  function notify(type: unknown, payload: unknown) {
-    if (!eventMap.get(type)) return;
-    const list = eventMap.get(type)?.filter((event: IEvent) => {
+  // 触发事件
+  public notify(type: unknown, payload: unknown) {
+    if (!this.eventMap.get(type)) return;
+    const list = this.eventMap.get(type)?.filter((event: IEvent) => {
       event?.callback?.(payload);
       return !event?.once;
     });
-    list?.length ? eventMap.set(type, list) : eventMap.delete(type);
+    list?.length ? this.eventMap.set(type, list) : this.eventMap.delete(type);
   }
 
-  function remove(type: unknown, callback?: IEventFn) {
-    if (!eventMap.get(type)) return;
+  // 移除事件。(不传callback移出type的所有回调事件)
+  public remove(type: unknown, callback?: IEventFn) {
+    if (!this.eventMap.get(type)) return;
     if (callback) {
-      const list = eventMap.get(type)?.filter((event: IEvent) => {
+      const list = this.eventMap.get(type)?.filter((event: IEvent) => {
         return event.callback !== callback;
       });
-      list?.length ? eventMap.set(type, list) : eventMap.delete(type);
+      list?.length ? this.eventMap.set(type, list) : this.eventMap.delete(type);
     } else {
-      eventMap.delete(type);
+      this.eventMap.delete(type);
     }
   }
+}
 
-  return {
-    on,
-    notify,
-    once,
-    remove,
-  };
-})();
+export const globalEvent = new EventEmitter();

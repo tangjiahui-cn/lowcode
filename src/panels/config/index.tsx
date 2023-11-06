@@ -1,12 +1,13 @@
 import { Button, message, notification, Space } from 'antd';
 import { page } from './style';
 import { GithubOutlined, RocketTwoTone } from '@ant-design/icons';
-import { currentJson, currentPanels, globalVariable, MODE } from '../../data';
+import { currentJson, currentPanels, globalEvent, globalVariable, MODE } from '../../data';
 import { createInitJson } from '../../utils/createInitJson';
 import ModeButtonGroup from '../../components-sys/ModeButtonGroup';
 import { useState } from 'react';
 import { useUpdateEffect } from 'ahooks';
 import { cloneDeep } from 'lodash';
+import { EVENT } from '../../enum';
 
 /**
  * 全局配置面板
@@ -22,6 +23,7 @@ export default function Config() {
   }
 
   function handleClear() {
+    globalEvent.notify(EVENT.SELECTED_COMPONENT, undefined);
     const INIT_JSON = createInitJson();
     currentPanels?.editor?.setJson?.(currentJson.setJson(INIT_JSON));
     localStorage.setItem('json', JSON.stringify(INIT_JSON));

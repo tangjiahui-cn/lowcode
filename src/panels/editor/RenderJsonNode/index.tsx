@@ -8,6 +8,8 @@ import {
   globalEvent,
   globalVariable,
   currentJson,
+  ExposeEvent,
+  TriggerEvent,
 } from '../../../data';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createJsonNode, getComponentByCId } from '../../../utils';
@@ -21,6 +23,8 @@ import OperateBox from '../../../components-sys/OperateBox';
 import { throttle } from 'lodash';
 import { useUpdateEffect } from 'ahooks';
 import { img } from '../../index';
+import { globalEventSystem } from '../../../data/globalEventSystem';
+import { currentRegisterEvent } from '../../../data/currentRegisterEvent';
 
 const notifyScroll = throttle((payload) => {
   globalEvent.notify(EVENT, payload);
@@ -113,8 +117,9 @@ export default function RenderJsonNode(props: IProps) {
     );
 
     // 刷新json
+    currentJson.updateJsonNode(props.parentJsonNode);
     currentPanels.editor.refreshJson();
-
+    globalEvent.notify(EVENT.SELECTED_COMPONENT, undefined);
     globalEvent.notify(EVENT.JSON_EDITOR, currentJson.getJson());
   }
 
@@ -221,6 +226,7 @@ export default function RenderJsonNode(props: IProps) {
   function getInstance(): Instance {
     return {
       id: props?.jsonNode?.id,
+      name: props?.jsonNode?.name,
       handleHover() {
         // 挂载wrap-box
         hoverPanelRef.current.mount();
@@ -247,14 +253,78 @@ export default function RenderJsonNode(props: IProps) {
         setAttributes(attributes);
         if (props?.jsonNode) {
           props.jsonNode.attributes = attributes;
+          // 只更新json中某个节点（不更新整个组件树）
+          currentJson.updateJsonNode(props?.jsonNode);
+          // 更新json编辑器
+          globalEvent.notify(EVENT.JSON_EDITOR, currentJson.getJson());
         }
-        // 只更新json中某个节点（不更新整个组件树）
-        currentJson.updateJsonNode(props?.jsonNode);
-        // 更新json编辑器
-        globalEvent.notify(EVENT.JSON_EDITOR, currentJson.getJson());
+      },
+      handleSetExposeAttributes(exposeEvents: ExposeEvent[]) {
+        if (props?.jsonNode) {
+          props.jsonNode.exposes = exposeEvents;
+          // 只更新json中某个节点（不更新整个组件树）
+          currentJson.updateJsonNode(props?.jsonNode);
+          // 更新json编辑器
+          globalEvent.notify(EVENT.JSON_EDITOR, currentJson.getJson());
+        }
+      },
+      handleSetTriggerAttributes(triggerEvent: TriggerEvent[]) {
+        if (props?.jsonNode) {
+          props.jsonNode.triggers = triggerEvent;
+          // 只更新json中某个节点（不更新整个组件树）
+          currentJson.updateJsonNode(props?.jsonNode);
+          // 更新json编辑器
+          globalEvent.notify(EVENT.JSON_EDITOR, currentJson.getJson());
+        }
+      },
+      getExposeAttributes() {
+        return props?.jsonNode?.exposes || [];
       },
     };
   }
+
+  // 注册事件
+  function registerEvents(): () => void {
+    // 取消注册的函数列表
+    const unRegisterFns: any[] = [];
+
+    // 暴露事件（供外界调用, 这里已经在组件内部监听了，此处只是注册下以供触发事件根据uId查询对应暴露事件）
+    props?.jsonNode?.exposes?.forEach((exposeEvent: ExposeEvent) => {
+      currentRegisterEvent.add(exposeEvent.uId, exposeEvent);
+      unRegisterFns.push(() => {
+        currentRegisterEvent.remove(exposeEvent.uId);
+      });
+    });
+
+    // 触发事件(监听当前实例的事件变更通知，并发布新的变更到暴露组件)
+    props?.jsonNode?.triggers?.forEach((trigger: TriggerEvent) => {
+      function callback() {
+        const targetEvent: ExposeEvent | undefined = currentRegisterEvent.get(trigger?.targetUId);
+        if (targetEvent) {
+          globalEventSystem.notify(targetEvent.id, targetEvent.eId, '111');
+        }
+      }
+
+      currentRegisterEvent.add(trigger.uId, trigger);
+      globalEventSystem.on(props?.jsonNode?.id, trigger?.eId, callback);
+      unRegisterFns.push(() => {
+        currentRegisterEvent.remove(trigger.uId);
+        globalEventSystem.remove(props?.jsonNode?.id, trigger?.eId, callback);
+      });
+    });
+
+    return () => unRegisterFns.forEach((fn) => fn?.());
+  }
+
+  useEffect(() => {
+    const unRegisterFn = registerEvents(); // 注册事件系统
+    instanceRef.current = getInstance();
+    currentInstances.add(instanceRef.current); // 注册当前实例
+    return () => {
+      unRegisterFn();
+      currentInstances.delete(instanceRef.current?.id);
+    };
+  }, [props?.jsonNode]);
 
   useUpdateEffect(() => {
     setAttributes(props?.jsonNode?.attributes);
@@ -264,12 +334,6 @@ export default function RenderJsonNode(props: IProps) {
       globalEvent.notify(EVENT.SELECTED_COMPONENT, props?.jsonNode);
     }
   }, [props?.jsonNode?.attributes]);
-
-  useEffect(() => {
-    instanceRef.current = getInstance();
-    currentInstances.add(instanceRef.current);
-    return () => currentInstances.delete(instanceRef.current?.id);
-  }, [props?.jsonNode]);
 
   // 开启预览模式，清空状态
   useUpdateEffect(() => {
@@ -285,6 +349,7 @@ export default function RenderJsonNode(props: IProps) {
 
   return (
     <component.template
+      id={props?.jsonNode?.id}
       getDomFn={(fn: any) => (getTargetDomRef.current = fn)}
       attributes={attributes}
       style={{

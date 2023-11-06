@@ -4,9 +4,12 @@
  * At 2023/10/31
  * By TangJiaHui
  */
+import { ExposeEvent, TriggerEvent } from './currentJson';
 
 export type Instance = {
   id: string;
+  // 名称
+  name?: string;
   // 经过实例
   handleHover: () => void;
   // 取消经过实例
@@ -17,6 +20,12 @@ export type Instance = {
   handleUnSelect: () => void;
   // 修改 attributes
   handleSetAttributes: (attributes: any) => void;
+  // 修改暴露事件
+  handleSetExposeAttributes: (exposeEvents: ExposeEvent[]) => void;
+  // 修改触发事件
+  handleSetTriggerAttributes: (triggerEvents: TriggerEvent[]) => void;
+  // 获取暴露事件
+  getExposeAttributes: () => ExposeEvent[];
 };
 
 interface currentInstances {

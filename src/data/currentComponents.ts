@@ -22,8 +22,15 @@ export type AttributesProps<T> = {
   onChange: (attributes: T) => void;
 };
 
+// 组件定义事件类型
+export type ComEvent<T = string> = {
+  eId: T; // 事件id
+  eName: string; // 事件名称（用于事件面板下拉展示）
+};
+
 // 模板组件属性
 export type TemplateProps<Attributes, E = any> = {
+  id: string;
   getDomFn: (fn: () => E | null) => void;
   // 属性
   attributes?: Attributes;
@@ -33,10 +40,18 @@ export type TemplateProps<Attributes, E = any> = {
   events?: DOMAttributes<E>;
   // 子元素
   children?: React.ReactNode[];
+
+  // 触发事件
+  triggerEvents?: (events: string[]) => void;
+  // 暴露事件
+  exposeEvents?: (events: string[]) => void;
 };
 
 // 开发环境事件拦截
-export function getEvent(injectEvent?: DOMAttributes<any>, events?: DOMAttributes<any>) {
+export function getEvent(
+  injectEvent: DOMAttributes<any> = {},
+  events: DOMAttributes<any> = {},
+): any {
   return globalVariable.isDev() ? injectEvent : events;
 }
 
@@ -55,6 +70,10 @@ export type RegisterComponent = {
   defaultStyle?: React.CSSProperties; // 默认样式属性
   defaultAttributes?: any; // 默认私有属性
   cType: CType; // 组件类型（代办同一类组件，用于分类）
+
+  /********** 事件系统 *********/
+  triggerEvents?: ComEvent[]; // 组件触发事件
+  exposeEvents?: ComEvent[]; // 组件暴露事件
 
   /**** 将要抛弃的属性 ****/
   defaultBase?: Base; // 默认基础属性

@@ -38,6 +38,8 @@ export const pageBodyMid = css({
 });
 
 export const pageBodyRight = css({
-  flex: '0 0 300px',
+  flex: '0 0 350px',
   borderLeft: '1px solid #e8e8e8',
+  overflowY: 'auto',
+  overflowX: 'hidden',
 });
