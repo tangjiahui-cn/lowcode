@@ -50,7 +50,12 @@ export default function (props: TemplateProps<Attributes, HTMLTextAreaElement>) 
       }
       {...getEvent(props?.events, {
         onChange(e: any) {
-          globalEventSystem.notify(props?.id, 'change' as TriggerEvents, e.target.value);
+          const target = {
+            ...attributes,
+            value: e.target.value,
+          };
+          setAttributes(target);
+          globalEventSystem.notify(props?.id, 'change' as TriggerEvents, target);
         },
       })}
     >

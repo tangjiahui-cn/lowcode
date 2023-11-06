@@ -17,10 +17,6 @@ export const globalEventSystem = {
     if (!triggerEventId) {
       throw new Error('triggerEventId is not exist.');
     }
-    if (!payload) {
-      throw new Error('payload is not exist.');
-    }
-
     if (!eventMap.get(insId) || !insId) {
       return;
     }
