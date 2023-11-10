@@ -33,7 +33,7 @@ export default function (props: IProps) {
       direction={'vertical'}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <b>触发事件</b>
+        <b>触发规则</b>
         <a style={{ fontSize: 12 }} onClick={handleAdd}>
           新增
         </a>

@@ -66,7 +66,7 @@ export default function AddExposeRuleDialog(props: IProps) {
       centered
       visible={props?.visible}
       width={800}
-      title={props?.isEdit ? '编辑暴露规则' : '新增暴露规则'}
+      title={props?.isEdit ? '编辑触发规则' : '新增触发规则'}
       onCancel={props?.onCancel}
       onOk={handleOk}
     >

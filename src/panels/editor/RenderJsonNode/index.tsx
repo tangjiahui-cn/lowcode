@@ -44,6 +44,10 @@ export default function RenderJsonNode(props: IProps) {
   const { jsonNode } = props;
   const isPreview = globalVariable.isPreview();
 
+  // 取消挂载当前实例事件规则的函数
+  const unRegisterExposeRuleFn = useRef<() => void>();
+  const unRegisterTriggerRuleFn = useRef<() => void>();
+
   // 获取元素DOM节点
   const getTargetDomRef = useRef<() => any>();
   // 当前实例
@@ -258,7 +262,10 @@ export default function RenderJsonNode(props: IProps) {
       },
       handleSetExposeAttributes(exposeRules: ExposeRule[]) {
         if (props?.jsonNode) {
+          // 先取消挂载之前的暴露规则，再重置jsonNode的暴露规则（顺序不要搞反，否则取消的是新的暴露规则）
+          unRegisterExposeRuleFn.current?.();
           props.jsonNode.exposeRules = exposeRules;
+          unRegisterExposeRuleFn.current = registerExposeRules(props?.jsonNode);
           // 只更新json中某个节点（不更新整个组件树）
           currentJson.updateJsonNode(props?.jsonNode);
           // 更新json编辑器
@@ -267,7 +274,9 @@ export default function RenderJsonNode(props: IProps) {
       },
       handleSetTriggerAttributes(triggerRules: TriggerRule[]) {
         if (props?.jsonNode) {
+          unRegisterTriggerRuleFn.current?.();
           props.jsonNode.triggerRules = triggerRules;
+          unRegisterTriggerRuleFn.current = registerTriggerRules(props?.jsonNode);
           // 只更新json中某个节点（不更新整个组件树）
           currentJson.updateJsonNode(props?.jsonNode);
           // 更新json编辑器
@@ -280,21 +289,26 @@ export default function RenderJsonNode(props: IProps) {
     };
   }
 
-  // 注册暴露规则、触发规则
-  function registerRules(jsonNode: JsonNode) {
+  // 注册暴露事件规则
+  function registerExposeRules(jsonNode: JsonNode) {
     jsonNode?.exposeRules?.forEach((exposeRule) => {
       engine.event.addExposeRule(exposeRule);
     });
-    jsonNode?.triggerRules?.forEach((triggerRule) => {
-      engine.event.addTriggerRule(triggerRule);
-    });
-
     return () => {
       jsonNode?.exposeRules?.forEach((exposeRule) => {
         engine.event.removeExposeRule(exposeRule);
       });
-      jsonNode?.triggerRules?.forEach((triggerRule) => {
-        engine.event.removeTriggerRule(triggerRule);
+    };
+  }
+
+  // 注册触发事件规则
+  function registerTriggerRules(jsonNode: JsonNode) {
+    jsonNode?.triggerRules?.forEach((exposeRule) => {
+      engine.event.addTriggerRule(exposeRule);
+    });
+    return () => {
+      jsonNode?.triggerRules?.forEach((exposeRule) => {
+        engine.event.removeTriggerRule(exposeRule);
       });
     };
   }
@@ -302,12 +316,15 @@ export default function RenderJsonNode(props: IProps) {
   useEffect(() => {
     instanceRef.current = getInstance();
     currentInstances.add(instanceRef.current); // 注册当前实例
-    // 注册事件
-    const unRegisterRules = registerRules(props?.jsonNode);
+    // 注册事件规则
+    unRegisterExposeRuleFn.current = registerExposeRules(props?.jsonNode);
+    unRegisterTriggerRuleFn.current = registerTriggerRules(props?.jsonNode);
+
     return () => {
       currentInstances.delete(instanceRef.current?.id);
-      // 取消挂载事件
-      unRegisterRules();
+      // 取消挂载事件规则
+      unRegisterExposeRuleFn.current?.();
+      unRegisterTriggerRuleFn.current?.();
     };
   }, [props?.jsonNode]);
 
