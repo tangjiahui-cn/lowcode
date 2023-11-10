@@ -7,7 +7,7 @@ type IProps = ICustomSelectProps & {
 };
 
 /**
- * 实例选择下拉框
+ * 实例暴露规则下拉框
  */
 
 export default function InstanceExposeRuleSelect(props: IProps) {

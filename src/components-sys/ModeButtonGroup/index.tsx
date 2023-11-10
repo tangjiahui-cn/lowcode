@@ -13,6 +13,9 @@ interface IProps {
   onChange?: (value: MODE) => void;
 }
 
+/**
+ * 模式按钮组
+ */
 export default function (props: IProps) {
   return (
     <Space size={0}>

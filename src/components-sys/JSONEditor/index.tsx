@@ -9,6 +9,10 @@ interface IProps {
   onError?: (value: any[]) => void;
 }
 
+/**
+ * JSON 编辑器
+ *
+ * */
 export default function JSONEditor(props: IProps) {
   const JsonRef = useRef<any>(null);
   const editor = useRef<any>(null);
