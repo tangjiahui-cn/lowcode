@@ -2,18 +2,17 @@ import { useState } from 'react';
 import {
   currentComponents,
   currentInstances,
-  ExposeEvent,
   globalEvent,
   Instance,
   JsonNode,
   RegisterComponent,
-  TriggerEvent,
 } from '../../data';
 import { EVENT } from '../../enum';
 import { Tabs } from 'antd';
 import { attributesEmptyStyle, attributesStyle } from './style';
 import { useRegisterGlobalEvent } from '../../hooks/useRegisterGlobalEvent';
 import EventPanel from './EventPanel';
+import { ExposeRule, TriggerRule } from '../../core';
 
 const tabOptions = [
   { label: '属性', value: '1' },
@@ -47,12 +46,12 @@ export default function Attributes() {
     globalEvent.notify(EVENT.SET_ATTRIBUTES, attributes);
   }
 
-  function handleExposeEvents(exposeEvents: ExposeEvent[]) {
-    instance?.handleSetExposeAttributes?.(exposeEvents);
+  function handleExposeRules(exposeRules: ExposeRule[]) {
+    instance?.handleSetExposeAttributes?.(exposeRules);
   }
 
-  function handleTriggerEvents(triggerEvents: TriggerEvent[]) {
-    instance?.handleSetTriggerAttributes?.(triggerEvents);
+  function handleTriggerRules(triggerRules: TriggerRule[]) {
+    instance?.handleSetTriggerAttributes?.(triggerRules);
   }
 
   useRegisterGlobalEvent(EVENT.SELECTED_COMPONENT, handleSelect);
@@ -74,8 +73,8 @@ export default function Attributes() {
         <EventPanel
           jsonNode={jsonNode}
           component={component}
-          onExposeEvents={handleExposeEvents}
-          onTriggerEvents={handleTriggerEvents}
+          onChangeExposeRules={handleExposeRules}
+          onChangeTriggerRules={handleTriggerRules}
         />
       )}
     </div>

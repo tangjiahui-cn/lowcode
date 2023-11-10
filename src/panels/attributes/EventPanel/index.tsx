@@ -1,12 +1,8 @@
 import { Space } from 'antd';
-import { ExposeEvent, JsonNode, RegisterComponent, TriggerEvent } from '../../../data';
-import ExposeList from './ExposeList';
-import TriggerList from './TriggerList';
-
-export interface Option {
-  label?: string;
-  value?: string;
-}
+import { JsonNode, RegisterComponent } from '../../../data';
+import { ExposeRule, TriggerRule } from '../../../core';
+import ExposeRulePanel from './ExposeRule';
+import TriggerRulePanel from './TriggerRule';
 
 /**
  * 事件面板
@@ -14,25 +10,18 @@ export interface Option {
 interface IProps {
   jsonNode?: JsonNode;
   component?: RegisterComponent;
-  onExposeEvents?: (list: ExposeEvent[]) => void;
-  onTriggerEvents?: (list: TriggerEvent[]) => void;
+  onExposeEvents?: (list: any[]) => void;
+  onTriggerEvents?: (list: any[]) => void;
+
+  onChangeExposeRules?: (rules: ExposeRule[]) => void;
+  onChangeTriggerRules?: (rules: TriggerRule[]) => void;
 }
 
 export default function (props: IProps) {
   return (
     <Space style={{ width: '100%' }} direction={'vertical'}>
-      <b>触发事件</b>
-      <TriggerList
-        component={props?.component}
-        jsonNode={props?.jsonNode}
-        onChange={props?.onTriggerEvents}
-      />
-      <b>暴露事件</b>
-      <ExposeList
-        component={props?.component}
-        jsonNode={props?.jsonNode}
-        onChange={props?.onExposeEvents}
-      />
+      <ExposeRulePanel jsonNode={props?.jsonNode} onChange={props?.onChangeExposeRules} />
+      <TriggerRulePanel jsonNode={props?.jsonNode} onChange={props?.onChangeTriggerRules} />
     </Space>
   );
 }

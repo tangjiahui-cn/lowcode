@@ -6,6 +6,7 @@
  */
 import { RegisterComponent } from './currentComponents';
 import * as React from 'react';
+import { ExposeRule, TriggerRule } from '../core';
 
 // （简单事件系统）
 // 输入框 change  => 按钮 setValue
@@ -16,25 +17,6 @@ import * as React from 'react';
 // 下拉框 change => 下拉框setValue、global = {}
 // 按钮 click => 下拉框setValue, global = {}
 
-// 触发事件
-export interface TriggerEvent {
-  id?: string; // 实例id
-  uId: string; // 唯一id
-  eId?: string; // 触发事件id
-  eName?: string; // 触发事件名称
-  targetUId?: string; // 目标唯一id
-  targetId?: string; // 目标实例Id
-  targetEventName?: string; // 目标暴露事件名称
-}
-
-// 暴露事件
-export interface ExposeEvent {
-  id?: string; // 实例id
-  uId: string; // 唯一id
-  eId?: string; // 暴露事件id
-  eName?: string; // 暴露事件名称
-}
-
 export type JsonNode<T = any> = {
   // 实例信息
   id: string; // 实例id
@@ -44,10 +26,10 @@ export type JsonNode<T = any> = {
   attributes?: T;
   // 嵌套子元素
   children?: JsonNode[];
-  // 触发事件
-  triggers?: TriggerEvent[];
-  // 暴露事件
-  exposes?: ExposeEvent[];
+  // 触发规则
+  triggerRules?: TriggerRule[];
+  // 暴露规则
+  exposeRules?: ExposeRule[];
 } & Pick<RegisterComponent, 'cId' | 'cType' | 'name' | 'isPage' | 'isContainer'>;
 
 interface CurrentJson {

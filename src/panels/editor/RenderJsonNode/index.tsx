@@ -8,8 +8,6 @@ import {
   globalEvent,
   globalVariable,
   currentJson,
-  ExposeEvent,
-  TriggerEvent,
 } from '../../../data';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createJsonNode, getComponentByCId } from '../../../utils';
@@ -23,8 +21,7 @@ import OperateBox from '../../../components-sys/OperateBox';
 import { throttle } from 'lodash';
 import { useUpdateEffect } from 'ahooks';
 import { img } from '../../index';
-import { globalEventSystem } from '../../../data/globalEventSystem';
-import { currentRegisterEvent } from '../../../data/currentRegisterEvent';
+import { engine, ExposeRule, TriggerRule } from '../../../core';
 
 const notifyScroll = throttle((payload) => {
   globalEvent.notify(EVENT, payload);
@@ -259,70 +256,58 @@ export default function RenderJsonNode(props: IProps) {
           globalEvent.notify(EVENT.JSON_EDITOR, currentJson.getJson());
         }
       },
-      handleSetExposeAttributes(exposeEvents: ExposeEvent[]) {
+      handleSetExposeAttributes(exposeRules: ExposeRule[]) {
         if (props?.jsonNode) {
-          props.jsonNode.exposes = exposeEvents;
+          props.jsonNode.exposeRules = exposeRules;
           // 只更新json中某个节点（不更新整个组件树）
           currentJson.updateJsonNode(props?.jsonNode);
           // 更新json编辑器
           globalEvent.notify(EVENT.JSON_EDITOR, currentJson.getJson());
         }
       },
-      handleSetTriggerAttributes(triggerEvent: TriggerEvent[]) {
+      handleSetTriggerAttributes(triggerRules: TriggerRule[]) {
         if (props?.jsonNode) {
-          props.jsonNode.triggers = triggerEvent;
+          props.jsonNode.triggerRules = triggerRules;
           // 只更新json中某个节点（不更新整个组件树）
           currentJson.updateJsonNode(props?.jsonNode);
           // 更新json编辑器
           globalEvent.notify(EVENT.JSON_EDITOR, currentJson.getJson());
         }
       },
-      getExposeAttributes() {
-        return props?.jsonNode?.exposes || [];
+      getExposeAttributes(): ExposeRule[] {
+        return props?.jsonNode?.exposeRules || [];
       },
     };
   }
 
-  // 注册事件
-  function registerEvents(): () => void {
-    // 取消注册的函数列表
-    const unRegisterFns: any[] = [];
-
-    // 暴露事件（供外界调用, 这里已经在组件内部监听了，此处只是注册下以供触发事件根据uId查询对应暴露事件）
-    props?.jsonNode?.exposes?.forEach((exposeEvent: ExposeEvent) => {
-      currentRegisterEvent.add(exposeEvent.uId, exposeEvent);
-      unRegisterFns.push(() => {
-        currentRegisterEvent.remove(exposeEvent.uId);
-      });
+  // 注册暴露规则、触发规则
+  function registerRules(jsonNode: JsonNode) {
+    jsonNode?.exposeRules?.forEach((exposeRule) => {
+      engine.event.addExposeRule(exposeRule);
+    });
+    jsonNode?.triggerRules?.forEach((triggerRule) => {
+      engine.event.addTriggerRule(triggerRule);
     });
 
-    // 触发事件(监听当前实例的事件变更通知，并发布新的变更到暴露组件)
-    props?.jsonNode?.triggers?.forEach((trigger: TriggerEvent) => {
-      function callback() {
-        const targetEvent: ExposeEvent | undefined = currentRegisterEvent.get(trigger?.targetUId);
-        if (targetEvent) {
-          globalEventSystem.notify(targetEvent.id, targetEvent.eId, '111');
-        }
-      }
-
-      currentRegisterEvent.add(trigger.uId, trigger);
-      globalEventSystem.on(props?.jsonNode?.id, trigger?.eId, callback);
-      unRegisterFns.push(() => {
-        currentRegisterEvent.remove(trigger.uId);
-        globalEventSystem.remove(props?.jsonNode?.id, trigger?.eId, callback);
+    return () => {
+      jsonNode?.exposeRules?.forEach((exposeRule) => {
+        engine.event.removeExposeRule(exposeRule);
       });
-    });
-
-    return () => unRegisterFns.forEach((fn) => fn?.());
+      jsonNode?.triggerRules?.forEach((triggerRule) => {
+        engine.event.removeTriggerRule(triggerRule);
+      });
+    };
   }
 
   useEffect(() => {
-    const unRegisterFn = registerEvents(); // 注册事件系统
     instanceRef.current = getInstance();
     currentInstances.add(instanceRef.current); // 注册当前实例
+    // 注册事件
+    const unRegisterRules = registerRules(props?.jsonNode);
     return () => {
-      unRegisterFn();
       currentInstances.delete(instanceRef.current?.id);
+      // 取消挂载事件
+      unRegisterRules();
     };
   }, [props?.jsonNode]);
 
@@ -353,7 +338,7 @@ export default function RenderJsonNode(props: IProps) {
       getDomFn={(fn: any) => (getTargetDomRef.current = fn)}
       attributes={attributes}
       style={{
-        cursor: 'default',
+        ...(isPreview ? {} : { cursor: 'default' }),
         ...component.defaultStyle,
       }}
       events={

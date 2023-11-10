@@ -2,7 +2,6 @@ import type { RegisterComponent } from '../../data';
 import Template from './Template';
 import Attributes from './Attributes';
 import { CType } from '../../enum/component';
-import { exposeEvents, triggerEvents } from './events';
 
 export default {
   cId: 'i-textarea',
@@ -11,6 +10,6 @@ export default {
   template: Template,
   attributeTemplate: Attributes,
   cType: CType.BASE,
-  exposeEvents,
-  triggerEvents,
+  exposeEvents: [{ eventType: 'setValue', eventName: '修改value值' }],
+  triggerEvents: [{ eventType: 'change', eventName: '值变更事件' }],
 } as RegisterComponent;

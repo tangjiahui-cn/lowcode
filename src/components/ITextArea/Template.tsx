@@ -1,9 +1,7 @@
 import { Input } from 'antd';
-import { currentInstances, getEvent, globalEvent, TemplateProps } from '../../data';
+import { getEvent, TemplateProps } from '../../data';
 import { useEffect, useRef, useState } from 'react';
-import { globalEventSystem } from '../../data/globalEventSystem';
-import { ExposeEvents, TriggerEvents } from './events';
-import { EVENT } from '../../enum';
+import { engine, useExpose } from '../../core';
 
 export interface Attributes {
   value: string;
@@ -16,23 +14,24 @@ export default function (props: TemplateProps<Attributes, HTMLTextAreaElement>) 
   const ref = useRef<any>(null);
   const [attributes, setAttributes] = useState<Attributes | undefined>(props?.attributes);
 
-  function exposeEvents() {
-    globalEventSystem.on(props?.id, 'setValue' as ExposeEvents, function (payload) {
-      const newAttributes: Attributes = {
-        ...props?.attributes,
-        value: payload,
-      };
-      currentInstances?.getIns(props?.id)?.handleSetAttributes?.(newAttributes);
-      globalEvent.notify(EVENT.SET_ATTRIBUTES, newAttributes);
-    });
-  }
+  useExpose([
+    {
+      id: props?.id,
+      eventType: 'setValue',
+      callback: (payload: any) => {
+        setAttributes({
+          ...attributes,
+          value: payload,
+        });
+      },
+    },
+  ]);
 
   useEffect(() => {
     setAttributes(props?.attributes);
   }, [props?.attributes]);
 
   useEffect(() => {
-    exposeEvents();
     props?.getDomFn?.(() => ref.current?.resizableTextArea?.textArea);
   }, []);
 
@@ -55,7 +54,12 @@ export default function (props: TemplateProps<Attributes, HTMLTextAreaElement>) 
             value: e.target.value,
           };
           setAttributes(target);
-          globalEventSystem.notify(props?.id, 'change' as TriggerEvents, target);
+          // 触发事件
+          engine.event.trigger({
+            id: props?.id,
+            eventType: 'change',
+            payload: e.target.value,
+          });
         },
       })}
     >

@@ -1,10 +1,8 @@
 import { Button } from 'antd';
 import { ButtonType } from 'antd/es/button';
-import { currentInstances, getEvent, globalEvent, TemplateProps } from '../../data';
-import { useEffect, useRef } from 'react';
-import { globalEventSystem } from '../../data/globalEventSystem';
-import { ExposeEvents, TriggerEvents } from './events';
-import { EVENT } from '../../enum';
+import { getEvent, TemplateProps } from '../../data';
+import { useEffect, useRef, useState } from 'react';
+import { engine, useExpose } from '../../core';
 
 export interface Attributes {
   type?: ButtonType;
@@ -13,25 +11,30 @@ export interface Attributes {
 
 /**
  * 组件模板
+ *
+ * 组件内部不负责处理复杂逻辑，只管理 attributes
  */
 export default function (props: TemplateProps<Attributes, HTMLButtonElement>) {
   const domRef = useRef<HTMLButtonElement>(null);
+  const [attributes, setAttributes] = useState(props?.attributes);
+  useEffect(() => setAttributes(attributes), [props?.attributes]);
 
-  // 暴露事件
-  function exposeEvents() {
-    // 修改 value 值
-    globalEventSystem.on(props?.id, 'setValue' as ExposeEvents, (payload: any) => {
-      const newAttributes: Attributes = {
-        ...props?.attributes,
-        value: payload,
-      };
-      currentInstances?.getIns(props?.id)?.handleSetAttributes?.(newAttributes);
-      globalEvent.notify(EVENT.SET_ATTRIBUTES, newAttributes);
-    });
+  function setValue(value: string) {
+    setAttributes({ ...attributes, value });
   }
 
+  // 暴露事件
+  useExpose([
+    {
+      id: props?.id,
+      eventType: 'setValue',
+      callback: (payload: any) => {
+        setValue(payload);
+      },
+    },
+  ]);
+
   useEffect(() => {
-    exposeEvents();
     props?.getDomFn?.(() => domRef.current);
   }, []);
 
@@ -41,9 +44,12 @@ export default function (props: TemplateProps<Attributes, HTMLButtonElement>) {
       style={props?.style}
       type={props?.attributes?.type}
       {...getEvent(props?.events, {
-        onClick(e) {
+        onClick() {
           // 触发事件
-          globalEventSystem.notify(props?.id, 'click' as TriggerEvents, e);
+          engine.event.trigger({
+            id: props?.id,
+            eventType: 'click',
+          });
         },
       })}
     >

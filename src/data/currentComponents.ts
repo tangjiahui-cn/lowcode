@@ -24,8 +24,8 @@ export type AttributesProps<T> = {
 
 // 组件定义事件类型
 export type ComEvent<T = string> = {
-  eId: T; // 事件id
-  eName: string; // 事件名称（用于事件面板下拉展示）
+  eventType: T; // 事件类型
+  eventName: string; // 事件名称（用于事件面板下拉展示）
 };
 
 // 模板组件属性

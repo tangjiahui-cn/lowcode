@@ -4,7 +4,7 @@
  * At 2023/10/31
  * By TangJiaHui
  */
-import { ExposeEvent, TriggerEvent } from './currentJson';
+import { ExposeRule, TriggerRule } from '../core';
 
 export type Instance = {
   id: string;
@@ -20,12 +20,12 @@ export type Instance = {
   handleUnSelect: () => void;
   // 修改 attributes
   handleSetAttributes: (attributes: any) => void;
-  // 修改暴露事件
-  handleSetExposeAttributes: (exposeEvents: ExposeEvent[]) => void;
-  // 修改触发事件
-  handleSetTriggerAttributes: (triggerEvents: TriggerEvent[]) => void;
-  // 获取暴露事件
-  getExposeAttributes: () => ExposeEvent[];
+  // 修改暴露事件规则
+  handleSetExposeAttributes: (exposeRules: ExposeRule[]) => void;
+  // 修改触发事件规则
+  handleSetTriggerAttributes: (triggerRules: TriggerRule[]) => void;
+  // 获取暴露事件规则
+  getExposeAttributes: () => ExposeRule[];
 };
 
 interface currentInstances {
