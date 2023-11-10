@@ -5,6 +5,7 @@ import AddTriggerRuleDialog from '../AddTriggerRuleDialog';
 import { JsonNode } from '../../../../../data';
 import { Space } from 'antd';
 import { css } from 'class-css';
+import { circle } from '../../ExposeRule/Item';
 
 const containerStyle = css({
   display: 'flex',
@@ -41,6 +42,7 @@ export default function (props: IProps) {
           cursor: 'pointer',
         })}
       >
+        <div className={circle.green} style={{ marginRight: 8 }} />
         {rule?.name}
       </div>
       <Space>

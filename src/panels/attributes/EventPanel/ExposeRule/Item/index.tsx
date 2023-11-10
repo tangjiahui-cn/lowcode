@@ -6,6 +6,17 @@ import { JsonNode } from '../../../../../data';
 import { Space } from 'antd';
 import { css } from 'class-css';
 
+export const circle = {
+  green: css({
+    width: 10,
+    height: 10,
+    display: 'inline-block',
+    background: '#6ae892',
+    borderRadius: '50%',
+    verticalAlign: 'middle',
+  }),
+};
+
 const containerStyle = css({
   display: 'flex',
   padding: '4px 0',
@@ -41,6 +52,7 @@ export default function (props: IProps) {
           cursor: 'pointer',
         })}
       >
+        <div className={circle.green} style={{ marginRight: 8 }} />
         {rule?.name}
       </div>
       <Space>
