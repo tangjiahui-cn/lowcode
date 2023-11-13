@@ -12,7 +12,8 @@ import { Tabs } from 'antd';
 import { attributesEmptyStyle, attributesStyle } from './style';
 import { useRegisterGlobalEvent } from '../../hooks/useRegisterGlobalEvent';
 import EventPanel from './EventPanel';
-import { ExposeRule, TriggerRule } from '../../core';
+import StylePanel from './StylePanel';
+import { ExposeRule, StyleProcessorData, TriggerRule } from '../../core';
 
 const tabOptions = [
   { label: '属性', value: '1' },
@@ -27,7 +28,7 @@ const tabOptions = [
  * By TangJiaHui
  */
 export default function Attributes() {
-  const [activeKey, setActiveKey] = useState<string>('3');
+  const [activeKey, setActiveKey] = useState<string>('2');
   // 组件模板（模板）
   const [component, setComponent] = useState<RegisterComponent | undefined>();
   // 当前jsonNode（保存状态）
@@ -44,6 +45,10 @@ export default function Attributes() {
   function handleAttributes(attributes: any) {
     instance?.handleSetAttributes?.(attributes);
     globalEvent.notify(EVENT.SET_ATTRIBUTES, attributes);
+  }
+
+  function handleStyleData(styleData?: StyleProcessorData) {
+    instance?.handleSetStyleData?.(styleData);
   }
 
   function handleExposeRules(exposeRules: ExposeRule[]) {
@@ -69,6 +74,7 @@ export default function Attributes() {
           onChange={handleAttributes}
         />
       )}
+      {activeKey === '2' && <StylePanel jsonNode={jsonNode} onChange={handleStyleData} />}
       {activeKey === '3' && (
         <EventPanel
           jsonNode={jsonNode}

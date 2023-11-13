@@ -10,15 +10,18 @@
 export * from './hooks';
 export * from './modal';
 export * from './data';
+export * from './style-processor';
 
 import { currentInstances } from '../data';
-import { event } from '.';
+import { event, styleProcessor } from '.';
 
 export class Engine {
   // 运行时实例集合
   public instance = currentInstances;
   // 事件系统
   public event = event;
+  // 样式处理器
+  public styleProcessor = styleProcessor;
 }
 
 export const engine = new Engine();

@@ -16,7 +16,11 @@ export default {
     height: '100%',
     width: '100%',
     overflowY: 'auto',
-    padding: 16,
+  },
+  styleData: {
+    layout: {
+      padding: 16,
+    },
   },
   cType: CType.SYS,
 } as RegisterComponent;

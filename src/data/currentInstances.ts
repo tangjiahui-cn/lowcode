@@ -4,7 +4,7 @@
  * At 2023/10/31
  * By TangJiaHui
  */
-import { ExposeRule, TriggerRule } from '../core';
+import { ExposeRule, StyleProcessorData, TriggerRule } from '../core';
 
 export type Instance = {
   id: string;
@@ -26,6 +26,8 @@ export type Instance = {
   handleSetTriggerAttributes: (triggerRules: TriggerRule[]) => void;
   // 获取暴露事件规则
   getExposeAttributes: () => ExposeRule[];
+  // 设置预处理样式对象
+  handleSetStyleData: (styleData?: StyleProcessorData) => void;
 };
 
 interface currentInstances {

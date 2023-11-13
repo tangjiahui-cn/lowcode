@@ -21,7 +21,7 @@ import OperateBox from '../../../components-sys/OperateBox';
 import { throttle } from 'lodash';
 import { useUpdateEffect } from 'ahooks';
 import { img } from '../../index';
-import { engine, ExposeRule, TriggerRule } from '../../../core';
+import { engine, ExposeRule, StyleProcessorData, TriggerRule } from '../../../core';
 
 const notifyScroll = throttle((payload) => {
   globalEvent.notify(EVENT, payload);
@@ -61,6 +61,11 @@ export default function RenderJsonNode(props: IProps) {
   // 属性值
   const [attributes, setAttributes] = useState<any>(props?.jsonNode.attributes);
 
+  // 设置预处理样式
+  const [styleData, setStyleData] = useState<StyleProcessorData | undefined>(
+    props?.jsonNode?.styleData,
+  );
+
   const commonOptions = {
     getContainerFn: () => currentPanels.editor.domRef?.current,
     getChildFn: () => getTargetDomRef?.current?.(),
@@ -77,7 +82,7 @@ export default function RenderJsonNode(props: IProps) {
       },
       ...commonOptions,
     },
-    [attributes],
+    [attributes, styleData],
   );
 
   const hoverPanelRef = useWrapBox({
@@ -260,6 +265,14 @@ export default function RenderJsonNode(props: IProps) {
           globalEvent.notify(EVENT.JSON_EDITOR, currentJson.getJson());
         }
       },
+      handleSetStyleData(styleData?: StyleProcessorData) {
+        if (!props?.jsonNode) return;
+        setStyleData(styleData);
+        props.jsonNode.styleData = styleData;
+        currentJson?.updateJsonNode(props?.jsonNode);
+        // 更新json编辑器
+        globalEvent.notify(EVENT.JSON_EDITOR, currentJson.getJson());
+      },
       handleSetExposeAttributes(exposeRules: ExposeRule[]) {
         if (props?.jsonNode) {
           // 先取消挂载之前的暴露规则，再重置jsonNode的暴露规则（顺序不要搞反，否则取消的是新的暴露规则）
@@ -330,12 +343,13 @@ export default function RenderJsonNode(props: IProps) {
 
   useUpdateEffect(() => {
     setAttributes(props?.jsonNode?.attributes);
+    setStyleData(props?.jsonNode?.styleData);
 
     // 节点更新时，更新属性面板
     if (currentSelectedInstance.isSelected(props?.jsonNode?.id)) {
       globalEvent.notify(EVENT.SELECTED_COMPONENT, props?.jsonNode);
     }
-  }, [props?.jsonNode?.attributes]);
+  }, [props?.jsonNode]);
 
   // 开启预览模式，清空状态
   useUpdateEffect(() => {
@@ -357,6 +371,7 @@ export default function RenderJsonNode(props: IProps) {
       style={{
         ...(isPreview ? {} : { cursor: 'default' }),
         ...component.defaultStyle,
+        ...engine.styleProcessor.getStyle(styleData), // 使用用户控制属性
       }}
       events={
         isPreview

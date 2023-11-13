@@ -7,6 +7,7 @@
 import { RegisterComponent } from './currentComponents';
 import * as React from 'react';
 import { ExposeRule, TriggerRule } from '../core';
+import { StyleProcessorData } from '../core/style-processor';
 
 // （简单事件系统）
 // 输入框 change  => 按钮 setValue
@@ -22,6 +23,8 @@ export type JsonNode<T = any> = {
   id: string; // 实例id
   // 样式
   style?: React.CSSProperties;
+  // 未处理样式对象（需要经过style-processor处理得到style）
+  styleData?: StyleProcessorData;
   // 私有属性
   attributes?: T;
   // 嵌套子元素

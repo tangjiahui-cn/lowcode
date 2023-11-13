@@ -8,6 +8,7 @@ import * as React from 'react';
 import { CType } from '../enum/component';
 import { globalVariable } from './globalVariable';
 import { DOMAttributes } from 'react';
+import { StyleProcessorData } from '../core';
 
 export type Base = {
   x: string;
@@ -70,6 +71,7 @@ export type RegisterComponent = {
   defaultStyle?: React.CSSProperties; // 默认样式属性
   defaultAttributes?: any; // 默认私有属性
   cType: CType; // 组件类型（代办同一类组件，用于分类）
+  styleData?: StyleProcessorData; // 待处理样式对象
 
   /********** 事件系统 *********/
   triggerEvents?: ComEvent[]; // 组件触发事件

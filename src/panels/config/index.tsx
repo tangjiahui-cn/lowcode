@@ -42,7 +42,11 @@ export default function Config() {
     // 开发模式（重置状态）
     if (mode === MODE.DEV) {
       notification.info({
-        message: '切换到开发模式',
+        message: (
+          <Space>
+            切换到<span style={{ color: '#f83434' }}>开发</span>模式
+          </Space>
+        ),
         duration: 1.2,
       });
 
@@ -54,7 +58,11 @@ export default function Config() {
     // 预览模式
     if (mode === MODE.PREVIEW) {
       notification.info({
-        message: '切换到预览模式',
+        message: (
+          <Space>
+            切换到<span style={{ color: '#11e00c' }}>预览</span>模式
+          </Space>
+        ),
         duration: 1.2,
       });
       const jsonCopy: any[] = cloneDeep(currentJson.getJson());

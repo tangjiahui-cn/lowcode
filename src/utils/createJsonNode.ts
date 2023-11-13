@@ -10,5 +10,6 @@ export function createJsonNode(component: RegisterComponent): JsonNode {
     attributes: component?.defaultAttributes,
     isContainer: component?.isContainer,
     isPage: component?.isPage,
+    styleData: component?.styleData,
   };
 }
