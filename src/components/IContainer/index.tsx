@@ -14,7 +14,11 @@ export default {
   },
   defaultStyle: {
     position: 'relative',
-    padding: 16,
+  },
+  styleData: {
+    layout: {
+      padding: 16,
+    },
   },
   cType: CType.LAYOUT,
 } as RegisterComponent;

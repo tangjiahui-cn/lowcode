@@ -15,6 +15,7 @@ interface IProps {
   jsonNode?: JsonNode;
   onChange?: (styleProcessData?: StyleProcessorData) => void;
 }
+
 export default function (props: IProps) {
   function emitChange(styleProcessData: StyleProcessorData) {
     props?.onChange?.(styleProcessData);

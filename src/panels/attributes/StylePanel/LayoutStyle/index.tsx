@@ -57,7 +57,7 @@ export default function LayoutStyle(props: IProps) {
       delete value.margin;
     }
 
-    setValue(props?.value);
+    setValue(value);
   }, [props?.value]);
 
   return (
