@@ -1,5 +1,6 @@
 import { TemplateProps } from '../../data';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useExpose } from '../../core';
 
 export interface Attributes {
   value: string;
@@ -10,6 +11,24 @@ export interface Attributes {
  */
 export default function (props: TemplateProps<Attributes, HTMLSpanElement>) {
   const domRef = useRef<HTMLSpanElement>(null);
+  const [attributes, setAttributes] = useState(props?.attributes);
+
+  useExpose([
+    {
+      id: props?.id,
+      eventType: 'setValue',
+      callback: (payload) => {
+        setAttributes({
+          ...attributes,
+          value: payload,
+        });
+      },
+    },
+  ]);
+
+  useEffect(() => {
+    setAttributes(props?.attributes);
+  }, [props?.attributes]);
 
   useEffect(() => {
     props?.getDomFn?.(() => domRef.current);
@@ -17,7 +36,7 @@ export default function (props: TemplateProps<Attributes, HTMLSpanElement>) {
 
   return (
     <span ref={domRef} style={props?.style} {...props?.events}>
-      {props?.attributes?.value}
+      {attributes?.value}
     </span>
   );
 }

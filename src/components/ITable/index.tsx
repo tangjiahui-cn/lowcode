@@ -10,4 +10,5 @@ export default {
   template: Template,
   attributeTemplate: Attributes,
   cType: CType.DISPLAY,
+  exposeEvents: [{ eventName: '查询列表', eventType: 'query' }],
 } as RegisterComponent;

@@ -1,6 +1,7 @@
 import { Table } from 'antd';
 import { TemplateProps } from '../../data';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useExpose } from '../../core';
 
 export interface Attributes {
   title: string; // 表格标题
@@ -11,6 +12,22 @@ export interface Attributes {
  */
 export default function (props: TemplateProps<Attributes, HTMLDivElement>) {
   const domRef = useRef<HTMLDivElement>(null);
+  const [loading, setLoading] = useState(false);
+
+  function query() {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 300);
+  }
+
+  useExpose([
+    {
+      id: props?.id,
+      eventType: 'query',
+      callback: query,
+    },
+  ]);
 
   useEffect(() => {
     props?.getDomFn?.(() => domRef.current);
@@ -22,6 +39,7 @@ export default function (props: TemplateProps<Attributes, HTMLDivElement>) {
         <h2 style={{ textAlign: 'center' }}>{props?.attributes?.title}</h2>
       )}
       <Table
+        loading={loading}
         dataSource={[{ key: '1', no: 1, name: 'T.J.H', age: 24, idCard: '340823199912341234' }]}
         columns={[
           { title: '序号', dataIndex: 'no' },

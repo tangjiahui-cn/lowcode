@@ -13,4 +13,5 @@ export default {
     value: '一段文字',
   },
   cType: CType.BASE,
+  exposeEvents: [{ eventType: 'setValue', eventName: '修改值' }],
 } as RegisterComponent;
