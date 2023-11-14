@@ -17,19 +17,22 @@ export function createOperateBox(
   let mountDom: DomType = null;
 
   const resize = throttle(() => {
-    const container = getContainerDom();
-    const child = getChildDom();
-    if (!container || !child || !mountDom) {
-      return;
-    }
+    // 等页面更新完毕后，再重置
+    setTimeout(() => {
+      const container = getContainerDom();
+      const child = getChildDom();
+      if (!container || !child || !mountDom) {
+        return;
+      }
 
-    const sizeInfo = getChildDomRect(container, child);
-    mountDom.className = css({
-      position: 'absolute',
-      left: sizeInfo.left,
-      top: sizeInfo.top,
-      width: 0,
-      height: 0,
+      const sizeInfo = getChildDomRect(container, child);
+      mountDom.className = css({
+        position: 'absolute',
+        left: sizeInfo.left,
+        top: sizeInfo.top,
+        width: 0,
+        height: 0,
+      });
     });
   }, globalVariable.eventThrottleDelay);
 

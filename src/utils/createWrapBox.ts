@@ -16,16 +16,19 @@ export function createWrapBox(
   let mountDom: DomType = null;
 
   const resize = throttle(() => {
-    const container = getContainerDom();
-    const child = getChildDom();
-    if (!container || !child || !mountDom) {
-      return;
-    }
+    // 等页面全部更新完毕再重置wrap-box
+    setTimeout(() => {
+      const container = getContainerDom();
+      const child = getChildDom();
+      if (!container || !child || !mountDom) {
+        return;
+      }
 
-    mountDom.className = css({
-      position: 'absolute',
-      ...style,
-      ...getChildDomRect(container, child),
+      mountDom.className = css({
+        position: 'absolute',
+        ...style,
+        ...getChildDomRect(container, child),
+      });
     });
   }, globalVariable.eventThrottleDelay);
 
