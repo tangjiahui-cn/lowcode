@@ -6,6 +6,7 @@ import { css } from 'class-css';
 import { useEffect, useState } from 'react';
 import { parseCssValue, StyleProcessLayout } from '../../../../core';
 import { cloneDeep } from 'lodash';
+import { JsonNode } from '../../../../data';
 
 const labelStyle = css({
   width: 50,
@@ -18,11 +19,11 @@ const defaultValue = {
 };
 
 interface IProps {
-  value?: StyleProcessLayout;
+  jsonNode?: JsonNode;
   onChange?: (value?: StyleProcessLayout) => void;
 }
 export default function LayoutStyle(props: IProps) {
-  const [value, setValue] = useState<StyleProcessLayout | undefined>(props?.value);
+  const [value, setValue] = useState<StyleProcessLayout | undefined>();
 
   function emitChange(value?: StyleProcessLayout) {
     setValue(value);
@@ -30,7 +31,7 @@ export default function LayoutStyle(props: IProps) {
   }
 
   useEffect(() => {
-    const value = cloneDeep(props?.value);
+    const value = cloneDeep(props?.jsonNode?.styleData?.layout || {});
     if (value?.padding) {
       const obj = parseCssValue(value?.padding);
       value.paddingTop = obj.top;
@@ -58,7 +59,7 @@ export default function LayoutStyle(props: IProps) {
     }
 
     setValue(value);
-  }, [props?.value]);
+  }, [props?.jsonNode]);
 
   return (
     <Space style={{ width: '100%' }} direction={'vertical'}>

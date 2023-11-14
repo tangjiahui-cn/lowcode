@@ -25,7 +25,7 @@ export default function (props: IProps) {
     <Space style={{ width: '100%' }} direction={'vertical'}>
       <Container title={'布局'} defaultExpand>
         <LayoutStyle
-          value={props?.jsonNode?.styleData?.layout}
+          jsonNode={props?.jsonNode}
           onChange={(layout) =>
             emitChange({
               ...props?.jsonNode?.styleData,
@@ -36,7 +36,7 @@ export default function (props: IProps) {
       </Container>
       <Container title={'文字'}>
         <TextStyle
-          value={props?.jsonNode?.styleData?.text}
+          jsonNode={props?.jsonNode}
           onChange={(text) =>
             emitChange({
               ...props?.jsonNode?.styleData,

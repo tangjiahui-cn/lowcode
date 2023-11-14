@@ -6,6 +6,8 @@ import { css } from 'class-css';
 import { useEffect, useState } from 'react';
 import { StyleProcessText } from '../../../../core';
 import { fontWeightOptions, textAlignOptions, verticalAlignOptions } from './enum';
+import { cloneDeep } from 'lodash';
+import { JsonNode } from '../../../../data';
 
 const valueWidth = 150;
 const labelStyle = css({
@@ -13,11 +15,11 @@ const labelStyle = css({
 });
 
 interface IProps {
-  value?: StyleProcessText;
+  jsonNode?: JsonNode;
   onChange?: (value?: StyleProcessText) => void;
 }
 export default function LayoutStyle(props: IProps) {
-  const [value, setValue] = useState<StyleProcessText | undefined>(props?.value);
+  const [value, setValue] = useState<StyleProcessText | undefined>();
 
   function emitChange(value?: StyleProcessText) {
     setValue(value);
@@ -25,8 +27,9 @@ export default function LayoutStyle(props: IProps) {
   }
 
   useEffect(() => {
-    setValue(props?.value);
-  }, [props?.value]);
+    const value = cloneDeep(props?.jsonNode?.styleData?.text || {});
+    setValue(value);
+  }, [props?.jsonNode]);
 
   return (
     <Space style={{ width: '100%' }} direction={'vertical'}>
