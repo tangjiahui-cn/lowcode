@@ -42,7 +42,7 @@ export default function Editor() {
       }}
     >
       {json.map((jsonNode: JsonNode) => {
-        return <RenderJsonNode key={jsonNode.id} jsonNode={jsonNode} parentJsonNode={undefined} />;
+        return <RenderJsonNode key={jsonNode.id} jsonNode={jsonNode} />;
       })}
     </div>
   );

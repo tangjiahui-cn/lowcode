@@ -22,7 +22,7 @@ export default function (props: AttributesProps<Attributes>) {
     <Space style={{ width: '100%' }} direction={'vertical'}>
       <div style={{ display: 'flex', alignItems: 'center' }}>
         文字：
-        <Input
+        <Input.TextArea
           style={{ flex: 1 }}
           value={attributes?.value}
           onChange={(e) => {

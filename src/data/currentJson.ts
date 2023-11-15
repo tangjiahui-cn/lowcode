@@ -33,6 +33,9 @@ export type JsonNode<T = any> = {
   triggerRules?: TriggerRule[];
   // 暴露规则
   exposeRules?: ExposeRule[];
+
+  // 父节点id
+  parentId?: string;
 } & Pick<RegisterComponent, 'cId' | 'cType' | 'name' | 'isPage' | 'isContainer'>;
 
 interface CurrentJson {

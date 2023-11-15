@@ -13,6 +13,7 @@ import { attributesEmptyStyle, attributesStyle } from './style';
 import { useRegisterGlobalEvent } from '../../hooks/useRegisterGlobalEvent';
 import EventPanel from './EventPanel';
 import StylePanel from './StylePanel';
+import BreadcrumbPanel from './BreadcrumbPanel';
 import { ExposeRule, StyleProcessorData, TriggerRule } from '../../core';
 
 const tabOptions = [
@@ -63,6 +64,7 @@ export default function Attributes() {
 
   return component ? (
     <div className={attributesStyle}>
+      <BreadcrumbPanel jsonNode={jsonNode} />
       <Tabs activeKey={activeKey} onChange={setActiveKey}>
         {tabOptions.map((option) => {
           return <Tabs.TabPane tab={option.label} key={option.value} />;

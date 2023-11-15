@@ -13,6 +13,7 @@ export * from './data';
 export * from './style-processor';
 
 import { currentInstances } from '../data';
+import { jsonNode } from './data/jsonNode';
 import { event, styleProcessor } from '.';
 
 export class Engine {
@@ -22,6 +23,8 @@ export class Engine {
   public event = event;
   // 样式处理器
   public styleProcessor = styleProcessor;
+  // 管理全部jsonNode实例;
+  public jsonNode = jsonNode;
 }
 
 export const engine = new Engine();

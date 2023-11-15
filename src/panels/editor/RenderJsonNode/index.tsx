@@ -21,7 +21,13 @@ import OperateBox from '../../../components-sys/OperateBox';
 import { throttle } from 'lodash';
 import { useUpdateEffect } from 'ahooks';
 import { img } from '../../index';
-import { engine, ExposeRule, StyleProcessorData, TriggerRule } from '../../../core';
+import {
+  engine,
+  ExposeRule,
+  StyleProcessorData,
+  TriggerRule,
+  useRegisterJsonNode,
+} from '../../../core';
 
 const notifyScroll = throttle((payload) => {
   globalEvent.notify(EVENT, payload);
@@ -99,6 +105,7 @@ export default function RenderJsonNode(props: IProps) {
     ...commonOptions,
     children: (
       <OperateBox
+        jsonNode={props?.jsonNode}
         show={{
           showDrag: !props?.jsonNode?.isPage,
           showSelectParent: !!props?.parentJsonNode,
@@ -326,6 +333,8 @@ export default function RenderJsonNode(props: IProps) {
     };
   }
 
+  useRegisterJsonNode(props?.jsonNode);
+
   useEffect(() => {
     instanceRef.current = getInstance();
     currentInstances.add(instanceRef.current); // 注册当前实例
@@ -417,7 +426,15 @@ export default function RenderJsonNode(props: IProps) {
       }
     >
       {props?.jsonNode?.children?.map?.((child) => {
-        return <RenderJsonNode key={child.id} jsonNode={child} parentJsonNode={props?.jsonNode} />;
+        return (
+          <RenderJsonNode
+            key={child.id}
+            jsonNode={Object.assign(child, {
+              parentId: props?.jsonNode?.id,
+            })}
+            parentJsonNode={props?.jsonNode}
+          />
+        );
       })}
     </component.template>
   );

@@ -1,12 +1,16 @@
-import { Space } from 'antd';
+import { Space, Tooltip } from 'antd';
 import { ArrowUpOutlined, DeleteOutlined, DragOutlined } from '@ant-design/icons';
-import { btn } from './style';
+import { btn, name } from './style';
+import { currentInstances, JsonNode } from '../../data';
+import ParentList from './ParentList';
+import { useState } from 'react';
 
 /**
  * 操作工具盒
  */
 
 interface IProps {
+  jsonNode: JsonNode;
   // 是否显示按钮
   show?: {
     // 显示拖拽操作
@@ -25,14 +29,30 @@ interface IProps {
 }
 
 export default function OperateBox(props: IProps) {
+  // 浮层是否允许显示
+  const [allowVisible, setAllowVisible] = useState(true);
+
   const mergeShow = {
     showDrag: props?.show?.showDrag ?? true,
     showSelectParent: props?.show?.showSelectParent ?? true,
     showDelete: props?.show?.showDelete ?? true,
   };
 
+  function handleSelect(node: JsonNode) {
+    currentInstances.getIns(node?.id)?.handleSelect();
+    setAllowVisible(false);
+  }
+
   return (
-    <Space size={0}>
+    <Space size={0} style={{ background: '#3877ec', color: 'white' }}>
+      <Tooltip
+        overlayInnerStyle={{ boxShadow: 'none', display: allowVisible ? 'block' : 'none' }}
+        title={<ParentList jsonNode={props?.jsonNode} onSelect={handleSelect} />}
+        placement={'bottomLeft'}
+        color={'transparent'}
+      >
+        <div className={name}>{props?.jsonNode?.name}</div>
+      </Tooltip>
       {mergeShow.showDrag && (
         <DragOutlined
           draggable
