@@ -15,12 +15,6 @@ interface IProps {
 export default function (props: IProps) {
   const [list, setList] = useState<JsonNode[]>([]);
 
-  function handleSelect(node: JsonNode) {
-    // 不能再次选中自身
-    if (node?.id === props?.jsonNode?.id) return;
-    currentInstances.getInstance(node?.id)?.handleSelect();
-  }
-
   useEffect(() => {
     if (!props?.jsonNode) {
       setList([]);
@@ -35,9 +29,28 @@ export default function (props: IProps) {
       style={{ fontSize: 14, padding: '2px 0', borderBottom: '1px solid #e8e8e8' }}
     >
       {list.map((node: JsonNode) => {
+        const isSelf = node.id === props?.jsonNode?.id;
         return (
-          <Breadcrumb.Item key={node?.id} onClick={() => handleSelect(node)}>
-            <span style={{ cursor: 'pointer' }}>{node?.name}</span>
+          <Breadcrumb.Item key={node?.id}>
+            <span
+              onMouseEnter={() => {
+                if (isSelf) return;
+                currentInstances.getInstance(node?.id)?.handleHover();
+              }}
+              onMouseLeave={() => {
+                if (isSelf) return;
+                currentInstances.getInstance(node?.id)?.handleUnHover();
+              }}
+              style={{ cursor: isSelf ? 'default' : 'pointer' }}
+              onClick={() => {
+                if (isSelf) return;
+                const instance = currentInstances.getInstance(node?.id);
+                instance?.handleUnHover();
+                instance?.handleSelect();
+              }}
+            >
+              {node?.name}
+            </span>
           </Breadcrumb.Item>
         );
       })}

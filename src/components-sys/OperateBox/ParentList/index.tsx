@@ -1,4 +1,4 @@
-import { JsonNode } from '../../../data';
+import { currentInstances, JsonNode } from '../../../data';
 import { useEffect, useState } from 'react';
 import { engine } from '../../../core';
 import { container, item } from './style';
@@ -26,7 +26,20 @@ export default function (props: IProps) {
     <div className={container}>
       {list.map((node) => {
         return (
-          <div key={node?.id} className={item} onClick={() => props?.onSelect?.(node)}>
+          <div
+            key={node?.id}
+            className={item}
+            onMouseEnter={() => {
+              currentInstances.getInstance(node?.id)?.handleHover();
+            }}
+            onMouseLeave={() => {
+              currentInstances.getInstance(node?.id)?.handleUnHover();
+            }}
+            onClick={() => {
+              currentInstances.getInstance(node?.id)?.handleUnHover();
+              props?.onSelect?.(node);
+            }}
+          >
             {node?.name}
           </div>
         );
