@@ -8,14 +8,51 @@ import React from 'react';
 import { getLayoutStyle, StyleProcessLayout } from './getLayoutStyle';
 import { getTextStyle, StyleProcessText } from './getTextStyle';
 import { getPositionStyle, StyleProcessPosition } from './getPositionStyle';
+import { getBorderStyle, StyleProcessBorder } from './getBorderStyle';
 
 export * from './getLayoutStyle';
 export * from './getTextStyle';
 export * from './getPositionStyle';
+export * from './getBorderStyle';
 
 export type SizeUnit = 'px' | '%';
+export const DEFAULT_SIZE_UNIT = 'px';
+export const sizeUnitOptions = ['px', '%'].map((x) => {
+  return { label: x, value: x };
+});
+
 export type PartialNumber = number | null | undefined;
-export type LineType = 'solid' | 'double' | 'dotted' | 'dashed' | 'wavy' | 'inherit';
+export type LineType = 'solid' | 'double' | 'dotted' | 'dashed' | 'wavy' | 'inherit' | undefined;
+export const lineTypeOptions = ['solid', 'double', 'dotted', 'dashed', 'wavy', 'none'].map((x) => {
+  return { label: x, value: x };
+});
+
+export type BorderType =
+  | 'none'
+  | 'hidden'
+  | 'dotted'
+  | 'dashed'
+  | 'solid'
+  | 'double'
+  | 'groove'
+  | 'ridge'
+  | 'inset'
+  | 'outset';
+export const DEFAULT_BORDER: BorderType = 'solid';
+export const borderTypeOptions = [
+  'none',
+  'hidden',
+  'dotted',
+  'dashed',
+  'solid',
+  'double',
+  'groove',
+  'ridge',
+  'inset',
+  'outset',
+].map((x) => {
+  return { label: x, value: x };
+});
 
 export const isNumber = (v: unknown): v is number => {
   return typeof v === 'number' && !isNaN(v) && Number.isFinite(v);
@@ -28,6 +65,7 @@ export type StyleProcessorData = {
   layout?: StyleProcessLayout;
   text?: StyleProcessText;
   position?: StyleProcessPosition;
+  border?: StyleProcessBorder;
 };
 
 // 处理样式对象
@@ -44,6 +82,10 @@ function getStyle(styleProcess: StyleProcessorData = {}): React.CSSProperties {
 
   if (styleProcess?.position) {
     Object.assign(style, getPositionStyle(styleProcess?.position));
+  }
+
+  if (styleProcess?.border) {
+    Object.assign(style, getBorderStyle(styleProcess?.border));
   }
 
   return style;

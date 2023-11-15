@@ -11,6 +11,7 @@ import { StyleProcessorData } from '../../../core';
 import LayoutStyle from './LayoutStyle';
 import TextStyle from './TextStyle';
 import PositionStyle from './PositionStyle';
+import BorderStyle from './BorderStyle';
 
 interface IProps {
   jsonNode?: JsonNode;
@@ -46,7 +47,7 @@ export default function (props: IProps) {
           }
         />
       </Container>
-      <Container title={'定位'} defaultExpand>
+      <Container title={'定位'}>
         <PositionStyle
           jsonNode={props?.jsonNode}
           onChange={(position) =>
@@ -57,11 +58,20 @@ export default function (props: IProps) {
           }
         />
       </Container>
-      <Container title={'边框'}>
-        <div>粗细</div>
-        <div>颜色</div>
-        <div>圆角</div>
-        <div>类型</div>
+      <Container title={'边框'} defaultExpand>
+        <BorderStyle
+          jsonNode={props?.jsonNode}
+          onChange={(border) =>
+            emitChange({
+              ...props?.jsonNode?.styleData,
+              border,
+            })
+          }
+        />
+        {/*<div>粗细</div>*/}
+        {/*<div>颜色</div>*/}
+        {/*<div>圆角</div>*/}
+        {/*<div>类型</div>*/}
       </Container>
     </Space>
   );
