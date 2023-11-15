@@ -12,9 +12,9 @@ const labelStyle = css({
   width: 50,
 });
 
-const SIZE_UNIT = ['px', '%'].map((value) => ({ label: value, value }));
+export const SIZE_UNIT = ['px', '%'].map((value) => ({ label: value, value }));
 
-const defaultValue = {
+export const defaultValue = {
   SIZE_UNIT: 'px',
 };
 

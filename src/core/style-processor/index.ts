@@ -5,15 +5,21 @@
  * By TangJiaHui
  */
 import React from 'react';
-import { StyleProcessLayout, getLayoutStyle } from './getLayoutStyle';
+import { getLayoutStyle, StyleProcessLayout } from './getLayoutStyle';
 import { getTextStyle, StyleProcessText } from './getTextStyle';
+import { getPositionStyle, StyleProcessPosition } from './getPositionStyle';
 
 export * from './getLayoutStyle';
 export * from './getTextStyle';
+export * from './getPositionStyle';
 
 export type SizeUnit = 'px' | '%';
 export type PartialNumber = number | null | undefined;
 export type LineType = 'solid' | 'double' | 'dotted' | 'dashed' | 'wavy' | 'inherit';
+
+export const isNumber = (v: unknown): v is number => {
+  return typeof v === 'number' && !isNaN(v) && Number.isFinite(v);
+};
 
 // 默认单位
 export const UNIT_DEFAULT: SizeUnit = 'px';
@@ -21,6 +27,7 @@ export const UNIT_DEFAULT: SizeUnit = 'px';
 export type StyleProcessorData = {
   layout?: StyleProcessLayout;
   text?: StyleProcessText;
+  position?: StyleProcessPosition;
 };
 
 // 处理样式对象
@@ -33,6 +40,10 @@ function getStyle(styleProcess: StyleProcessorData = {}): React.CSSProperties {
 
   if (styleProcess?.text) {
     Object.assign(style, getTextStyle(styleProcess?.text));
+  }
+
+  if (styleProcess?.position) {
+    Object.assign(style, getPositionStyle(styleProcess?.position));
   }
 
   return style;

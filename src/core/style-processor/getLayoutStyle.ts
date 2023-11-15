@@ -1,5 +1,5 @@
 import React from 'react';
-import { UNIT_DEFAULT, PartialNumber } from './index';
+import { UNIT_DEFAULT, PartialNumber, isNumber } from './index';
 
 // 布局处理类型
 export type StyleProcessLayout = {
@@ -40,30 +40,42 @@ export type StyleProcessLayout = {
  */
 export function getLayoutStyle(data: StyleProcessLayout): React.CSSProperties {
   const style: React.CSSProperties = {};
-  if (data?.width) style.width = data.width + (data?.widthUnit || UNIT_DEFAULT);
-  if (data?.height) style.height = data.height + (data?.heightUnit || UNIT_DEFAULT);
-  if (data?.zIndex) style.zIndex = data?.zIndex;
+  if (isNumber(data?.width)) style.width = data.width + (data?.widthUnit || UNIT_DEFAULT);
+  if (isNumber(data?.height)) style.height = data.height + (data?.heightUnit || UNIT_DEFAULT);
+  if (isNumber(data?.zIndex)) style.zIndex = data?.zIndex;
 
   if (data?.padding) {
     style.padding = data?.padding;
-  } else if (data?.paddingTop || data?.paddingRight || data?.paddingBottom || data?.paddingLeft) {
-    const padding: string[] = [];
-    padding.push(`${data?.paddingTop || 0}${data?.paddingTopUnit || UNIT_DEFAULT}`);
-    padding.push(`${data?.paddingRight || 0}${data?.paddingRightUnit || UNIT_DEFAULT}`);
-    padding.push(`${data?.paddingBottom || 0}${data?.paddingBottomUnit || UNIT_DEFAULT}`);
-    padding.push(`${data?.paddingLeft || 0}${data?.paddingLeftUnit || UNIT_DEFAULT}`);
-    style.padding = padding.join(' ');
+  } else {
+    if (isNumber(data?.paddingTop)) {
+      style.paddingTop = `${data?.paddingTop || 0}${data?.paddingTopUnit || UNIT_DEFAULT}`;
+    }
+    if (isNumber(data?.paddingRight)) {
+      style.paddingTop = `${data?.paddingRight || 0}${data?.paddingRightUnit || UNIT_DEFAULT}`;
+    }
+    if (isNumber(data?.paddingBottom)) {
+      style.paddingTop = `${data?.paddingBottom || 0}${data?.paddingBottomUnit || UNIT_DEFAULT}`;
+    }
+    if (isNumber(data?.paddingLeft)) {
+      style.paddingTop = `${data?.paddingLeft || 0}${data?.paddingLeftUnit || UNIT_DEFAULT}`;
+    }
   }
 
   if (data?.margin) {
     style.margin = data?.margin;
-  } else if (data?.marginTop || data?.marginRight || data?.marginBottom || data?.marginLeft) {
-    const margin: string[] = [];
-    margin.push(`${data?.marginTop || 0}${data?.marginTopUnit || UNIT_DEFAULT}`);
-    margin.push(`${data?.marginRight || 0}${data?.marginRightUnit || UNIT_DEFAULT}`);
-    margin.push(`${data?.marginBottom || 0}${data?.marginBottomUnit || UNIT_DEFAULT}`);
-    margin.push(`${data?.marginLeft || 0}${data?.marginLeftUnit || UNIT_DEFAULT}`);
-    style.margin = margin.join(' ');
+  } else {
+    if (isNumber(data?.marginTop)) {
+      style.marginTop = `${data?.marginTop || 0}${data?.marginTopUnit || UNIT_DEFAULT}`;
+    }
+    if (isNumber(data?.marginRight)) {
+      style.marginTop = `${data?.marginRight || 0}${data?.marginRightUnit || UNIT_DEFAULT}`;
+    }
+    if (isNumber(data?.marginBottom)) {
+      style.marginTop = `${data?.marginBottom || 0}${data?.marginBottomUnit || UNIT_DEFAULT}`;
+    }
+    if (isNumber(data?.marginLeft)) {
+      style.marginTop = `${data?.marginLeft || 0}${data?.marginLeftUnit || UNIT_DEFAULT}`;
+    }
   }
 
   return style;

@@ -7,9 +7,10 @@
 import { Space } from 'antd';
 import { JsonNode } from '../../../data';
 import Container from '../../../components-sys/Container';
+import { StyleProcessorData } from '../../../core';
 import LayoutStyle from './LayoutStyle';
 import TextStyle from './TextStyle';
-import { StyleProcessorData } from '../../../core';
+import PositionStyle from './PositionStyle';
 
 interface IProps {
   jsonNode?: JsonNode;
@@ -23,7 +24,7 @@ export default function (props: IProps) {
 
   return (
     <Space style={{ width: '100%' }} direction={'vertical'}>
-      <Container title={'布局'} defaultExpand>
+      <Container title={'布局'}>
         <LayoutStyle
           jsonNode={props?.jsonNode}
           onChange={(layout) =>
@@ -45,8 +46,16 @@ export default function (props: IProps) {
           }
         />
       </Container>
-      <Container title={'定位'}>
-        <div>类型</div>
+      <Container title={'定位'} defaultExpand>
+        <PositionStyle
+          jsonNode={props?.jsonNode}
+          onChange={(position) =>
+            emitChange({
+              ...props?.jsonNode?.styleData,
+              position,
+            })
+          }
+        />
       </Container>
       <Container title={'边框'}>
         <div>粗细</div>

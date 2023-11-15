@@ -16,6 +16,7 @@ export const item = css({
   padding: '2px 8px',
   cursor: 'pointer',
   background: 'rgba(0,0,0,0.65)',
+  borderRadius: 4,
   '& + &': {
     marginTop: 2,
   },
