@@ -1,27 +1,7 @@
 import { JsonNode } from '../../../data';
 import { useEffect, useState } from 'react';
 import { engine } from '../../../core';
-import { css } from 'class-css';
-
-const container = css({
-  position: 'absolute',
-  top: -10,
-  left: 0,
-  width: 100,
-  maxHeight: 200,
-});
-
-const item = css({
-  padding: '2px 8px',
-  cursor: 'pointer',
-  background: 'rgba(0,0,0,0.65)',
-  '& + &': {
-    marginTop: 2,
-  },
-  '&:hover': {
-    background: 'rgba(0,0,0,0.50)',
-  },
-});
+import { container, item } from './style';
 
 /**
  * 父组件选择列表
