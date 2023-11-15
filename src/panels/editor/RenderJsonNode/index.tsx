@@ -30,7 +30,7 @@ import {
 } from '../../../core';
 
 const notifyScroll = throttle((payload) => {
-  globalEvent.notify(EVENT, payload);
+  globalEvent.notify(EVENT.SCROLL, payload);
 }, globalVariable.eventThrottleDelay);
 
 interface IProps {

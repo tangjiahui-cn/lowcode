@@ -51,7 +51,7 @@ export function createWrapBox(
     // 窗口变化时重置UI
     window.addEventListener('resize', resize);
     // 组件滚动时重置UI
-    globalEvent.on(EVENT, resize);
+    globalEvent.on(EVENT.SCROLL, resize);
   }
 
   // 移出 wrap-box
@@ -63,7 +63,7 @@ export function createWrapBox(
     container.removeChild(mountDom);
     mountDom = null;
     window.removeEventListener('resize', resize);
-    globalEvent.remove(EVENT, resize);
+    globalEvent.remove(EVENT.SCROLL, resize);
   }
 
   return {
