@@ -18,7 +18,7 @@ export default function (props: IProps) {
   function handleSelect(node: JsonNode) {
     // 不能再次选中自身
     if (node?.id === props?.jsonNode?.id) return;
-    currentInstances.getIns(node?.id)?.handleSelect();
+    currentInstances.getInstance(node?.id)?.handleSelect();
   }
 
   useEffect(() => {

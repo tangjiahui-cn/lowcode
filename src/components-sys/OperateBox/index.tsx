@@ -39,7 +39,7 @@ export default function OperateBox(props: IProps) {
   };
 
   function handleSelect(node: JsonNode) {
-    currentInstances.getIns(node?.id)?.handleSelect();
+    currentInstances.getInstance(node?.id)?.handleSelect();
     setAllowVisible(false);
   }
 

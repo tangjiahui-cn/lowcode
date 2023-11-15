@@ -16,7 +16,7 @@ export default function InstanceExposeRuleSelect(props: IProps) {
       requestFn={async () => {
         return (
           currentInstances
-            .getIns(props?.insId)
+            .getInstance(props?.insId)
             ?.getExposeAttributes?.()
             ?.map((exposeRule: ExposeRule) => {
               return {

@@ -20,13 +20,13 @@ export default function () {
         title: (
           <div
             onClick={() => {
-              currentInstances.getIns(x?.id)?.handleSelect?.();
+              currentInstances.getInstance(x?.id)?.handleSelect?.();
             }}
             onMouseEnter={() => {
-              currentInstances.getIns(x?.id)?.handleHover?.();
+              currentInstances.getInstance(x?.id)?.handleHover?.();
             }}
             onMouseLeave={() => {
-              currentInstances.getIns(x?.id)?.handleUnHover?.();
+              currentInstances.getInstance(x?.id)?.handleUnHover?.();
             }}
           >
             {x?.name}

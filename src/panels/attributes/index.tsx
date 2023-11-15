@@ -40,7 +40,7 @@ export default function Attributes() {
   function handleSelect(payload: JsonNode) {
     setJsonNode(payload);
     setComponent(currentComponents.getComponent(payload?.cId));
-    setInstance(currentInstances.getIns(payload?.id));
+    setInstance(currentInstances.getInstance(payload?.id));
   }
 
   function handleAttributes(attributes: any) {

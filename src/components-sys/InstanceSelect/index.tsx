@@ -8,7 +8,7 @@ export default function InstanceSelect(props: ICustomSelectProps) {
   return (
     <ICustomSelect
       requestFn={async () =>
-        currentInstances.getAllIns().map((ins) => {
+        currentInstances.getAllInstance().map((ins) => {
           return {
             label: ins.name,
             value: ins.id,

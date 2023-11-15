@@ -138,7 +138,7 @@ export default function RenderJsonNode(props: IProps) {
 
   function handleSelectParent() {
     if (!props?.parentJsonNode) return;
-    currentInstances.getIns(props?.parentJsonNode?.id)?.handleSelect?.();
+    currentInstances.getInstance(props?.parentJsonNode?.id)?.handleSelect?.();
   }
 
   function handleDragStart(e: React.DragEvent<HTMLSpanElement>) {
@@ -166,7 +166,7 @@ export default function RenderJsonNode(props: IProps) {
     currentPanels.editor.refreshJson();
     // 选中拖拽节点
     setTimeout(() => {
-      currentInstances.getIns(jsonNode?.id)?.handleSelect?.();
+      currentInstances.getInstance(jsonNode?.id)?.handleSelect?.();
     });
   }
 
@@ -209,7 +209,7 @@ export default function RenderJsonNode(props: IProps) {
 
     // 选中拖拽节点
     setTimeout(() => {
-      currentInstances.getIns(moveJsonNode?.id)?.handleSelect?.();
+      currentInstances.getInstance(moveJsonNode?.id)?.handleSelect?.();
     });
     globalEvent.notify(EVENT.JSON_EDITOR, currentJson.getJson());
   }
