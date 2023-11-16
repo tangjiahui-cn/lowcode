@@ -1,4 +1,4 @@
-import { createOperateBox, DomType } from '../utils';
+import { createOperateBox, DomType } from '../core';
 import React, { MutableRefObject, useEffect, useRef } from 'react';
 
 /**

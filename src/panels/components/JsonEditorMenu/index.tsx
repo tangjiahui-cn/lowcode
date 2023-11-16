@@ -1,7 +1,8 @@
 import JSONEditor from '../../../components-sys/JSONEditor';
 import { useEffect, useState } from 'react';
-import { currentJson, currentPanels, globalEvent, JsonNode } from '../../../data';
+import { globalEvent } from '../../../data';
 import { EVENT } from '../../../enum';
+import { engine, JsonNode } from '../../../core';
 
 // TODO: 后续考虑使用中介者模式拆分数据交换和响应式更新，确保数据流单向流动
 export default function () {
@@ -9,11 +10,11 @@ export default function () {
 
   useEffect(() => {
     setTimeout(() => {
-      setJson(currentJson.getJson());
+      setJson(engine.json.getJson());
     });
 
     function updateJSON() {
-      setJson([...currentJson.getJson()]);
+      setJson([...engine.json.getJson()]);
     }
 
     globalEvent.on(EVENT.JSON_EDITOR, updateJSON);
@@ -25,7 +26,7 @@ export default function () {
       <JSONEditor
         value={json}
         onChange={(json) => {
-          currentPanels.editor?.refreshJson([...json]);
+          engine.panel.editor?.refreshJson([...json]);
         }}
       />
     </div>

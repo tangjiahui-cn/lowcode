@@ -1,4 +1,4 @@
-import { TemplateProps } from '../../data';
+import { TemplateProps } from '../../core';
 import { useEffect, useRef } from 'react';
 
 export interface Attributes {

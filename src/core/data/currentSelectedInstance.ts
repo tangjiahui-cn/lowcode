@@ -4,7 +4,7 @@
  * At 2023/11/01
  * By TangJiaHui
  */
-import type { Instance } from './currentInstances';
+import { Instance } from '..';
 
 interface CurrentSelectedInstance {
   // 设置当前选中实例

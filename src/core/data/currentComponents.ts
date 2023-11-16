@@ -5,10 +5,10 @@
  * By TangJiaHui
  */
 import * as React from 'react';
-import { CType } from '../enum/component';
-import { globalVariable } from './globalVariable';
+import { CType } from '../../enum/component';
+import { globalVariable } from '../../data';
 import { DOMAttributes } from 'react';
-import { StyleProcessorData } from '../core';
+import { StyleProcessorData } from '..';
 
 export type Base = {
   x: string;

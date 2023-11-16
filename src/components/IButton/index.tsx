@@ -1,7 +1,7 @@
-import type { RegisterComponent } from '../../data';
+import type { RegisterComponent } from '../../core';
 import Template from './Template';
 import Attributes from './Attributes';
-import { CType } from '../../enum/component';
+import { CType } from '../../enum';
 
 export default {
   cId: 'i-button',

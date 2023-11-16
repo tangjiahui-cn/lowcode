@@ -1,10 +1,10 @@
 /**
- * 运行时变量
+ * 运行时面板变量
  *
  * At 2023/11/01
  * By TangJiaHui
  */
-import { currentJson, JsonNode } from './currentJson';
+import { engine, JsonNode } from '..';
 
 interface CurrentPanels {
   // 编辑区域
@@ -23,9 +23,9 @@ export const currentPanels: CurrentPanels = {
     setJson: undefined,
     domRef: undefined,
     refreshJson(newJson?: JsonNode[]) {
-      const target = newJson || [...currentJson.getJson()];
+      const target = newJson || [...engine.json.getJson()];
       // // 设置json
-      currentJson.setJson(target);
+      engine.json.setJson(target);
       // // 触发 setJson 更新整个页面
       currentPanels.editor.setJson?.(target);
     },

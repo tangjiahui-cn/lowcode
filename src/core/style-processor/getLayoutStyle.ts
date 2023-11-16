@@ -1,5 +1,5 @@
 import React from 'react';
-import { UNIT_DEFAULT, PartialNumber, isNumber } from './index';
+import { UNIT_DEFAULT, PartialNumber, isNumber } from '.';
 
 // 布局处理类型
 export type StyleProcessLayout = {

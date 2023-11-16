@@ -1,6 +1,5 @@
 import { Button, Table } from 'antd';
-import { createNewTriggerTargetRule } from '../../../../../../utils';
-import { TriggerRuleTo } from '../../../../../../core';
+import { TriggerRuleTo, createNewTriggerTargetRule } from '../../../../../../core';
 import InstanceSelect from '../../../../../../components-sys/InstanceSelect';
 import { ColumnsType } from 'antd/es/table';
 import InstanceExposeRuleSelect from '../../../../../../components-sys/InstanceExposeRuleSelect';

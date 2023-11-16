@@ -4,10 +4,9 @@
 import { Checkbox, Input, InputNumber, Select, Space } from 'antd';
 import { css } from 'class-css';
 import { useEffect, useState } from 'react';
-import { StyleProcessText } from '../../../../core';
+import { StyleProcessText, JsonNode } from '../../../../core';
 import { fontWeightOptions, textAlignOptions, verticalAlignOptions } from './enum';
 import { cloneDeep } from 'lodash';
-import { JsonNode } from '../../../../data';
 
 const valueWidth = 150;
 const labelStyle = css({

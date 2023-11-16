@@ -1,10 +1,10 @@
-import { currentComponents, RegisterComponent } from '../../../data';
 import { Space } from 'antd';
 import { container, block } from './style';
 import { img } from '../../index';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { DRAG, CType } from '../../../enum';
+import { engine, RegisterComponent } from '../../../core';
 
 interface Item {
   title: string;
@@ -51,15 +51,15 @@ export default function ComponentMenu() {
     setList([
       {
         title: '基础组件',
-        components: currentComponents.getAllComponents(CType.BASE),
+        components: engine.component.getAllComponents(CType.BASE),
       },
       {
         title: '展示组件',
-        components: currentComponents.getAllComponents(CType.DISPLAY),
+        components: engine.component.getAllComponents(CType.DISPLAY),
       },
       {
         title: '布局组件',
-        components: currentComponents.getAllComponents(CType.LAYOUT),
+        components: engine.component.getAllComponents(CType.LAYOUT),
       },
     ]);
   }, []);

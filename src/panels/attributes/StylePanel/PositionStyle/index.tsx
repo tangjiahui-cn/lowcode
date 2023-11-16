@@ -4,10 +4,9 @@
 import { InputNumber, Select, Space } from 'antd';
 import { css } from 'class-css';
 import { useEffect, useState } from 'react';
-import { deleteSpecificProps, Position, StyleProcessPosition } from '../../../../core';
+import { deleteSpecificProps, Position, StyleProcessPosition, JsonNode } from '../../../../core';
 import { positionOptions } from './enum';
 import { cloneDeep } from 'lodash';
-import { JsonNode } from '../../../../data';
 import { defaultValue, SIZE_UNIT } from '../LayoutStyle';
 
 const valueWidth = 150;

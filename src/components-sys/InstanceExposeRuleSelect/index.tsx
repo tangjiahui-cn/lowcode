@@ -1,6 +1,5 @@
-import { currentInstances } from '../../data';
 import ICustomSelect, { ICustomSelectProps } from '../ICustomSelect';
-import { ExposeRule } from '../../core';
+import { engine, ExposeRule } from '../../core';
 
 type IProps = ICustomSelectProps & {
   insId?: string; // 实例id
@@ -15,7 +14,7 @@ export default function InstanceExposeRuleSelect(props: IProps) {
     <ICustomSelect
       requestFn={async () => {
         return (
-          currentInstances
+          engine.instance
             .getInstance(props?.insId)
             ?.getExposeAttributes?.()
             ?.map((exposeRule: ExposeRule) => {

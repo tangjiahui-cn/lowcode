@@ -1,13 +1,13 @@
 import { Button, message, notification, Space } from 'antd';
 import { page } from './style';
 import { GithubOutlined, RocketTwoTone } from '@ant-design/icons';
-import { currentJson, currentPanels, globalEvent, globalVariable, MODE } from '../../data';
-import { createInitJson } from '../../utils/createInitJson';
+import { globalEvent, globalVariable, MODE } from '../../data';
 import ModeButtonGroup from '../../components-sys/ModeButtonGroup';
 import { useState } from 'react';
 import { useUpdateEffect } from 'ahooks';
 import { cloneDeep } from 'lodash';
 import { EVENT } from '../../enum';
+import { engine, createInitJson } from '../../core';
 
 /**
  * 全局配置面板
@@ -25,13 +25,13 @@ export default function Config() {
   function handleClear() {
     globalEvent.notify(EVENT.SELECTED_COMPONENT, undefined);
     const INIT_JSON = createInitJson();
-    currentPanels?.editor?.setJson?.(currentJson.setJson(INIT_JSON));
+    engine.panel?.editor?.setJson?.(engine.json.setJson(INIT_JSON));
     localStorage.setItem('json', JSON.stringify(INIT_JSON));
     message.success('清空成功', 0.3);
   }
 
   function handleSave() {
-    const jsonStr = JSON.stringify(currentJson.getJson());
+    const jsonStr = JSON.stringify(engine.json.getJson());
     localStorage.setItem('json', jsonStr);
     message.success('保存成功', 0.3);
   }
@@ -50,8 +50,8 @@ export default function Config() {
         duration: 1.2,
       });
 
-      currentPanels.editor?.setJson?.([]);
-      setTimeout(() => currentPanels.editor.refreshJson());
+      engine.panel.editor?.setJson?.([]);
+      setTimeout(() => engine.panel.editor.refreshJson());
       return;
     }
 
@@ -65,8 +65,8 @@ export default function Config() {
         ),
         duration: 1.2,
       });
-      const jsonCopy: any[] = cloneDeep(currentJson.getJson());
-      currentPanels?.editor?.setJson?.(jsonCopy);
+      const jsonCopy: any[] = cloneDeep(engine.json.getJson());
+      engine.panel?.editor?.setJson?.(jsonCopy);
       return;
     }
   }

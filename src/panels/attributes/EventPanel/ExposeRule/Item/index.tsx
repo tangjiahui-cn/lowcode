@@ -1,8 +1,7 @@
 import { SettingOutlined, DeleteOutlined } from '@ant-design/icons';
-import { ExposeRule } from '../../../../../core';
+import { ExposeRule, JsonNode } from '../../../../../core';
 import { useState } from 'react';
 import AddExposeRuleDialog from '../AddExposeRuleDialog';
-import { JsonNode } from '../../../../../data';
 import { Space } from 'antd';
 import { css } from 'class-css';
 

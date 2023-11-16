@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
-import { JsonNode } from '../../data';
-import { engine } from '..';
+import { engine, JsonNode } from '..';
 
 /**
  * 注册jsonNode

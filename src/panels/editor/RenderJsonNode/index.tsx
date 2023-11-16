@@ -1,21 +1,8 @@
-import {
-  currentComponents,
-  currentInstances,
-  Instance,
-  JsonNode,
-  RegisterComponent,
-  currentPanels,
-  globalEvent,
-  globalVariable,
-  currentJson,
-} from '../../../data';
+import { globalEvent, globalVariable } from '../../../data';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { createJsonNode, getComponentByCId } from '../../../utils';
-import { currentSelectedInstance } from '../../../data/currentSelectedInstance';
 import { useWrapBox } from '../../../hooks/useWrapBox';
 import * as React from 'react';
 import { DRAG, ERROR, EVENT } from '../../../enum';
-import { currentHoverInstanceStack } from '../../../data/currentHoverInstanceStack';
 import { useOperateBox } from '../../../hooks/useOperateBox';
 import OperateBox from '../../../components-sys/OperateBox';
 import { throttle } from 'lodash';
@@ -23,10 +10,15 @@ import { useUpdateEffect } from 'ahooks';
 import { img } from '../../index';
 import {
   engine,
+  Instance,
   ExposeRule,
   StyleProcessorData,
   TriggerRule,
   useRegisterJsonNode,
+  RegisterComponent,
+  JsonNode,
+  createJsonNode,
+  getComponentByCId,
 } from '../../../core';
 
 const notifyScroll = throttle((payload) => {
@@ -73,7 +65,7 @@ export default function RenderJsonNode(props: IProps) {
   );
 
   const commonOptions = {
-    getContainerFn: () => currentPanels.editor.domRef?.current,
+    getContainerFn: () => engine.panel.editor.domRef?.current,
     getChildFn: () => getTargetDomRef?.current?.(),
   };
 
@@ -130,15 +122,15 @@ export default function RenderJsonNode(props: IProps) {
     );
 
     // 刷新json
-    currentJson.updateJsonNode(props.parentJsonNode);
-    currentPanels.editor.refreshJson();
+    engine.json.updateJsonNode(props.parentJsonNode);
+    engine.panel.editor.refreshJson();
     globalEvent.notify(EVENT.SELECTED_COMPONENT, undefined);
-    globalEvent.notify(EVENT.JSON_EDITOR, currentJson.getJson());
+    globalEvent.notify(EVENT.JSON_EDITOR, engine.json.getJson());
   }
 
   function handleSelectParent() {
     if (!props?.parentJsonNode) return;
-    currentInstances.getInstance(props?.parentJsonNode?.id)?.handleSelect?.();
+    engine.instance.getInstance(props?.parentJsonNode?.id)?.handleSelect?.();
   }
 
   function handleDragStart(e: React.DragEvent<HTMLSpanElement>) {
@@ -154,7 +146,7 @@ export default function RenderJsonNode(props: IProps) {
 
   // 插入一个新的节点
   function insertNewNode(newJsonNode: JsonNode) {
-    const component = currentComponents.getComponent(newJsonNode?.cId);
+    const component = engine.component.getComponent(newJsonNode?.cId);
     if (!component) {
       throw new Error(ERROR.NOT_FOUND_COMPONENT);
     }
@@ -163,10 +155,10 @@ export default function RenderJsonNode(props: IProps) {
       props.jsonNode.children = [];
     }
     props?.jsonNode?.children?.push?.(jsonNode);
-    currentPanels.editor.refreshJson();
+    engine.panel.editor.refreshJson();
     // 选中拖拽节点
     setTimeout(() => {
-      currentInstances.getInstance(jsonNode?.id)?.handleSelect?.();
+      engine.instance.getInstance(jsonNode?.id)?.handleSelect?.();
     });
   }
 
@@ -194,7 +186,7 @@ export default function RenderJsonNode(props: IProps) {
     });
 
     // 清空所有选中节点
-    currentSelectedInstance.clear();
+    engine.selectedInstance.clear();
 
     // 拖拽节点放在当前节点下
     props?.jsonNode?.children
@@ -202,22 +194,22 @@ export default function RenderJsonNode(props: IProps) {
       : (props.jsonNode.children = [moveJsonNode]);
 
     // 刷新json列表
-    currentPanels.editor.refreshJson();
+    engine.panel.editor.refreshJson();
 
     // 重置父节点缓存
     _parentJsonNode = undefined;
 
     // 选中拖拽节点
     setTimeout(() => {
-      currentInstances.getInstance(moveJsonNode?.id)?.handleSelect?.();
+      engine.instance.getInstance(moveJsonNode?.id)?.handleSelect?.();
     });
-    globalEvent.notify(EVENT.JSON_EDITOR, currentJson.getJson());
+    globalEvent.notify(EVENT.JSON_EDITOR, engine.json.getJson());
   }
 
   function handleDrop(e: React.DragEvent<HTMLDivElement>) {
     const newData = e.dataTransfer.getData(DRAG.NEW);
 
-    if (currentSelectedInstance.isSelected?.(props?.jsonNode?.id)) {
+    if (engine.selectedInstance.isSelected?.(props?.jsonNode?.id)) {
       setTimeout(() => {
         focusPanelRef.current.resize();
       });
@@ -250,8 +242,8 @@ export default function RenderJsonNode(props: IProps) {
       },
       handleSelect() {
         // 取消上一个选中元素，并设置新的选中元素
-        currentSelectedInstance.get()?.handleUnSelect?.();
-        currentSelectedInstance.set(instanceRef.current);
+        engine.selectedInstance.get()?.handleUnSelect?.();
+        engine.selectedInstance.set(instanceRef.current);
         // 挂载wrap-box
         focusPanelRef?.current?.mount();
         operateBoxRef?.current?.mount();
@@ -267,18 +259,18 @@ export default function RenderJsonNode(props: IProps) {
         if (props?.jsonNode) {
           props.jsonNode.attributes = attributes;
           // 只更新json中某个节点（不更新整个组件树）
-          currentJson.updateJsonNode(props?.jsonNode);
+          engine.json.updateJsonNode(props?.jsonNode);
           // 更新json编辑器
-          globalEvent.notify(EVENT.JSON_EDITOR, currentJson.getJson());
+          globalEvent.notify(EVENT.JSON_EDITOR, engine.json.getJson());
         }
       },
       handleSetStyleData(styleData?: StyleProcessorData) {
         if (!props?.jsonNode) return;
         setStyleData(styleData);
         props.jsonNode.styleData = styleData;
-        currentJson?.updateJsonNode(props?.jsonNode);
+        engine.json?.updateJsonNode(props?.jsonNode);
         // 更新json编辑器
-        globalEvent.notify(EVENT.JSON_EDITOR, currentJson.getJson());
+        globalEvent.notify(EVENT.JSON_EDITOR, engine.json.getJson());
       },
       handleSetExposeAttributes(exposeRules: ExposeRule[]) {
         if (props?.jsonNode) {
@@ -287,9 +279,9 @@ export default function RenderJsonNode(props: IProps) {
           props.jsonNode.exposeRules = exposeRules;
           unRegisterExposeRuleFn.current = registerExposeRules(props?.jsonNode);
           // 只更新json中某个节点（不更新整个组件树）
-          currentJson.updateJsonNode(props?.jsonNode);
+          engine.json.updateJsonNode(props?.jsonNode);
           // 更新json编辑器
-          globalEvent.notify(EVENT.JSON_EDITOR, currentJson.getJson());
+          globalEvent.notify(EVENT.JSON_EDITOR, engine.json.getJson());
         }
       },
       handleSetTriggerAttributes(triggerRules: TriggerRule[]) {
@@ -298,9 +290,9 @@ export default function RenderJsonNode(props: IProps) {
           props.jsonNode.triggerRules = triggerRules;
           unRegisterTriggerRuleFn.current = registerTriggerRules(props?.jsonNode);
           // 只更新json中某个节点（不更新整个组件树）
-          currentJson.updateJsonNode(props?.jsonNode);
+          engine.json.updateJsonNode(props?.jsonNode);
           // 更新json编辑器
-          globalEvent.notify(EVENT.JSON_EDITOR, currentJson.getJson());
+          globalEvent.notify(EVENT.JSON_EDITOR, engine.json.getJson());
         }
       },
       getExposeAttributes(): ExposeRule[] {
@@ -337,13 +329,13 @@ export default function RenderJsonNode(props: IProps) {
 
   useEffect(() => {
     instanceRef.current = getInstance();
-    currentInstances.add(instanceRef.current); // 注册当前实例
+    engine.instance.add(instanceRef.current); // 注册当前实例
     // 注册事件规则
     unRegisterExposeRuleFn.current = registerExposeRules(props?.jsonNode);
     unRegisterTriggerRuleFn.current = registerTriggerRules(props?.jsonNode);
 
     return () => {
-      currentInstances.delete(instanceRef.current?.id);
+      engine.instance.delete(instanceRef.current?.id);
       // 取消挂载事件规则
       unRegisterExposeRuleFn.current?.();
       unRegisterTriggerRuleFn.current?.();
@@ -355,7 +347,7 @@ export default function RenderJsonNode(props: IProps) {
     setStyleData(props?.jsonNode?.styleData);
 
     // 节点更新时，更新属性面板
-    if (currentSelectedInstance.isSelected(props?.jsonNode?.id)) {
+    if (engine.selectedInstance.isSelected(props?.jsonNode?.id)) {
       globalEvent.notify(EVENT.SELECTED_COMPONENT, props?.jsonNode);
     }
   }, [props?.jsonNode]);
@@ -366,8 +358,8 @@ export default function RenderJsonNode(props: IProps) {
       focusPanelRef.current.remove();
       hoverPanelRef.current.remove();
       operateBoxRef.current.remove();
-      currentSelectedInstance.clear();
-      currentHoverInstanceStack.clear();
+      engine.selectedInstance.clear();
+      engine.hoverInstanceStack.clear();
       globalEvent.notify(EVENT.SELECTED_COMPONENT, undefined);
     }
   }, [isPreview]);
@@ -386,14 +378,14 @@ export default function RenderJsonNode(props: IProps) {
         isPreview
           ? undefined
           : {
-              onScroll(event) {
+              onScroll(event: any) {
                 notifyScroll({ event, jsonNode: props?.jsonNode });
               },
-              onPointerDown(e) {
+              onPointerDown(e: any) {
                 e.preventDefault();
                 e.stopPropagation();
                 // 不能重复选中同一个元素
-                if (currentSelectedInstance.isSelected(instanceRef.current?.id)) {
+                if (engine.selectedInstance.isSelected(instanceRef.current?.id)) {
                   return;
                 }
                 // 新的选中元素操作
@@ -401,22 +393,22 @@ export default function RenderJsonNode(props: IProps) {
               },
               onPointerEnter() {
                 // 旧的栈顶元素取消经过
-                currentHoverInstanceStack.getStackTop()?.handleUnHover?.();
+                engine.hoverInstanceStack.getStackTop()?.handleUnHover?.();
                 // 插入新的栈顶元素，并经过
                 instanceRef.current?.handleHover?.();
-                currentHoverInstanceStack?.push(instanceRef?.current);
+                engine.hoverInstanceStack?.push(instanceRef?.current);
               },
               onPointerLeave() {
                 // 弹出栈顶元素，取消经过
-                currentHoverInstanceStack.pop()?.handleUnHover();
+                engine.hoverInstanceStack.pop()?.handleUnHover();
                 // 新的栈顶元素经过
-                currentHoverInstanceStack.getStackTop()?.handleHover();
+                engine.hoverInstanceStack.getStackTop()?.handleHover();
               },
-              onDragOver(e) {
+              onDragOver(e: any) {
                 e.preventDefault();
                 e.stopPropagation();
               },
-              onDrop(e) {
+              onDrop(e: any) {
                 e.stopPropagation();
                 // 仅容器节点可以放置其他元素
                 if (!props?.jsonNode?.isContainer) return;

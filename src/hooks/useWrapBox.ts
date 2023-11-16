@@ -1,4 +1,4 @@
-import { createWrapBox, DomType } from '../utils';
+import { createWrapBox, DomType } from '../core';
 import { MutableRefObject, useEffect, useRef } from 'react';
 
 /**

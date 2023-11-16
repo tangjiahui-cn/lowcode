@@ -4,10 +4,9 @@
 import { InputNumber, Select, Space } from 'antd';
 import { css } from 'class-css';
 import { useEffect, useState } from 'react';
-import { DEFAULT_SIZE_UNIT, sizeUnitOptions, StyleProcessBorder } from '../../../../core';
+import { DEFAULT_SIZE_UNIT, sizeUnitOptions, StyleProcessBorder, JsonNode } from '../../../../core';
 import Item from './Item';
 import { cloneDeep } from 'lodash';
-import { JsonNode } from '../../../../data';
 
 const unitWidth = 80;
 export const valueWidth = 150;

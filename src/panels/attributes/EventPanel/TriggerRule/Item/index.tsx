@@ -1,8 +1,7 @@
 import { SettingOutlined, DeleteOutlined } from '@ant-design/icons';
-import { TriggerRule } from '../../../../../core';
+import { TriggerRule, JsonNode } from '../../../../../core';
 import { useState } from 'react';
 import AddTriggerRuleDialog from '../AddTriggerRuleDialog';
-import { JsonNode } from '../../../../../data';
 import { Space } from 'antd';
 import { css } from 'class-css';
 import { circle } from '../../ExposeRule/Item';

@@ -1,6 +1,5 @@
-import { currentInstances, JsonNode } from '../../../data';
 import { useEffect, useState } from 'react';
-import { engine } from '../../../core';
+import { engine, JsonNode } from '../../../core';
 import { container, item } from './style';
 
 /**
@@ -30,13 +29,13 @@ export default function (props: IProps) {
             key={node?.id}
             className={item}
             onMouseEnter={() => {
-              currentInstances.getInstance(node?.id)?.handleHover();
+              engine.instance.getInstance(node?.id)?.handleHover();
             }}
             onMouseLeave={() => {
-              currentInstances.getInstance(node?.id)?.handleUnHover();
+              engine.instance.getInstance(node?.id)?.handleUnHover();
             }}
             onClick={() => {
-              currentInstances.getInstance(node?.id)?.handleUnHover();
+              engine.instance.getInstance(node?.id)?.handleUnHover();
               props?.onSelect?.(node);
             }}
           >

@@ -10,21 +10,39 @@
 export * from './hooks';
 export * from './modal';
 export * from './data';
+export * from './utils';
 export * from './style-processor';
 
-import { currentInstances } from '../data';
-import { jsonNode } from './data/jsonNode';
+import {
+  jsonNode,
+  currentInstances,
+  currentHoverInstanceStack,
+  currentComponents,
+  currentJson,
+  currentPanels,
+  currentSelectedInstance,
+} from './data';
 import { event, styleProcessor } from '.';
 
 export class Engine {
-  // 运行时实例集合
+  // 当前json
+  public json = currentJson;
+  // json实例;
+  public jsonNode = jsonNode;
+  // 运行时实例
   public instance = currentInstances;
+  // 已注册组件
+  public component = currentComponents;
   // 事件系统
   public event = event;
   // 样式处理器
   public styleProcessor = styleProcessor;
-  // 管理全部jsonNode实例;
-  public jsonNode = jsonNode;
+  // 鼠标经过实例栈
+  public hoverInstanceStack = currentHoverInstanceStack;
+  // 鼠标选中实例
+  public selectedInstance = currentSelectedInstance;
+  // 运行时面板
+  public panel = currentPanels;
 }
 
 export const engine = new Engine();

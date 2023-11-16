@@ -1,5 +1,5 @@
-import { currentComponents } from '../../data';
 import ICustomSelect, { ICustomSelectProps } from '../ICustomSelect';
+import { engine } from '../../core';
 
 type IProps = ICustomSelectProps & {
   componentId?: string;
@@ -12,7 +12,7 @@ export default function ComponentTriggerEventsSelect(props: IProps) {
   return (
     <ICustomSelect
       requestFn={async () =>
-        currentComponents.getComponent(props?.componentId)?.triggerEvents?.map((ins) => {
+        engine.component.getComponent(props?.componentId)?.triggerEvents?.map((ins) => {
           return {
             label: ins.eventName,
             value: ins.eventType,

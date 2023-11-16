@@ -1,8 +1,6 @@
 import { Form, Input, Modal, Select } from 'antd';
-import { ExposeRule } from '../../../../../core';
+import { engine, ExposeRule, createNewExposeRule, JsonNode } from '../../../../../core';
 import { useEffect, useState } from 'react';
-import { currentComponents, JsonNode } from '../../../../../data';
-import { createNewExposeRule } from '../../../../../utils';
 
 /**
  * 新增暴露规则弹窗
@@ -36,7 +34,7 @@ export default function AddExposeRuleDialog(props: IProps) {
   }
 
   function initOptions() {
-    const component = currentComponents.getComponent(props?.jsonNode?.cId);
+    const component = engine.component.getComponent(props?.jsonNode?.cId);
     setOptions(
       component?.exposeEvents?.map((x) => {
         return {

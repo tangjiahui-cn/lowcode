@@ -4,7 +4,7 @@
  * At 2023/10/31
  * By TangJiaHui
  */
-import { ExposeRule, StyleProcessorData, TriggerRule } from '../core';
+import { ExposeRule, StyleProcessorData, TriggerRule } from '..';
 
 export type Instance = {
   id: string;
@@ -30,7 +30,7 @@ export type Instance = {
   handleSetStyleData: (styleData?: StyleProcessorData) => void;
 };
 
-interface currentInstances {
+interface CurrentInstances {
   // 新增一个实例
   add: (ins: Instance) => void;
   // 获取一个指定实例
@@ -42,7 +42,7 @@ interface currentInstances {
 }
 
 const insList: Map<string, Instance> = new Map();
-export const currentInstances: currentInstances = {
+export const currentInstances: CurrentInstances = {
   add(ins) {
     insList.set(ins.id, ins);
   },

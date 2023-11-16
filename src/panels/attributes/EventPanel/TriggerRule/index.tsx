@@ -1,6 +1,5 @@
-import { JsonNode } from '../../../../data';
 import { useEffect, useState } from 'react';
-import { TriggerRule } from '../../../../core';
+import { TriggerRule, JsonNode } from '../../../../core';
 import { Space } from 'antd';
 import Item from './Item';
 import AddExposeRuleDialog from './AddTriggerRuleDialog';

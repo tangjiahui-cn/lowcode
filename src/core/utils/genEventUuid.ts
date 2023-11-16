@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import { ExposeRule, TriggerRule, TriggerRuleTo } from '../core';
+import { ExposeRule, TriggerRule, TriggerRuleTo } from '..';
 
 /**
  * 生成事件uuid

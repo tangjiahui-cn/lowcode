@@ -4,10 +4,8 @@
  * At 2023/10/31
  * By TangJiaHui
  */
-import { RegisterComponent } from './currentComponents';
 import * as React from 'react';
-import { ExposeRule, TriggerRule } from '../core';
-import { StyleProcessorData } from '../core/style-processor';
+import { ExposeRule, RegisterComponent, TriggerRule, StyleProcessorData } from '..';
 
 // （简单事件系统）
 // 输入框 change  => 按钮 setValue

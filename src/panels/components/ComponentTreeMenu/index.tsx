@@ -1,7 +1,8 @@
 import { Tree, TreeDataNode } from 'antd';
 import { useEffect, useState } from 'react';
-import { currentInstances, currentJson, globalEvent, JsonNode } from '../../../data';
+import { globalEvent } from '../../../data';
 import { EVENT } from '../../../enum';
+import { engine, JsonNode } from '../../../core';
 
 /**
  * 组件树
@@ -20,13 +21,13 @@ export default function () {
         title: (
           <div
             onClick={() => {
-              currentInstances.getInstance(x?.id)?.handleSelect?.();
+              engine.instance.getInstance(x?.id)?.handleSelect?.();
             }}
             onMouseEnter={() => {
-              currentInstances.getInstance(x?.id)?.handleHover?.();
+              engine.instance.getInstance(x?.id)?.handleHover?.();
             }}
             onMouseLeave={() => {
-              currentInstances.getInstance(x?.id)?.handleUnHover?.();
+              engine.instance.getInstance(x?.id)?.handleUnHover?.();
             }}
           >
             {x?.name}
@@ -46,7 +47,7 @@ export default function () {
 
   useEffect(() => {
     setTimeout(() => {
-      updateTreeData(currentJson.getJson());
+      updateTreeData(engine.json.getJson());
     });
 
     globalEvent.on(EVENT.JSON_EDITOR, updateTreeData);

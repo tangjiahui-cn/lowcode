@@ -1,6 +1,5 @@
 import { Space } from 'antd';
-import { JsonNode, RegisterComponent } from '../../../data';
-import { ExposeRule, TriggerRule } from '../../../core';
+import { ExposeRule, TriggerRule, JsonNode, RegisterComponent } from '../../../core';
 import ExposeRulePanel from './ExposeRule';
 import TriggerRulePanel from './TriggerRule';
 

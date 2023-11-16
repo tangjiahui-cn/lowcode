@@ -1,12 +1,5 @@
 import { useState } from 'react';
-import {
-  currentComponents,
-  currentInstances,
-  globalEvent,
-  Instance,
-  JsonNode,
-  RegisterComponent,
-} from '../../data';
+import { globalEvent } from '../../data';
 import { EVENT } from '../../enum';
 import { Tabs } from 'antd';
 import { attributesEmptyStyle, attributesStyle } from './style';
@@ -14,7 +7,15 @@ import { useRegisterGlobalEvent } from '../../hooks/useRegisterGlobalEvent';
 import EventPanel from './EventPanel';
 import StylePanel from './StylePanel';
 import BreadcrumbPanel from './BreadcrumbPanel';
-import { ExposeRule, StyleProcessorData, TriggerRule } from '../../core';
+import {
+  engine,
+  ExposeRule,
+  Instance,
+  RegisterComponent,
+  StyleProcessorData,
+  TriggerRule,
+  JsonNode,
+} from '../../core';
 
 const tabOptions = [
   { label: '属性', value: '1' },
@@ -39,8 +40,8 @@ export default function Attributes() {
 
   function handleSelect(payload: JsonNode) {
     setJsonNode(payload);
-    setComponent(currentComponents.getComponent(payload?.cId));
-    setInstance(currentInstances.getInstance(payload?.id));
+    setComponent(engine.component.getComponent(payload?.cId));
+    setInstance(engine.instance.getInstance(payload?.id));
   }
 
   function handleAttributes(attributes: any) {

@@ -1,7 +1,6 @@
 import { Table } from 'antd';
-import { TemplateProps } from '../../data';
 import { useEffect, useRef, useState } from 'react';
-import { useExpose } from '../../core';
+import { useExpose, TemplateProps } from '../../core';
 
 export interface Attributes {
   title: string; // 表格标题

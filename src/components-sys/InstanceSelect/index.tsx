@@ -1,5 +1,5 @@
-import { currentInstances } from '../../data';
 import ICustomSelect, { ICustomSelectProps } from '../ICustomSelect';
+import { engine } from '../../core';
 
 /**
  * 实例选择下拉框
@@ -8,7 +8,7 @@ export default function InstanceSelect(props: ICustomSelectProps) {
   return (
     <ICustomSelect
       requestFn={async () =>
-        currentInstances.getAllInstance().map((ins) => {
+        engine.instance.getAllInstance().map((ins) => {
           return {
             label: ins.name,
             value: ins.id,

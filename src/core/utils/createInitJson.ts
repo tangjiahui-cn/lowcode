@@ -1,11 +1,11 @@
-import { currentComponents, JsonNode } from '../data';
 import { createJsonNode } from './createJsonNode';
+import { engine, JsonNode } from '..';
 
 /**
  * 创建一个包含初始Page的JSON
  */
 export function createInitJson(): JsonNode[] {
-  const component = currentComponents.getComponent('i-page');
+  const component = engine.component.getComponent('i-page');
   if (!component) {
     throw new Error('page component is not found.');
   }

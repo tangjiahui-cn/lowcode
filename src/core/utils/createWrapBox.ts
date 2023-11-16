@@ -2,8 +2,8 @@ import * as React from 'react';
 import { DomType, getChildDomRect } from './getChildDomRect';
 import { css } from 'class-css';
 import { throttle } from 'lodash';
-import { globalEvent, globalVariable } from '../data';
-import { EVENT } from '../enum';
+import { globalEvent, globalVariable } from '../../data';
+import { EVENT } from '../../enum';
 
 /**
  * 获取包裹盒子元素

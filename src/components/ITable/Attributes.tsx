@@ -1,7 +1,7 @@
 import { Attributes } from './Template';
 import { Input, Space } from 'antd';
 import { useEffect, useState } from 'react';
-import { AttributesProps } from '../../data';
+import { AttributesProps } from '../../core';
 
 /**
  * 属性面板

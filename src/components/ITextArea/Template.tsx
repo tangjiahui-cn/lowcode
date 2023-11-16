@@ -1,7 +1,6 @@
 import { Input } from 'antd';
-import { getEvent, TemplateProps } from '../../data';
 import { useEffect, useRef, useState } from 'react';
-import { engine, useExpose } from '../../core';
+import { engine, useExpose, getEvent, TemplateProps } from '../../core';
 
 export interface Attributes {
   value: string;

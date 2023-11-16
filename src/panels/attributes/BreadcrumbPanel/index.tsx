@@ -5,9 +5,8 @@
  * By TangJiaHui
  */
 import { Breadcrumb } from 'antd';
-import { currentInstances, JsonNode } from '../../../data';
 import { useEffect, useState } from 'react';
-import { engine } from '../../../core';
+import { engine, JsonNode } from '../../../core';
 
 interface IProps {
   jsonNode?: JsonNode;
@@ -35,16 +34,16 @@ export default function (props: IProps) {
             <span
               onMouseEnter={() => {
                 if (isSelf) return;
-                currentInstances.getInstance(node?.id)?.handleHover();
+                engine.instance.getInstance(node?.id)?.handleHover();
               }}
               onMouseLeave={() => {
                 if (isSelf) return;
-                currentInstances.getInstance(node?.id)?.handleUnHover();
+                engine.instance.getInstance(node?.id)?.handleUnHover();
               }}
               style={{ cursor: isSelf ? 'default' : 'pointer' }}
               onClick={() => {
                 if (isSelf) return;
-                const instance = currentInstances.getInstance(node?.id);
+                const instance = engine.instance.getInstance(node?.id);
                 instance?.handleUnHover();
                 instance?.handleSelect();
               }}

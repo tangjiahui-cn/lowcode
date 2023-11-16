@@ -5,9 +5,8 @@
  * By TangJiaHui
  */
 import { Space } from 'antd';
-import { JsonNode } from '../../../data';
 import Container from '../../../components-sys/Container';
-import { StyleProcessorData } from '../../../core';
+import { StyleProcessorData, JsonNode } from '../../../core';
 import LayoutStyle from './LayoutStyle';
 import TextStyle from './TextStyle';
 import PositionStyle from './PositionStyle';

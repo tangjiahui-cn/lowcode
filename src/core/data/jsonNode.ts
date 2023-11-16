@@ -1,7 +1,7 @@
 /**
  * 管理全局注册的jsonNode
  */
-import { JsonNode } from '../../data';
+import { JsonNode } from '..';
 
 const map = new Map<string, JsonNode>();
 export const jsonNode = {

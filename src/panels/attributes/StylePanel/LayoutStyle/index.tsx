@@ -4,9 +4,8 @@
 import { InputNumber, Select, Space } from 'antd';
 import { css } from 'class-css';
 import { useEffect, useState } from 'react';
-import { parseCssValue, StyleProcessLayout } from '../../../../core';
+import { parseCssValue, StyleProcessLayout, JsonNode } from '../../../../core';
 import { cloneDeep } from 'lodash';
-import { JsonNode } from '../../../../data';
 
 const labelStyle = css({
   width: 50,

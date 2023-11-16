@@ -1,6 +1,6 @@
-import { TemplateProps } from '../../data';
 import { createElement, useEffect, useMemo, useRef } from 'react';
 import DropHereEmpty from '../../components-sys/DropHereEmpty';
+import { TemplateProps } from '../../core';
 
 export const levelList: string[] = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
 export interface Attributes {

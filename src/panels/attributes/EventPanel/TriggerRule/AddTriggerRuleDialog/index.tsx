@@ -1,8 +1,6 @@
 import { Form, Modal, Space } from 'antd';
-import { TriggerRule, TriggerRuleTo } from '../../../../../core';
+import { createNewTriggerRule, JsonNode, TriggerRule, TriggerRuleTo } from '../../../../../core';
 import { useEffect, useState } from 'react';
-import { JsonNode } from '../../../../../data';
-import { createNewTriggerRule } from '../../../../../utils';
 import HelpHoverTip from '../../../../../components-sys/HelpHoverTip';
 import TargetTable from './TargetTable';
 import ComponentTriggerEventsSelect from '../../../../../components-sys/ComponentTriggerEventsSelect';

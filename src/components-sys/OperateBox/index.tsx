@@ -1,9 +1,9 @@
 import { Space, Tooltip } from 'antd';
 import { ArrowUpOutlined, DeleteOutlined, DragOutlined } from '@ant-design/icons';
 import { btn, name } from './style';
-import { currentInstances, JsonNode } from '../../data';
 import ParentList from './ParentList';
 import { useState } from 'react';
+import { engine, JsonNode } from '../../core';
 
 /**
  * 操作工具盒
@@ -39,7 +39,7 @@ export default function OperateBox(props: IProps) {
   };
 
   function handleSelect(node: JsonNode) {
-    currentInstances.getInstance(node?.id)?.handleSelect();
+    engine.instance.getInstance(node?.id)?.handleSelect();
     setAllowVisible(false);
   }
 
