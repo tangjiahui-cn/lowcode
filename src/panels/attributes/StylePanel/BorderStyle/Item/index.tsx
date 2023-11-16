@@ -51,7 +51,6 @@ export default function BorderItem(props: BorderItemProps) {
       <Space>
         <div className={labelStyle}>类型</div>
         <Select
-          allowClear
           style={{ width: valueWidth }}
           options={borderTypeOptions}
           placeholder={'请选择'}

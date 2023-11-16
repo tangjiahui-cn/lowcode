@@ -12,6 +12,7 @@ import LayoutStyle from './LayoutStyle';
 import TextStyle from './TextStyle';
 import PositionStyle from './PositionStyle';
 import BorderStyle from './BorderStyle';
+import { tips } from './tips';
 
 interface IProps {
   jsonNode?: JsonNode;
@@ -25,7 +26,7 @@ export default function (props: IProps) {
 
   return (
     <Space style={{ width: '100%' }} direction={'vertical'}>
-      <Container title={'布局'}>
+      <Container title={'布局'} defaultExpand tips={tips.layout}>
         <LayoutStyle
           jsonNode={props?.jsonNode}
           onChange={(layout) =>
@@ -58,7 +59,7 @@ export default function (props: IProps) {
           }
         />
       </Container>
-      <Container title={'边框'} defaultExpand>
+      <Container title={'边框'}>
         <BorderStyle
           jsonNode={props?.jsonNode}
           onChange={(border) =>
@@ -68,10 +69,6 @@ export default function (props: IProps) {
             })
           }
         />
-        {/*<div>粗细</div>*/}
-        {/*<div>颜色</div>*/}
-        {/*<div>圆角</div>*/}
-        {/*<div>类型</div>*/}
       </Container>
     </Space>
   );

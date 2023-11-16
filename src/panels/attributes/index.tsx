@@ -29,7 +29,7 @@ const tabOptions = [
  * By TangJiaHui
  */
 export default function Attributes() {
-  const [activeKey, setActiveKey] = useState<string>('2');
+  const [activeKey, setActiveKey] = useState<string>('1');
   // 组件模板（模板）
   const [component, setComponent] = useState<RegisterComponent | undefined>();
   // 当前jsonNode（保存状态）
