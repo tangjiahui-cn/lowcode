@@ -21,7 +21,7 @@ export default function (props: AttributesProps<Attributes>) {
   return (
     <Space style={{ width: '100%' }} direction={'vertical'}>
       <Space>
-        文字：
+        内容：
         <Input.TextArea
           style={{ width: 230 }}
           value={attributes?.value}

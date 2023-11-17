@@ -60,7 +60,7 @@ export function getEvent(
 export type TemplateType = React.FunctionComponent<TemplateProps<any>>;
 
 // 自定义组件类型
-export type RegisterComponent = {
+export type RegisterComponent<Attributes = any> = {
   cId: string; // 组件类型id
   name?: string; // 组件名称
   icon?: string; // 组件占位图标
@@ -69,7 +69,7 @@ export type RegisterComponent = {
   template: TemplateType; // 组件模板
   attributeTemplate?: any; // 组件私有属性模板
   defaultStyle?: React.CSSProperties; // 默认样式属性
-  defaultAttributes?: any; // 默认私有属性
+  defaultAttributes?: Attributes; // 默认私有属性
   cType: CType; // 组件类型（代办同一类组件，用于分类）
   styleData?: StyleProcessorData; // 待处理样式对象
 

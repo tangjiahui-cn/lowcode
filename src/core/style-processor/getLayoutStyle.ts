@@ -51,13 +51,13 @@ export function getLayoutStyle(data: StyleProcessLayout): React.CSSProperties {
       style.paddingTop = `${data?.paddingTop || 0}${data?.paddingTopUnit || UNIT_DEFAULT}`;
     }
     if (isNumber(data?.paddingRight)) {
-      style.paddingTop = `${data?.paddingRight || 0}${data?.paddingRightUnit || UNIT_DEFAULT}`;
+      style.paddingRight = `${data?.paddingRight || 0}${data?.paddingRightUnit || UNIT_DEFAULT}`;
     }
     if (isNumber(data?.paddingBottom)) {
-      style.paddingTop = `${data?.paddingBottom || 0}${data?.paddingBottomUnit || UNIT_DEFAULT}`;
+      style.paddingBottom = `${data?.paddingBottom || 0}${data?.paddingBottomUnit || UNIT_DEFAULT}`;
     }
     if (isNumber(data?.paddingLeft)) {
-      style.paddingTop = `${data?.paddingLeft || 0}${data?.paddingLeftUnit || UNIT_DEFAULT}`;
+      style.paddingLeft = `${data?.paddingLeft || 0}${data?.paddingLeftUnit || UNIT_DEFAULT}`;
     }
   }
 
@@ -68,13 +68,13 @@ export function getLayoutStyle(data: StyleProcessLayout): React.CSSProperties {
       style.marginTop = `${data?.marginTop || 0}${data?.marginTopUnit || UNIT_DEFAULT}`;
     }
     if (isNumber(data?.marginRight)) {
-      style.marginTop = `${data?.marginRight || 0}${data?.marginRightUnit || UNIT_DEFAULT}`;
+      style.marginRight = `${data?.marginRight || 0}${data?.marginRightUnit || UNIT_DEFAULT}`;
     }
     if (isNumber(data?.marginBottom)) {
-      style.marginTop = `${data?.marginBottom || 0}${data?.marginBottomUnit || UNIT_DEFAULT}`;
+      style.marginBottom = `${data?.marginBottom || 0}${data?.marginBottomUnit || UNIT_DEFAULT}`;
     }
     if (isNumber(data?.marginLeft)) {
-      style.marginTop = `${data?.marginLeft || 0}${data?.marginLeftUnit || UNIT_DEFAULT}`;
+      style.marginLeft = `${data?.marginLeft || 0}${data?.marginLeftUnit || UNIT_DEFAULT}`;
     }
   }
 

@@ -56,8 +56,9 @@ export default function AddExposeRuleDialog(props: IProps) {
 
   return (
     <Modal
-      visible={props?.visible}
+      open={props?.visible}
       centered
+      destroyOnClose
       title={props?.isEdit ? '编辑暴露规则' : '新增暴露规则'}
       onCancel={props?.onCancel}
       onOk={handleOk}

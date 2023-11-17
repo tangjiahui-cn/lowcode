@@ -16,7 +16,7 @@ export interface Attributes {
 export default function (props: TemplateProps<Attributes, HTMLButtonElement>) {
   const domRef = useRef<HTMLButtonElement>(null);
   const [attributes, setAttributes] = useState(props?.attributes);
-  useEffect(() => setAttributes(attributes), [props?.attributes]);
+  useEffect(() => setAttributes(props?.attributes), [props?.attributes]);
 
   function setValue(value: string) {
     setAttributes({ ...attributes, value });

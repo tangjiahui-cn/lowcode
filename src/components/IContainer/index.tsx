@@ -1,5 +1,5 @@
 import type { RegisterComponent } from '../../core';
-import Template from './Template';
+import Template, { Attributes as AttributesType } from './Template';
 import Attributes from './Attributes';
 import { CType } from '../../enum';
 
@@ -16,4 +16,4 @@ export default {
     position: 'relative',
   },
   cType: CType.LAYOUT,
-} as RegisterComponent;
+} as RegisterComponent<AttributesType>;

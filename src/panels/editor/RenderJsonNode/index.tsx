@@ -414,6 +414,9 @@ export default function RenderJsonNode(props: IProps) {
                 if (!props?.jsonNode?.isContainer) return;
                 handleDrop(e);
               },
+              // onContextMenu(e) {
+              //   e.preventDefault();
+              // },
             }
       }
     >

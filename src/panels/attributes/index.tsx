@@ -18,9 +18,9 @@ import {
 } from '../../core';
 
 const tabOptions = [
-  { label: '属性', value: '1' },
-  { label: '样式', value: '2' },
-  { label: '事件', value: '3' },
+  { label: '属性', key: '1' },
+  { label: '样式', key: '2' },
+  { label: '事件', key: '3' },
 ];
 
 /**
@@ -66,11 +66,7 @@ export default function Attributes() {
   return component ? (
     <div className={attributesStyle}>
       <BreadcrumbPanel jsonNode={jsonNode} />
-      <Tabs activeKey={activeKey} onChange={setActiveKey}>
-        {tabOptions.map((option) => {
-          return <Tabs.TabPane tab={option.label} key={option.value} />;
-        })}
-      </Tabs>
+      <Tabs activeKey={activeKey} onChange={setActiveKey} items={tabOptions} />
       {activeKey === '1' && component?.attributeTemplate && (
         <component.attributeTemplate
           attributes={jsonNode?.attributes}

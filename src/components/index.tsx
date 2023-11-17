@@ -5,6 +5,7 @@
  * By TangJiaHui
  */
 import IPage from './IPage';
+import ISelect from './ISelect';
 import IButton from './IButton';
 import ITextArea from './ITextArea';
 import IContainer from './IContainer';
@@ -15,6 +16,7 @@ import { engine } from '../core';
 export function registerComponents() {
   engine.component.add(IPage);
   engine.component.add(IButton);
+  engine.component.add(ISelect);
   engine.component.add(ITextArea);
   engine.component.add(IContainer);
   engine.component.add(ITable);

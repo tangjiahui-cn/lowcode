@@ -5,6 +5,7 @@ import { IOption, localSearchFn } from './type';
 import { useStateWithRef, useEffectOnce } from '../../hooks-sys';
 
 export interface ICustomSelectProps {
+  allowClear?: boolean;
   defaultFirst?: boolean; // 默认选中第一个  // 会在onChange里回调
   disabled?: boolean;
   all?: boolean; // 是否可选 全部
@@ -30,6 +31,7 @@ export interface ICustomSelectProps {
  */
 export default function ICustomSelect(props: ICustomSelectProps) {
   const {
+    allowClear = false,
     defaultFirst,
     disabled,
     all,
@@ -107,6 +109,7 @@ export default function ICustomSelect(props: ICustomSelectProps) {
 
   return (
     <Select
+      allowClear={allowClear}
       disabled={disabled}
       style={style}
       value={currentValue}

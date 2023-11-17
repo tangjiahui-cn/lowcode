@@ -8,6 +8,24 @@ export interface Attributes {
   title?: string;
   // 页面标题级别
   titleLevel?: string;
+
+  // 容器布局属性
+  childrenStyle?: {
+    /** 布局 **/
+    display?: 'flex';
+    gap?: number;
+    flexDirection?: 'row' | 'row-reverse' | 'column' | 'column-reverse';
+    flexWrap?: 'nowrap' | 'wrap' | 'wrap-reverse';
+    justifyContent?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around';
+    alignItems?: 'flex-start' | 'flex-end' | 'center' | 'baseline' | 'stretch';
+    alignContent?:
+      | 'flex-start'
+      | 'flex-end'
+      | 'center'
+      | 'space-between'
+      | 'space-around'
+      | 'stretch';
+  };
 }
 
 /**
@@ -27,7 +45,14 @@ export default function (props: TemplateProps<Attributes, HTMLDivElement>) {
   }, []);
 
   return (
-    <div ref={domRef} style={props?.style} {...props?.events}>
+    <div
+      ref={domRef}
+      style={{
+        ...props?.style,
+        ...props?.attributes?.childrenStyle,
+      }}
+      {...props?.events}
+    >
       {props?.attributes?.title && TitleTag}
       {props?.children}
       {!props?.children?.length && <DropHereEmpty />}
