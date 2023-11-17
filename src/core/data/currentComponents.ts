@@ -35,12 +35,12 @@ export type TemplateProps<Attributes, E = any> = {
   getDomFn: (fn: () => E | null) => void;
   // 属性
   attributes?: Attributes;
-  // 样式
-  style?: React.CSSProperties;
   // 事件
   events?: DOMAttributes<E>;
   // 子元素
   children?: React.ReactNode[];
+  // 预处理样式
+  styleData?: StyleProcessorData;
 
   // 触发事件
   triggerEvents?: (events: string[]) => void;
@@ -68,7 +68,7 @@ export type RegisterComponent<Attributes = any> = {
   isContainer?: boolean; // 是否是容器类组件（可以嵌套children）
   template: TemplateType; // 组件模板
   attributeTemplate?: any; // 组件私有属性模板
-  defaultStyle?: React.CSSProperties; // 默认样式属性
+  // defaultStyle?: React.CSSProperties; // 默认样式属性
   defaultAttributes?: Attributes; // 默认私有属性
   cType: CType; // 组件类型（代办同一类组件，用于分类）
   styleData?: StyleProcessorData; // 待处理样式对象

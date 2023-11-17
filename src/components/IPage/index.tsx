@@ -11,13 +11,6 @@ export default {
   isContainer: true,
   template: Template,
   attributeTemplate: Attributes,
-  defaultStyle: {
-    position: 'relative',
-    height: '100%',
-    width: '100%',
-    overflowY: 'auto',
-    background: 'white',
-  },
   styleData: {
     layout: {
       padding: 16,

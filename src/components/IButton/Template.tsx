@@ -40,7 +40,7 @@ export default function (props: TemplateProps<Attributes, HTMLButtonElement>) {
   return (
     <Button
       ref={domRef}
-      style={props?.style}
+      style={engine.styleProcessor.getStyle(props?.styleData)}
       type={props?.attributes?.type}
       {...getEvent(props?.events, {
         onClick() {

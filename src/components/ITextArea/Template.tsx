@@ -37,7 +37,7 @@ export default function (props: TemplateProps<Attributes, HTMLTextAreaElement>) 
   return (
     <Input.TextArea
       ref={ref}
-      style={props?.style}
+      style={engine.styleProcessor.getStyle(props?.styleData)}
       placeholder={'请输入'}
       value={attributes?.value}
       onChange={(e) =>

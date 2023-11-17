@@ -1,6 +1,6 @@
 import { createElement, useEffect, useMemo, useRef } from 'react';
 import DropHereEmpty from '../../components-sys/DropHereEmpty';
-import { TemplateProps } from '../../core';
+import { engine, TemplateProps } from '../../core';
 
 export const levelList: string[] = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
 export interface Attributes {
@@ -48,7 +48,8 @@ export default function (props: TemplateProps<Attributes, HTMLDivElement>) {
     <div
       ref={domRef}
       style={{
-        ...props?.style,
+        position: 'relative',
+        ...engine.styleProcessor.getStyle(props?.styleData),
         ...props?.attributes?.childrenStyle,
       }}
       {...props?.events}

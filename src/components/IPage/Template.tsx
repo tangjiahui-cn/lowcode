@@ -1,4 +1,4 @@
-import { TemplateProps } from '../../core';
+import { engine, TemplateProps } from '../../core';
 import { useEffect, useRef } from 'react';
 
 export interface Attributes {
@@ -20,9 +20,11 @@ export default function (props: TemplateProps<Attributes, HTMLDivElement>) {
       ref={domRef}
       style={{
         position: 'relative',
-        width: '100%',
         height: '100%',
-        ...props?.style,
+        width: '100%',
+        overflowY: 'auto',
+        background: 'white',
+        ...engine.styleProcessor.getStyle(props?.styleData),
       }}
       {...props?.events}
     >

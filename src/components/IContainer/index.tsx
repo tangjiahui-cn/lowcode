@@ -12,8 +12,5 @@ export default {
   defaultAttributes: {
     titleLevel: 'h1',
   },
-  defaultStyle: {
-    position: 'relative',
-  },
   cType: CType.LAYOUT,
 } as RegisterComponent<AttributesType>;

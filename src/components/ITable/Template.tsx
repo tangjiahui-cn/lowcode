@@ -1,6 +1,6 @@
 import { Table } from 'antd';
 import { useEffect, useRef, useState } from 'react';
-import { useExpose, TemplateProps } from '../../core';
+import { useExpose, TemplateProps, engine } from '../../core';
 
 export interface Attributes {
   title: string; // 表格标题
@@ -33,7 +33,7 @@ export default function (props: TemplateProps<Attributes, HTMLDivElement>) {
   }, []);
 
   return (
-    <div ref={domRef} style={props?.style} {...props?.events}>
+    <div ref={domRef} style={engine.styleProcessor.getStyle(props?.styleData)} {...props?.events}>
       {props?.attributes?.title && (
         <h2 style={{ textAlign: 'center' }}>{props?.attributes?.title}</h2>
       )}

@@ -369,11 +369,7 @@ export default function RenderJsonNode(props: IProps) {
       id={props?.jsonNode?.id}
       getDomFn={(fn: any) => (getTargetDomRef.current = fn)}
       attributes={attributes}
-      style={{
-        ...(isPreview ? {} : { cursor: 'default' }),
-        ...component.defaultStyle,
-        ...engine.styleProcessor.getStyle(styleData), // 使用用户控制属性
-      }}
+      styleData={styleData}
       events={
         isPreview
           ? undefined

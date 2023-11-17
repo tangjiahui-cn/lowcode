@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useExpose, TemplateProps } from '../../core';
+import { useExpose, TemplateProps, engine } from '../../core';
 
 export interface Attributes {
   value: string;
@@ -34,7 +34,7 @@ export default function (props: TemplateProps<Attributes, HTMLSpanElement>) {
   }, []);
 
   return (
-    <span ref={domRef} style={props?.style} {...props?.events}>
+    <span ref={domRef} style={engine.styleProcessor.getStyle(props?.styleData)} {...props?.events}>
       {attributes?.value}
     </span>
   );

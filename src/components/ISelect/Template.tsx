@@ -44,11 +44,15 @@ export default function (props: TemplateProps<Attributes, HTMLDivElement>) {
       ref={domRef}
       style={{
         display: 'inline-block',
-        ...props?.style,
+        ...engine.styleProcessor.getWrapStyle(props?.styleData), // 包裹容器仅仅用于设置定位、布局
       }}
     >
+      {/*// 内部容器用于设置其他样式*/}
       <Select
-        style={props?.style}
+        style={{
+          width: '100%',
+          ...engine.styleProcessor.getDisplayStyle(props?.styleData),
+        }}
         value={attributes?.value}
         options={attributes?.options}
         placeholder={'请输入'}

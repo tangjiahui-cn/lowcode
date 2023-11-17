@@ -153,7 +153,38 @@ export function parseCssValue(value: string | number | null | undefined): {
   };
 }
 
+// 计算包裹容器样式（布局/定位）
+function getWrapStyle(styleProcess: StyleProcessorData = {}): React.CSSProperties {
+  const style: React.CSSProperties = {};
+
+  if (styleProcess?.layout) {
+    Object.assign(style, getLayoutStyle(styleProcess?.layout));
+  }
+
+  if (styleProcess?.position) {
+    Object.assign(style, getPositionStyle(styleProcess?.position));
+  }
+
+  return style;
+}
+
+// 计算展示效果类样式（文字、边框、背景）
+function getDisplayStyle(styleProcess: StyleProcessorData = {}): React.CSSProperties {
+  const style: React.CSSProperties = {};
+
+  if (styleProcess?.text) {
+    Object.assign(style, getTextStyle(styleProcess?.text));
+  }
+
+  if (styleProcess?.border) {
+    Object.assign(style, getBorderStyle(styleProcess?.border));
+  }
+
+  return style;
+}
+
 export const styleProcessor = {
   getStyle,
-  getLayoutStyle,
+  getWrapStyle,
+  getDisplayStyle,
 };
