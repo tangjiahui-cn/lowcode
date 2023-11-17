@@ -22,10 +22,14 @@ export interface GlobalVariable {
 
 export const globalVariable: GlobalVariable = {
   mode: MODE.DEV,
-  maxZIndex: 1,
+  maxZIndex: 0,
   eventThrottleDelay: 4,
 
-  setMaxZIndex: (zIndex: number) => {
+  setMaxZIndex: (zIndex?: any) => {
+    // 非数字返回
+    if (!Number.isFinite(zIndex)) {
+      return;
+    }
     if (zIndex < globalVariable.maxZIndex) {
       return;
     }

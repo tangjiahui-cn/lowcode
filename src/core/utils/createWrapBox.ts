@@ -52,6 +52,16 @@ export function createWrapBox(
     window.addEventListener('resize', resize);
     // 组件滚动时重置UI
     globalEvent.on(EVENT.SCROLL, resize);
+
+    // 监听当前最大zIndex
+    mountDom && ((mountDom as any).style.zIndex = globalVariable.maxZIndex);
+    globalEvent.on(EVENT.SET_MAX_Z_INDEX, listenZIndex);
+  }
+
+  function listenZIndex(zIndex: number) {
+    if (mountDom) {
+      (mountDom as any).style.zIndex = zIndex;
+    }
   }
 
   // 移出 wrap-box
@@ -64,6 +74,9 @@ export function createWrapBox(
     mountDom = null;
     window.removeEventListener('resize', resize);
     globalEvent.remove(EVENT.SCROLL, resize);
+
+    // 取消监听zIndex事件
+    globalEvent.remove(EVENT.SET_MAX_Z_INDEX, listenZIndex);
   }
 
   return {
