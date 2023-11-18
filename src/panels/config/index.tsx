@@ -1,7 +1,7 @@
 import { Button, message, notification, Space } from 'antd';
 import { page } from './style';
 import { GithubOutlined, RocketTwoTone } from '@ant-design/icons';
-import { globalEvent, globalVariable, MODE } from '../../data';
+import { MODE } from '../../core';
 import ModeButtonGroup from '../../components-sys/ModeButtonGroup';
 import { useState } from 'react';
 import { useUpdateEffect } from 'ahooks';
@@ -23,7 +23,7 @@ export default function Config() {
   }
 
   function handleClear() {
-    globalEvent.notify(EVENT.SELECTED_COMPONENT, undefined);
+    engine.globalEvent.notify(EVENT.SELECTED_COMPONENT, undefined);
     const INIT_JSON = createInitJson();
     engine.panel?.editor?.setJson?.(engine.json.setJson(INIT_JSON));
     localStorage.setItem('json', JSON.stringify(INIT_JSON));
@@ -37,7 +37,7 @@ export default function Config() {
   }
 
   function handleChangeMode(mode: MODE) {
-    globalVariable.setMode(mode);
+    engine.globalVar.setMode(mode);
 
     // 开发模式（重置状态）
     if (mode === MODE.DEV) {

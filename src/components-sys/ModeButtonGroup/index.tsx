@@ -1,7 +1,7 @@
 import { Space } from 'antd';
 import * as classNames from 'classnames';
 import { btn, btnSelect } from './style';
-import { MODE } from '../../data';
+import { MODE } from '../../core';
 
 const options = [
   { label: '开发', value: MODE.DEV },

@@ -1,6 +1,5 @@
 import { Tree, TreeDataNode } from 'antd';
 import { useEffect, useState } from 'react';
-import { globalEvent } from '../../../data';
 import { EVENT } from '../../../enum';
 import { engine, JsonNode } from '../../../core';
 
@@ -50,8 +49,8 @@ export default function () {
       updateTreeData(engine.json.getJson());
     });
 
-    globalEvent.on(EVENT.JSON_EDITOR, updateTreeData);
-    return () => globalEvent.remove(EVENT.JSON_EDITOR, updateTreeData);
+    engine.globalEvent.on(EVENT.JSON_EDITOR, updateTreeData);
+    return () => engine.globalEvent.remove(EVENT.JSON_EDITOR, updateTreeData);
   }, []);
 
   return <Tree expandedKeys={expandKeys} onExpand={setExpendKeys} treeData={treeData} />;

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { globalEvent, IEventFn } from '../data';
+import { engine } from '../core';
 
 /**
  * 注册全局事件hooks
@@ -7,12 +7,12 @@ import { globalEvent, IEventFn } from '../data';
  * At 2023/11/03
  * By TangJiaHui
  */
-export function useRegisterGlobalEvent(event: any, callback: IEventFn | IEventFn[]) {
+export function useRegisterGlobalEvent(event: any, callback: (payload: any) => void) {
   useEffect(() => {
     const list = Array.isArray(callback) ? callback : [callback];
-    list.forEach((cb) => globalEvent.on(event, cb));
+    list.forEach((cb) => engine.globalEvent.on(event, cb));
     return () => {
-      list.forEach((cb) => globalEvent.remove(event, cb));
+      list.forEach((cb) => engine.globalEvent.remove(event, cb));
     };
   }, []);
 }

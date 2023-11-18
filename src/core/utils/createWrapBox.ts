@@ -2,8 +2,8 @@ import * as React from 'react';
 import { DomType, getChildDomRect } from './getChildDomRect';
 import { css } from 'class-css';
 import { throttle } from 'lodash';
-import { globalEvent, globalVariable } from '../../data';
 import { EVENT } from '../../enum';
+import { engine } from '../index';
 
 /**
  * 获取包裹盒子元素
@@ -30,7 +30,7 @@ export function createWrapBox(
         ...getChildDomRect(container, child),
       });
     });
-  }, globalVariable.eventThrottleDelay);
+  }, engine.globalVar.eventThrottleDelay);
 
   // 挂载wrap-box
   function mount() {
@@ -51,11 +51,11 @@ export function createWrapBox(
     // 窗口变化时重置UI
     window.addEventListener('resize', resize);
     // 组件滚动时重置UI
-    globalEvent.on(EVENT.SCROLL, resize);
+    engine.globalEvent.on(EVENT.SCROLL, resize);
 
     // 监听当前最大zIndex
-    mountDom && ((mountDom as any).style.zIndex = globalVariable.maxZIndex);
-    globalEvent.on(EVENT.SET_MAX_Z_INDEX, listenZIndex);
+    mountDom && ((mountDom as any).style.zIndex = engine.globalVar.maxZIndex);
+    engine.globalEvent.on(EVENT.SET_MAX_Z_INDEX, listenZIndex);
   }
 
   function listenZIndex(zIndex: number) {
@@ -73,10 +73,10 @@ export function createWrapBox(
     container.removeChild(mountDom);
     mountDom = null;
     window.removeEventListener('resize', resize);
-    globalEvent.remove(EVENT.SCROLL, resize);
+    engine.globalEvent.remove(EVENT.SCROLL, resize);
 
     // 取消监听zIndex事件
-    globalEvent.remove(EVENT.SET_MAX_Z_INDEX, listenZIndex);
+    engine.globalEvent.remove(EVENT.SET_MAX_Z_INDEX, listenZIndex);
   }
 
   return {

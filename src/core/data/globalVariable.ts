@@ -1,5 +1,5 @@
-import { globalEvent } from './globalEvent';
-import { EVENT } from '../enum';
+import { EVENT } from '../../enum';
+import { engine } from '..';
 
 export enum MODE {
   DEV = '1', // 开发模式
@@ -34,7 +34,7 @@ export const globalVariable: GlobalVariable = {
       return;
     }
     globalVariable.maxZIndex = zIndex;
-    globalEvent.notify(EVENT.SET_MAX_Z_INDEX, zIndex);
+    engine.globalEvent.notify(EVENT.SET_MAX_Z_INDEX, zIndex);
   },
   setMode: (mode: MODE) => {
     globalVariable.mode = mode;

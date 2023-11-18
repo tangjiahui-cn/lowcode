@@ -3,8 +3,8 @@ import { DomType, getChildDomRect } from './getChildDomRect';
 import { css } from 'class-css';
 import { createRoot } from 'react-dom/client';
 import { throttle } from 'lodash';
-import { globalEvent, globalVariable } from '../../data';
 import { EVENT } from '../../enum';
+import { engine } from '../index';
 
 /**
  * 获取包裹盒子元素
@@ -34,7 +34,7 @@ export function createOperateBox(
         height: 0,
       });
     });
-  }, globalVariable.eventThrottleDelay);
+  }, engine.globalVar.eventThrottleDelay);
 
   // 挂载 operate-box
   function mount() {
@@ -67,7 +67,7 @@ export function createOperateBox(
     // 窗口变化时重置UI
     window.addEventListener('resize', resize);
     // 组件滚动时重置UI
-    globalEvent.on(EVENT.SCROLL, resize);
+    engine.globalEvent.on(EVENT.SCROLL, resize);
   }
 
   // 移出 operate-box
@@ -80,7 +80,7 @@ export function createOperateBox(
     container.removeChild(mountDom);
     mountDom = null;
     window.removeEventListener('resize', resize);
-    globalEvent.remove(EVENT.SCROLL, resize);
+    engine.globalEvent.remove(EVENT.SCROLL, resize);
   }
 
   return {

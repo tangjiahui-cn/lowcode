@@ -1,4 +1,3 @@
-import { globalEvent, globalVariable } from '../../../data';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useWrapBox } from '../../../hooks/useWrapBox';
 import * as React from 'react';
@@ -22,8 +21,8 @@ import {
 } from '../../../core';
 
 const notifyScroll = throttle((payload) => {
-  globalEvent.notify(EVENT.SCROLL, payload);
-}, globalVariable.eventThrottleDelay);
+  engine.globalEvent.notify(EVENT.SCROLL, payload);
+}, engine.globalVar.eventThrottleDelay);
 
 interface IProps {
   jsonNode: JsonNode;
@@ -40,7 +39,10 @@ interface IProps {
 let _parentJsonNode: JsonNode | undefined;
 export default function RenderJsonNode(props: IProps) {
   const { jsonNode } = props;
-  const isPreview = globalVariable.isPreview();
+  const isPreview = engine.globalVar.isPreview();
+
+  // 记录拖拽时经过组件的size信息
+  const sizeInfo = useRef<DOMRect>();
 
   // 取消挂载当前实例事件规则的函数
   const unRegisterExposeRuleFn = useRef<() => void>();
@@ -124,8 +126,8 @@ export default function RenderJsonNode(props: IProps) {
     // 刷新json
     engine.json.updateJsonNode(props.parentJsonNode);
     engine.panel.editor.refreshJson();
-    globalEvent.notify(EVENT.SELECTED_COMPONENT, undefined);
-    globalEvent.notify(EVENT.JSON_EDITOR, engine.json.getJson());
+    engine.globalEvent.notify(EVENT.SELECTED_COMPONENT, undefined);
+    engine.globalEvent.notify(EVENT.JSON_EDITOR, engine.json.getJson());
   }
 
   function handleSelectParent() {
@@ -203,7 +205,7 @@ export default function RenderJsonNode(props: IProps) {
     setTimeout(() => {
       engine.instance.getInstance(moveJsonNode?.id)?.handleSelect?.();
     });
-    globalEvent.notify(EVENT.JSON_EDITOR, engine.json.getJson());
+    engine.globalEvent.notify(EVENT.JSON_EDITOR, engine.json.getJson());
   }
 
   function handleDrop(e: React.DragEvent<HTMLDivElement>) {
@@ -247,7 +249,7 @@ export default function RenderJsonNode(props: IProps) {
         // 挂载wrap-box
         focusPanelRef?.current?.mount();
         operateBoxRef?.current?.mount();
-        globalEvent.notify(EVENT.SELECTED_COMPONENT, props?.jsonNode);
+        engine.globalEvent.notify(EVENT.SELECTED_COMPONENT, props?.jsonNode);
       },
       handleUnSelect() {
         // 取消挂载wrap-box
@@ -261,7 +263,7 @@ export default function RenderJsonNode(props: IProps) {
           // 只更新json中某个节点（不更新整个组件树）
           engine.json.updateJsonNode(props?.jsonNode);
           // 更新json编辑器
-          globalEvent.notify(EVENT.JSON_EDITOR, engine.json.getJson());
+          engine.globalEvent.notify(EVENT.JSON_EDITOR, engine.json.getJson());
         }
       },
       handleSetStyleData(styleData?: StyleProcessorData) {
@@ -270,7 +272,7 @@ export default function RenderJsonNode(props: IProps) {
         props.jsonNode.styleData = styleData;
         engine.json?.updateJsonNode(props?.jsonNode);
         // 更新json编辑器
-        globalEvent.notify(EVENT.JSON_EDITOR, engine.json.getJson());
+        engine.globalEvent.notify(EVENT.JSON_EDITOR, engine.json.getJson());
       },
       handleSetExposeAttributes(exposeRules: ExposeRule[]) {
         if (props?.jsonNode) {
@@ -281,7 +283,7 @@ export default function RenderJsonNode(props: IProps) {
           // 只更新json中某个节点（不更新整个组件树）
           engine.json.updateJsonNode(props?.jsonNode);
           // 更新json编辑器
-          globalEvent.notify(EVENT.JSON_EDITOR, engine.json.getJson());
+          engine.globalEvent.notify(EVENT.JSON_EDITOR, engine.json.getJson());
         }
       },
       handleSetTriggerAttributes(triggerRules: TriggerRule[]) {
@@ -292,7 +294,7 @@ export default function RenderJsonNode(props: IProps) {
           // 只更新json中某个节点（不更新整个组件树）
           engine.json.updateJsonNode(props?.jsonNode);
           // 更新json编辑器
-          globalEvent.notify(EVENT.JSON_EDITOR, engine.json.getJson());
+          engine.globalEvent.notify(EVENT.JSON_EDITOR, engine.json.getJson());
         }
       },
       getExposeAttributes(): ExposeRule[] {
@@ -348,7 +350,7 @@ export default function RenderJsonNode(props: IProps) {
 
     // 节点更新时，更新属性面板
     if (engine.selectedInstance.isSelected(props?.jsonNode?.id)) {
-      globalEvent.notify(EVENT.SELECTED_COMPONENT, props?.jsonNode);
+      engine.globalEvent.notify(EVENT.SELECTED_COMPONENT, props?.jsonNode);
     }
   }, [props?.jsonNode]);
 
@@ -360,7 +362,7 @@ export default function RenderJsonNode(props: IProps) {
       operateBoxRef.current.remove();
       engine.selectedInstance.clear();
       engine.hoverInstanceStack.clear();
-      globalEvent.notify(EVENT.SELECTED_COMPONENT, undefined);
+      engine.globalEvent.notify(EVENT.SELECTED_COMPONENT, undefined);
     }
   }, [isPreview]);
 
@@ -400,7 +402,24 @@ export default function RenderJsonNode(props: IProps) {
                 // 新的栈顶元素经过
                 engine.hoverInstanceStack.getStackTop()?.handleHover();
               },
+              onDragEnter(e: any) {
+                sizeInfo.current = getTargetDomRef.current?.()?.getBoundingClientRect();
+                e.stopPropagation();
+              },
+              onDragLeave(e: any) {
+                if (props?.jsonNode?.isContainer) {
+                  instanceRef.current?.handleUnHover?.();
+                }
+                e.stopPropagation();
+              },
               onDragOver(e: any) {
+                if (props?.jsonNode?.isContainer) {
+                  // 如果是容器，可以直接放下拖拽节点
+                  instanceRef.current?.handleHover?.();
+                } else {
+                  // 计算拖拽节点在当前节点的前方还是后方
+                  // ...
+                }
                 e.preventDefault();
                 e.stopPropagation();
               },

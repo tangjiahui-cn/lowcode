@@ -7,6 +7,7 @@
  * - JSON：数据存储
  * - 事件系统：运行时流程、运行时规则定义、初始声明
  */
+
 export * from './hooks';
 export * from './modal';
 export * from './data';
@@ -21,8 +22,9 @@ import {
   currentJson,
   currentPanels,
   currentSelectedInstance,
+  globalVariable,
 } from './data';
-import { event, styleProcessor } from '.';
+import { BaseEvent, event, styleProcessor } from '.';
 
 export class Engine {
   // 当前json
@@ -43,6 +45,10 @@ export class Engine {
   public selectedInstance = currentSelectedInstance;
   // 运行时面板
   public panel = currentPanels;
+  // 全局事件
+  public globalEvent = new BaseEvent();
+  // 全局变量
+  public globalVar = globalVariable;
 }
 
 export const engine = new Engine();

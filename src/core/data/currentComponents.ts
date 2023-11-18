@@ -6,9 +6,8 @@
  */
 import * as React from 'react';
 import { CType } from '../../enum/component';
-import { globalVariable } from '../../data';
 import { DOMAttributes } from 'react';
-import { StyleProcessorData } from '..';
+import { engine, StyleProcessorData } from '..';
 
 export type Base = {
   x: string;
@@ -53,7 +52,7 @@ export function getEvent(
   injectEvent: DOMAttributes<any> = {},
   events: DOMAttributes<any> = {},
 ): any {
-  return globalVariable.isDev() ? injectEvent : events;
+  return engine.globalVar.isDev() ? injectEvent : events;
 }
 
 // 模板组件类型

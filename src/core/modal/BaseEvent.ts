@@ -13,11 +13,11 @@ type BaseEventItem = {
   once?: boolean;
 };
 
-export class BaseEvent<T = any> {
-  private map = new Map<string, BaseEventItem[]>();
+export class BaseEvent<T = any, KEY = any> {
+  private map = new Map<KEY, BaseEventItem[]>();
 
   // 监听事件
-  public on(key?: string, callback?: BaseEventCallBack<T>, once?: boolean) {
+  public on(key?: KEY, callback?: BaseEventCallBack<T>, once?: boolean) {
     if (!key) throw new Error('key is not exist.');
     if (!callback) throw new Error('key is not exist.');
 
@@ -35,7 +35,7 @@ export class BaseEvent<T = any> {
   }
 
   // 监听事件（执行一次后销毁）
-  public once(key?: string, callback?: BaseEventCallBack) {
+  public once(key?: KEY, callback?: BaseEventCallBack) {
     if (!key) throw new Error('key is not exist.');
     if (!callback) throw new Error('key is not exist.');
 
@@ -43,7 +43,7 @@ export class BaseEvent<T = any> {
   }
 
   // 发布变更
-  public notify(key?: string, payload?: T) {
+  public notify(key?: KEY, payload?: T) {
     if (!key) throw new Error('key is not exist.');
 
     const itemList = this.map.get(key);
@@ -67,7 +67,7 @@ export class BaseEvent<T = any> {
   }
 
   // 删除一个事件
-  public remove(key?: string, callback?: BaseEventCallBack) {
+  public remove(key?: KEY, callback?: BaseEventCallBack) {
     if (!key) throw new Error('key is not exist.');
     if (!callback) throw new Error('key is not exist.');
 
@@ -81,7 +81,7 @@ export class BaseEvent<T = any> {
   }
 
   // 删除一个key对应的所有事件
-  public removeKey(key?: string) {
+  public removeKey(key?: KEY) {
     if (!key) throw new Error('key is not exist.');
     this.map.delete(key);
   }

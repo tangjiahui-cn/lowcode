@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { globalEvent } from '../../data';
 import { EVENT } from '../../enum';
 import { Tabs } from 'antd';
 import { attributesEmptyStyle, attributesStyle } from './style';
@@ -46,7 +45,7 @@ export default function Attributes() {
 
   function handleAttributes(attributes: any) {
     instance?.handleSetAttributes?.(attributes);
-    globalEvent.notify(EVENT.SET_ATTRIBUTES, attributes);
+    engine.globalEvent.notify(EVENT.SET_ATTRIBUTES, attributes);
   }
 
   function handleStyleData(styleData?: StyleProcessorData) {

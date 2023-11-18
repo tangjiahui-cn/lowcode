@@ -1,6 +1,5 @@
 import JSONEditor from '../../../components-sys/JSONEditor';
 import { useEffect, useState } from 'react';
-import { globalEvent } from '../../../data';
 import { EVENT } from '../../../enum';
 import { engine, JsonNode } from '../../../core';
 
@@ -17,8 +16,8 @@ export default function () {
       setJson([...engine.json.getJson()]);
     }
 
-    globalEvent.on(EVENT.JSON_EDITOR, updateJSON);
-    return () => globalEvent.remove(EVENT.JSON_EDITOR, updateJSON);
+    engine.globalEvent.on(EVENT.JSON_EDITOR, updateJSON);
+    return () => engine.globalEvent.remove(EVENT.JSON_EDITOR, updateJSON);
   }, []);
 
   return (

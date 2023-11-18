@@ -1,6 +1,6 @@
 import React from 'react';
 import { UNIT_DEFAULT, PartialNumber, isNumber } from '.';
-import { globalVariable } from '../../data';
+import { engine } from '../index';
 
 // 布局处理类型
 export type StyleProcessLayout = {
@@ -44,7 +44,7 @@ export function getLayoutStyle(data: StyleProcessLayout): React.CSSProperties {
   if (isNumber(data?.width)) style.width = data.width + (data?.widthUnit || UNIT_DEFAULT);
   if (isNumber(data?.height)) style.height = data.height + (data?.heightUnit || UNIT_DEFAULT);
   if (isNumber(data?.zIndex)) {
-    globalVariable.setMaxZIndex((style.zIndex = data?.zIndex));
+    engine.globalVar.setMaxZIndex((style.zIndex = data?.zIndex));
   }
 
   if (data?.padding) {
