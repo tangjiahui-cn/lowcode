@@ -7,3 +7,4 @@ export * from './currentComponents';
 export * from './currentJson';
 export * from './currentPanels';
 export * from './globalVariable';
+export * from './runtime';

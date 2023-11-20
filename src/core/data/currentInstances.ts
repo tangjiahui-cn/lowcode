@@ -28,6 +28,8 @@ export type Instance = {
   getExposeAttributes: () => ExposeRule[];
   // 设置预处理样式对象
   handleSetStyleData: (styleData?: StyleProcessorData) => void;
+  // 获取当前实例的大小位置信息
+  getBoundingClientRect: () => DOMRect;
 };
 
 interface CurrentInstances {

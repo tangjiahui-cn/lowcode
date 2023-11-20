@@ -18,6 +18,8 @@ import {
   JsonNode,
   createJsonNode,
   getComponentByCId,
+  ContainerChildren,
+  ContainerChildrenItem,
 } from '../../../core';
 
 const notifyScroll = throttle((payload) => {
@@ -105,8 +107,14 @@ export default function RenderJsonNode(props: IProps) {
           showSelectParent: !!props?.parentJsonNode,
           showDelete: !props?.jsonNode?.isPage,
         }}
-        onDragEnd={() => (_parentJsonNode = undefined)}
+        onDragEnd={() => {
+          engine.runtime.clearDragJsonNode();
+          _parentJsonNode = undefined;
+
+          engine.runtime.unShowWrap?.();
+        }}
         onDragStart={(e) => {
+          engine.runtime.setDragJsonNode(props?.jsonNode);
           _parentJsonNode = props?.parentJsonNode;
           handleDragStart(e);
         }}
@@ -166,14 +174,20 @@ export default function RenderJsonNode(props: IProps) {
 
   // 移动节点
   function moveNode(moveData: { jsonNode: JsonNode; parentJsonNode: JsonNode }) {
-    const { jsonNode: moveJsonNode, parentJsonNode: moveParentNode } = moveData;
+    const { jsonNode: moveJsonNode } = moveData;
+    const targetId = engine.runtime.getInsertTargetId();
+
+    // 如果插入自己的前面，则不用移动
+    if (!targetId || targetId === moveData.jsonNode?.id) {
+      return;
+    }
 
     if (
       !moveJsonNode ||
       // 移动容器到自身，取消
-      moveJsonNode?.id === props?.jsonNode.id ||
+      moveJsonNode?.id === props?.jsonNode.id
       // 在同一个容器内移动
-      moveParentNode?.id === props?.jsonNode?.id
+      // moveParentNode?.id === props?.jsonNode?.id
     ) {
       return;
     }
@@ -191,9 +205,20 @@ export default function RenderJsonNode(props: IProps) {
     engine.selectedInstance.clear();
 
     // 拖拽节点放在当前节点下
-    props?.jsonNode?.children
-      ? props?.jsonNode?.children?.push(moveJsonNode)
-      : (props.jsonNode.children = [moveJsonNode]);
+    if (props?.jsonNode?.children) {
+      // 判断新插入位置
+      const children: JsonNode[] = [];
+      // 在children中插入移动的json节点
+      props.jsonNode.children.forEach((x) => {
+        if (x.id === targetId) {
+          children.push(moveJsonNode);
+        }
+        children.push(x);
+      });
+      props.jsonNode.children = children;
+    } else {
+      props.jsonNode.children = [moveJsonNode];
+    }
 
     // 刷新json列表
     engine.panel.editor.refreshJson();
@@ -208,14 +233,62 @@ export default function RenderJsonNode(props: IProps) {
     engine.globalEvent.notify(EVENT.JSON_EDITOR, engine.json.getJson());
   }
 
+  // 搜集拖拽时需要判断组件的大小和位置信息
+  function collectSizeInfo() {
+    const info: ContainerChildren = [];
+    if (props?.jsonNode?.isContainer) {
+      props?.jsonNode?.children?.forEach((jsonNode) => {
+        info.push({
+          id: jsonNode?.id,
+          info: engine.instance.getInstance(jsonNode.id)?.getBoundingClientRect?.(),
+        });
+      });
+    }
+    engine.runtime.setDragOnContainerChildren(info);
+  }
+
+  // 判断鼠标插入位置（暂时只判断了左右两个方向）
+  function judgeInsertPosition(e: React.DragEvent) {
+    const { x: sx = 0 } = e.nativeEvent;
+    const containerChildren = engine.runtime.getDragOnContainerChildren();
+    let minDX = 0;
+    let id: string | undefined = undefined;
+    let info: DOMRect | undefined = undefined;
+    containerChildren?.forEach((item: ContainerChildrenItem) => {
+      const { x = 0, right = 0 } = item?.info || {};
+      const deltaX = x - sx;
+
+      if (deltaX > 0) {
+        if (!id || deltaX < minDX) {
+          minDX = deltaX;
+          id = item?.id;
+          info = item?.info;
+        }
+      } else {
+        const rightDeltaX = right - sx;
+        if (rightDeltaX < 0) return;
+        if (!id || rightDeltaX < minDX) {
+          minDX = rightDeltaX;
+          id = item?.id;
+          info = item?.info;
+        }
+      }
+    });
+
+    engine.runtime.showWrap?.(info);
+    if (id) {
+      engine.runtime.setInsertTargetId(id);
+    }
+  }
+
   function handleDrop(e: React.DragEvent<HTMLDivElement>) {
     const newData = e.dataTransfer.getData(DRAG.NEW);
 
-    if (engine.selectedInstance.isSelected?.(props?.jsonNode?.id)) {
-      setTimeout(() => {
-        focusPanelRef.current.resize();
-      });
-    }
+    // if (engine.selectedInstance.isSelected?.(props?.jsonNode?.id)) {
+    //   setTimeout(() => {
+    //     focusPanelRef.current.resize();
+    //   });
+    // }
 
     // 新建一个实例
     if (newData) {
@@ -234,6 +307,9 @@ export default function RenderJsonNode(props: IProps) {
     return {
       id: props?.jsonNode?.id,
       name: props?.jsonNode?.name,
+      getBoundingClientRect() {
+        return (getTargetDomRef?.current?.() as any)?.getBoundingClientRect?.();
+      },
       handleHover() {
         // 挂载wrap-box
         hoverPanelRef.current.mount();
@@ -404,21 +480,34 @@ export default function RenderJsonNode(props: IProps) {
               },
               onDragEnter(e: any) {
                 sizeInfo.current = getTargetDomRef.current?.()?.getBoundingClientRect();
+
+                // 不能拖拽节点到自身
+                if (engine.runtime.isDragJsonNode(props?.jsonNode?.id)) {
+                  return;
+                }
+
+                instanceRef?.current?.handleHover?.();
+                // 进入组件时：
+                // * 如果是容器类组件，则计算所有儿子元素的大小位置信息
+                // * 如果是废容器类组件，则计算当前组件的的大小位置信息
+                collectSizeInfo();
+
                 e.stopPropagation();
+                e.preventDefault();
               },
               onDragLeave(e: any) {
-                if (props?.jsonNode?.isContainer) {
-                  instanceRef.current?.handleUnHover?.();
-                }
+                instanceRef.current?.handleUnHover?.();
                 e.stopPropagation();
+                e.preventDefault();
               },
-              onDragOver(e: any) {
+              onDragOver(e: React.DragEvent) {
+                // 不能拖拽节点到自身
+                if (engine.runtime.isDragJsonNode(props?.jsonNode?.id)) {
+                  return;
+                }
+                // 经过容器节点是，对节点进行插入位置判断
                 if (props?.jsonNode?.isContainer) {
-                  // 如果是容器，可以直接放下拖拽节点
-                  instanceRef.current?.handleHover?.();
-                } else {
-                  // 计算拖拽节点在当前节点的前方还是后方
-                  // ...
+                  judgeInsertPosition(e);
                 }
                 e.preventDefault();
                 e.stopPropagation();

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import RenderJsonNode from './RenderJsonNode';
-import { checkJson, engine, JsonNode } from '../../core';
+import { checkJson, engine, JsonNode, useRegisterWrapDom } from '../../core';
 
 /**
  * 编辑区域面板
@@ -24,6 +24,8 @@ export default function Editor() {
     engine.panel.editor.setJson = setJson;
     engine.panel.editor.domRef = dom;
   }
+
+  useRegisterWrapDom();
 
   useEffect(() => {
     initJson();
