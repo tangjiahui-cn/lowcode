@@ -24,6 +24,7 @@ import {
   currentSelectedInstance,
   globalVariable,
   runtime,
+  currentVariables,
 } from './data';
 import { BaseEvent, event, styleProcessor } from '.';
 
@@ -48,10 +49,12 @@ export class Engine {
   public panel = currentPanels;
   // 全局事件
   public globalEvent = new BaseEvent();
-  // 全局变量
+  // 配置项 - 全局变量
   public globalVar = globalVariable;
   // 运行时
   public runtime = runtime;
+  // 全局变量
+  public globalVariable = currentVariables;
 }
 
 export const engine = new Engine();

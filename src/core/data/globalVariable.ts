@@ -9,7 +9,7 @@ export enum MODE {
 /**
  * 全局变量
  */
-export interface GlobalVariable {
+export interface GlobalVariableConfig {
   mode: MODE; // 模式
   maxZIndex: number; // 最大zIndex
   eventThrottleDelay: number; // 触发事件节流延时
@@ -20,7 +20,7 @@ export interface GlobalVariable {
   isPreview: () => boolean; // 是否是预览模式
 }
 
-export const globalVariable: GlobalVariable = {
+export const globalVariable: GlobalVariableConfig = {
   mode: MODE.DEV,
   maxZIndex: 0,
   eventThrottleDelay: 4,

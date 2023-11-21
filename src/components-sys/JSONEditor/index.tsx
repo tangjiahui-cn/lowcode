@@ -5,6 +5,7 @@ import { useUpdateEffect } from 'ahooks';
 
 interface IProps {
   value?: any;
+  defaultValue?: any;
   onChange?: (value: any[]) => void;
   onError?: (value: any[]) => void;
 }
@@ -35,7 +36,7 @@ export default function JSONEditor(props: IProps) {
 
   function init() {
     editor.current = new JsonEditor(JsonRef.current, options);
-    editor.current?.set?.(props?.value || {});
+    editor.current?.set?.(props?.defaultValue || props?.value || {});
   }
 
   function handleDestroy() {

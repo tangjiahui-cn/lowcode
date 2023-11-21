@@ -175,7 +175,7 @@ export default function RenderJsonNode(props: IProps) {
   // 移动节点
   function moveNode(moveData: { jsonNode: JsonNode; parentJsonNode: JsonNode }) {
     const { jsonNode: moveJsonNode } = moveData;
-    const targetId = engine.runtime.getInsertTargetId();
+    // const targetId = engine.runtime.getInsertTargetId();
 
     // // 如果插入自己的前面，则不用移动
     // if (!targetId || targetId === moveData.jsonNode?.id) {

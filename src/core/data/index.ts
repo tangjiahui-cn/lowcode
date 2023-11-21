@@ -8,3 +8,4 @@ export * from './currentJson';
 export * from './currentPanels';
 export * from './globalVariable';
 export * from './runtime';
+export * from './currentVariables';

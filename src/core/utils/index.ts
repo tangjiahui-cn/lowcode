@@ -5,3 +5,4 @@ export * from './getComponent';
 export * from './getChildDomRect';
 export * from './createOperateBox';
 export * from './genEventUuid';
+export * from './getVarUuid';

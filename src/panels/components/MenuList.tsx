@@ -1,4 +1,9 @@
-import { AppstoreOutlined, EditOutlined, ApartmentOutlined } from '@ant-design/icons';
+import {
+  AppstoreOutlined,
+  EditOutlined,
+  ApartmentOutlined,
+  ConsoleSqlOutlined,
+} from '@ant-design/icons';
 import { css } from 'class-css';
 
 const btn = css({
@@ -14,12 +19,14 @@ export enum MenuType {
   componentList = '1',
   jsonEditor = '2',
   componentTree = '3',
+  globalVariable = '4',
 }
 
 const list = [
   { key: MenuType.componentList, icon: AppstoreOutlined, description: '组件资产' },
   { key: MenuType.jsonEditor, icon: EditOutlined, description: 'JSON编辑器' },
   { key: MenuType.componentTree, icon: ApartmentOutlined, description: '组件树' },
+  { key: MenuType.globalVariable, icon: ConsoleSqlOutlined, description: '全局变量' },
 ];
 
 /**

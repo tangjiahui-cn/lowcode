@@ -46,6 +46,16 @@ export type TriggerRuleTo = Omit<ExposeRule, 'rId' | 'id'> & {
   id?: string; // 实例id
 };
 
+// 触发规则携带参数
+export type TriggerRulePayloadType = 0 | 1 | 2; // 0默认 1全局变量 2自定义
+export type TriggerRulePayload = {
+  type: TriggerRulePayloadType; // 携带参数类型
+  value: any;
+};
+
+// 组件改变 -> 修改全局变量 、修改下拉框
+// 重置按钮 -> 重置下拉框、修改全局变量
+
 // 触发规则
 export type TriggerRule = {
   rId: string; // 规则id
