@@ -19,7 +19,7 @@ import {
   createJsonNode,
   getComponentByCId,
   ContainerChildren,
-  ContainerChildrenItem,
+  // ContainerChildrenItem,
 } from '../../../core';
 
 const notifyScroll = throttle((payload) => {
@@ -177,17 +177,15 @@ export default function RenderJsonNode(props: IProps) {
     const { jsonNode: moveJsonNode } = moveData;
     const targetId = engine.runtime.getInsertTargetId();
 
-    // 如果插入自己的前面，则不用移动
-    if (!targetId || targetId === moveData.jsonNode?.id) {
-      return;
-    }
+    // // 如果插入自己的前面，则不用移动
+    // if (!targetId || targetId === moveData.jsonNode?.id) {
+    //   return;
+    // }
 
     if (
       !moveJsonNode ||
       // 移动容器到自身，取消
       moveJsonNode?.id === props?.jsonNode.id
-      // 在同一个容器内移动
-      // moveParentNode?.id === props?.jsonNode?.id
     ) {
       return;
     }
@@ -206,16 +204,17 @@ export default function RenderJsonNode(props: IProps) {
 
     // 拖拽节点放在当前节点下
     if (props?.jsonNode?.children) {
-      // 判断新插入位置
-      const children: JsonNode[] = [];
-      // 在children中插入移动的json节点
-      props.jsonNode.children.forEach((x) => {
-        if (x.id === targetId) {
-          children.push(moveJsonNode);
-        }
-        children.push(x);
-      });
-      props.jsonNode.children = children;
+      // // 判断新插入位置
+      // const children: JsonNode[] = [];
+      // // 在children中插入移动的json节点
+      // props.jsonNode.children.forEach((x) => {
+      //   if (x.id === targetId) {
+      //     children.push(moveJsonNode);
+      //   }
+      //   children.push(x);
+      // });
+      // props.jsonNode.children = children;
+      props?.jsonNode?.children?.push(moveJsonNode);
     } else {
       props.jsonNode.children = [moveJsonNode];
     }
@@ -247,48 +246,48 @@ export default function RenderJsonNode(props: IProps) {
     engine.runtime.setDragOnContainerChildren(info);
   }
 
-  // 判断鼠标插入位置（暂时只判断了左右两个方向）
-  function judgeInsertPosition(e: React.DragEvent) {
-    const { x: sx = 0 } = e.nativeEvent;
-    const containerChildren = engine.runtime.getDragOnContainerChildren();
-    let minDX = 0;
-    let id: string | undefined = undefined;
-    let info: DOMRect | undefined = undefined;
-    containerChildren?.forEach((item: ContainerChildrenItem) => {
-      const { x = 0, right = 0 } = item?.info || {};
-      const deltaX = x - sx;
-
-      if (deltaX > 0) {
-        if (!id || deltaX < minDX) {
-          minDX = deltaX;
-          id = item?.id;
-          info = item?.info;
-        }
-      } else {
-        const rightDeltaX = right - sx;
-        if (rightDeltaX < 0) return;
-        if (!id || rightDeltaX < minDX) {
-          minDX = rightDeltaX;
-          id = item?.id;
-          info = item?.info;
-        }
-      }
-    });
-
-    engine.runtime.showWrap?.(info);
-    if (id) {
-      engine.runtime.setInsertTargetId(id);
-    }
-  }
+  // // 判断鼠标插入位置（暂时只判断了左右两个方向）
+  // function judgeInsertPosition(e: React.DragEvent) {
+  //   const { x: sx = 0 } = e.nativeEvent;
+  //   const containerChildren = engine.runtime.getDragOnContainerChildren();
+  //   let minDX = 0;
+  //   let id: string | undefined = undefined;
+  //   let info: DOMRect | undefined = undefined;
+  //   containerChildren?.forEach((item: ContainerChildrenItem) => {
+  //     const { x = 0, right = 0 } = item?.info || {};
+  //     const deltaX = x - sx;
+  //
+  //     if (deltaX > 0) {
+  //       if (!id || deltaX < minDX) {
+  //         minDX = deltaX;
+  //         id = item?.id;
+  //         info = item?.info;
+  //       }
+  //     } else {
+  //       const rightDeltaX = right - sx;
+  //       if (rightDeltaX < 0) return;
+  //       if (!id || rightDeltaX < minDX) {
+  //         minDX = rightDeltaX;
+  //         id = item?.id;
+  //         info = item?.info;
+  //       }
+  //     }
+  //   });
+  //
+  //   engine.runtime.showWrap?.(info);
+  //   if (id) {
+  //     engine.runtime.setInsertTargetId(id);
+  //   }
+  // }
 
   function handleDrop(e: React.DragEvent<HTMLDivElement>) {
     const newData = e.dataTransfer.getData(DRAG.NEW);
 
-    // if (engine.selectedInstance.isSelected?.(props?.jsonNode?.id)) {
-    //   setTimeout(() => {
-    //     focusPanelRef.current.resize();
-    //   });
-    // }
+    if (engine.selectedInstance.isSelected?.(props?.jsonNode?.id)) {
+      setTimeout(() => {
+        focusPanelRef.current.resize();
+      });
+    }
 
     // 新建一个实例
     if (newData) {
@@ -505,22 +504,20 @@ export default function RenderJsonNode(props: IProps) {
                 if (engine.runtime.isDragJsonNode(props?.jsonNode?.id)) {
                   return;
                 }
-                // 经过容器节点是，对节点进行插入位置判断
-                if (props?.jsonNode?.isContainer) {
-                  judgeInsertPosition(e);
-                }
+                // // 经过容器节点是，对节点进行插入位置判断
+                // if (props?.jsonNode?.isContainer) {
+                //   judgeInsertPosition(e);
+                // }
                 e.preventDefault();
                 e.stopPropagation();
               },
               onDrop(e: any) {
+                engine.runtime.unShowWrap?.();
                 e.stopPropagation();
                 // 仅容器节点可以放置其他元素
                 if (!props?.jsonNode?.isContainer) return;
                 handleDrop(e);
               },
-              // onContextMenu(e) {
-              //   e.preventDefault();
-              // },
             }
       }
     >
