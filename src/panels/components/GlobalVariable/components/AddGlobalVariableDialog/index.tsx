@@ -45,6 +45,7 @@ export default function AddGlobalVariableDialog(props: IProps) {
   useEffect(() => {
     if (props?.visible) {
       if (props?.isEdit) {
+        setType(props?.data?.type);
         form.setFieldsValue({
           name: props?.data?.name,
           type: props?.data?.type,
@@ -52,6 +53,7 @@ export default function AddGlobalVariableDialog(props: IProps) {
           description: props?.data?.description,
         });
       } else {
+        setType('undefined');
         form.setFieldsValue({
           name: undefined,
           type: 'undefined',
@@ -64,8 +66,9 @@ export default function AddGlobalVariableDialog(props: IProps) {
 
   return (
     <Modal
-      open={props?.visible}
       centered
+      destroyOnClose
+      open={props?.visible}
       title={props?.isEdit ? '编辑变量' : '新增变量'}
       onCancel={props?.onCancel}
       onOk={handleOk}

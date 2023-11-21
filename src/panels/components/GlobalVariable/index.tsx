@@ -18,8 +18,13 @@ export default function () {
   const [visible, setVisible] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
 
+  function emitList(list: GlobalVariable[]) {
+    setList(list);
+    save(list);
+  }
+
   function handleDelete(item: GlobalVariable) {
-    setList(list.filter((x) => x.vId !== item.vId));
+    emitList(list.filter((x) => x.vId !== item.vId));
   }
 
   function handleEdit(item: GlobalVariable) {
@@ -44,7 +49,6 @@ export default function () {
 
   useEffect(() => {
     load();
-    return () => save(list);
   }, []);
 
   return (
@@ -86,8 +90,7 @@ export default function () {
           } else {
             targetList = [...list, variable];
           }
-          setList(targetList);
-          setTimeout(() => save(targetList));
+          emitList(targetList);
         }}
       />
     </div>
