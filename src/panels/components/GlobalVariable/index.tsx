@@ -54,7 +54,7 @@ export default function () {
   return (
     <div>
       <div className={headerStyle}>
-        <span>全局变量管理页面</span>
+        <span style={{ color: '#6e6e6e', fontSize: 14 }}>全局变量管理页面</span>
         <a onClick={handleAdd}>新增</a>
       </div>
       <Space style={{ width: '100%' }} direction={'vertical'} size={0}>
@@ -65,8 +65,12 @@ export default function () {
                 {x?.name}
               </div>
               <Space style={{ padding: '0 8px' }}>
-                <DeleteOutlined onClick={() => handleDelete(x)} />
-                <SettingOutlined onClick={() => handleEdit(x)} />
+                <a>
+                  <DeleteOutlined onClick={() => handleDelete(x)} />
+                </a>
+                <a>
+                  <SettingOutlined onClick={() => handleEdit(x)} />
+                </a>
               </Space>
             </div>
           );
