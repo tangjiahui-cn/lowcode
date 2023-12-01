@@ -132,7 +132,7 @@ export default function AddEventDialog(props: IProps) {
     <Modal
       centered
       destroyOnClose
-      visible={props?.visible}
+      open={props?.visible}
       title={`${props?.event?.eventType} 事件`}
       width={800}
       bodyStyle={{
@@ -300,7 +300,7 @@ export default function AddEventDialog(props: IProps) {
                 <div
                   style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
                 >
-                  <span>[payload]</span>
+                  <span>[传参]</span>
                   <a onClick={() => setIsExpand(!isExpand)}>
                     {isExpand ? (
                       <Space>

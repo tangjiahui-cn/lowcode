@@ -13,7 +13,9 @@ export default function (props: TemplateProps<Attributes, HTMLDivElement>) {
   const domRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(false);
 
-  function query() {
+  function query(payload: any) {
+    // eslint-disable-next-line no-console
+    console.log('参数:', payload);
     setLoading(true);
     setTimeout(() => {
       setLoading(false);

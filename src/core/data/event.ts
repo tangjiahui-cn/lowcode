@@ -39,7 +39,6 @@ import {
   getFunctionFromString,
   RegisterEventStep,
   engine,
-  GlobalVariableType,
 } from '..';
 
 export type CallbackType = BaseEventCallBack;
@@ -141,55 +140,37 @@ export const event = {
 };
 
 /**
- * 判断数值类型
- *
- */
-function judgeValue(value: unknown): GlobalVariableType | undefined {
-  if (Number.isFinite(value)) {
-    return 'number';
-  }
-
-  if (typeof value === 'string') {
-    return 'string';
-  }
-
-  if (typeof value === 'object' && value) {
-    return 'object';
-  }
-
-  if (typeof value === 'boolean') {
-    return 'boolean';
-  }
-
-  return;
-}
-
-/**
- * 处理 event-step
+ * 执行 event-step
  *
  * @param step 注册事件的step
  * @param payload 默认携带payload
  */
+function getPayload(step: RegisterEventStep, payload: any) {
+  switch (step.payloadType) {
+    case 'default':
+      return payload;
+    case 'globalVar':
+      return engine.variables.getGlobalVar(step.payload)?.value;
+    case 'custom':
+      return step.payload;
+  }
+  return payload;
+}
 
 function doneEventStep(step: RegisterEventStep, payload: any) {
-  let newPayload = parsePayload(step, payload);
+  const srcPayload = getPayload(step, payload);
 
   switch (step.type) {
     case 'event': // 触发其他组件内事件
-      instanceEvent.notify(step.event?.id || '', step.event?.eventType || '', newPayload);
+      const sendPayload = parser(srcPayload, undefined, step.payloadParser);
+      instanceEvent.notify(step.event?.id || '', step.event?.eventType || '', sendPayload);
       break;
     case 'globalVar': // 修改全局变量
-      const globalVar = engine.variables.getGlobalVar(step?.globalVar?.vId);
-      let type = judgeValue(newPayload);
-      let value = newPayload;
-      if (!type) {
-        type = 'string';
-        value = '';
-      }
-      if (globalVar) {
-        globalVar.value = value;
-        globalVar.type = type;
-        engine.variables.registerGlobalVar(globalVar);
+      const vId = step?.globalVar?.vId;
+      const targetVar = engine.variables.getGlobalVar(vId);
+      const value = parser(srcPayload, targetVar?.value, step.payloadParser);
+      if (targetVar) {
+        engine.variables.updateGlobalVar(targetVar, value);
       }
       break;
     case 'openUrl': // 打开新标签页
@@ -201,37 +182,13 @@ function doneEventStep(step: RegisterEventStep, payload: any) {
   }
 }
 
-/**
- * 解析参数函数
- *
- * @param payload 默认携带payload
- * @param parserFuncString 解析器函数字符串
- */
-
-function parsePayload(step: RegisterEventStep, defaultPayload: any): any {
-  let payload = step.payload;
-
-  if (!step?.payloadType || step?.payloadType === 'default') {
-    return defaultPayload;
-  }
-
-  // 传参是全局变量
-  if (step?.payloadType === 'globalVar') {
-    const vId = step?.payload;
-    payload = engine.variables.getGlobalVar(vId)?.value;
-  }
-
-  return parserDefaultPayload(payload, step.payloadParser);
-}
-
 // 解析值
-function parserDefaultPayload(payload: any, parserFuncString?: string) {
-  if (!parserFuncString) return payload;
-
+function parser(src: any, des: any, functionString?: string) {
+  if (!functionString) return src;
   try {
-    const func = getFunctionFromString(parserFuncString);
-    return func?.(payload);
+    const func = getFunctionFromString(functionString);
+    return func?.(src, des);
   } catch {
-    return payload;
+    return src;
   }
 }

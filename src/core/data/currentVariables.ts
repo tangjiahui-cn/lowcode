@@ -3,6 +3,7 @@
  *
  * tips: 全局变量挂载在 i-page 节点上
  */
+import { engine } from '../index';
 
 export type Object = {
   [k: string]: any;
@@ -55,4 +56,41 @@ export const currentVariables = {
   getGlobalVar(vId?: string): GlobalVariable | undefined {
     return vId ? data[vId] : undefined;
   },
+  // 更新一个全局变量
+  updateGlobalVar(variable: GlobalVariable, value: any) {
+    let type = judgeValue(value);
+    if (!type) {
+      type = 'string';
+      value = '';
+    }
+    if (variable) {
+      variable.value = value;
+      variable.type = type;
+      engine.variables.registerGlobalVar(variable);
+    }
+  },
 };
+
+/**
+ * 判断数值类型
+ *
+ */
+function judgeValue(value: unknown): GlobalVariableType | undefined {
+  if (Number.isFinite(value)) {
+    return 'number';
+  }
+
+  if (typeof value === 'string') {
+    return 'string';
+  }
+
+  if (typeof value === 'object' && value) {
+    return 'object';
+  }
+
+  if (typeof value === 'boolean') {
+    return 'boolean';
+  }
+
+  return;
+}

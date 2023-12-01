@@ -5,6 +5,7 @@ import { headerStyle, itemStyle } from './style';
 import AddGlobalVariableDialog from './components/AddGlobalVariableDialog';
 import { engine, GlobalVariable } from '../../../core';
 import { EVENT } from '../../../enum';
+import ITipDialog from '../../../components-sys/ITipDialog';
 
 /**
  * 全局变量管理页面
@@ -26,8 +27,15 @@ export default function () {
   }
 
   function handleDelete(item: GlobalVariable) {
-    engine.variables.unRegisterGlobalVar(item);
-    emitList(list.filter((x) => x.vId !== item.vId));
+    ITipDialog.open({
+      title: '提醒',
+      content: `是否删除"${item?.name}"全局变量?`,
+      onOk(close) {
+        engine.variables.unRegisterGlobalVar(item);
+        emitList(list.filter((x) => x.vId !== item.vId));
+        close();
+      },
+    });
   }
 
   function handleEdit(item: GlobalVariable) {

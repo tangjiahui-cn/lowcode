@@ -22,12 +22,15 @@ export default function Container(props: ContainerProps) {
           userSelect: 'none',
           display: 'flex',
           alignItems: 'center',
+          justifyContent: 'space-between',
           gap: 4,
         }}
         onClick={() => setExpand(!expand)}
       >
-        <span>{props?.title}</span>
-        {props?.tips && <HelpHoverTip content={props?.tips} />}
+        <Space>
+          <span>{props?.title}</span>
+          {props?.tips && <HelpHoverTip content={props?.tips} />}
+        </Space>
       </div>
       <Space
         style={{

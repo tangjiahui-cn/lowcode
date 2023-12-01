@@ -5,8 +5,14 @@
  * By TangJiaHui
  */
 import * as React from 'react';
-import { ExposeRule, RegisterComponent, TriggerRule, StyleProcessorData, GlobalVariable } from '..';
-import { RegisterEvent } from '../../panels/attributes/NewEventPanel';
+import {
+  RegisterEvent,
+  ExposeRule,
+  RegisterComponent,
+  TriggerRule,
+  StyleProcessorData,
+  GlobalVariable,
+} from '..';
 
 // （简单事件系统）
 // 输入框 change  => 按钮 setValue
