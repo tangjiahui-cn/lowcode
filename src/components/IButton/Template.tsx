@@ -52,7 +52,7 @@ export default function (props: TemplateProps<Attributes, HTMLButtonElement>) {
         },
       })}
     >
-      {props?.attributes?.value}
+      {attributes?.value}
     </Button>
   );
 }

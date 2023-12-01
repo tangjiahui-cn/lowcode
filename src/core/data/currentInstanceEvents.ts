@@ -4,7 +4,7 @@
  * At 2023/11/30
  * By TangJiaHui
  */
-import { Expose } from './event';
+import { Expose } from '..';
 
 const data: {
   [K: Expose['id']]: Expose[];

@@ -17,6 +17,7 @@ import { itemClass, itemSelectClass } from './style';
 import PayloadTypeSelect from './components/PayloadTypeSelect';
 import VariableInput from './components/VariableInput';
 import { cloneDeep } from 'lodash';
+import IEmpty from '../../../../../components-sys/IEmpty';
 
 const stepTypeNameMap: {
   [KEY: string]: string;
@@ -187,181 +188,188 @@ export default function AddEventDialog(props: IProps) {
           flex: 3,
         }}
       >
-        <Space direction={'vertical'} style={{ padding: '12px 16px', flex: 1 }}>
-          {currentStep?.type === 'event' && (
-            <>
-              <Space>
-                目标组件：
-                <InstanceSelect
-                  style={{ width: 200 }}
-                  value={currentStep.event?.id}
-                  onChange={(id: string = '') => {
-                    updateStep({
-                      ...currentStep,
-                      event: {
-                        ...currentStep?.event,
-                        id,
-                        eventType: undefined,
-                      },
-                    });
-                  }}
-                />
-              </Space>
-              <Space>
-                目标事件：
-                <InstanceExposeSelect
-                  value={currentStep.event?.eventType}
-                  style={{ width: 200 }}
-                  insId={currentStep?.event?.id}
-                  onChange={(eventType: string = '') => {
-                    updateStep({
-                      ...currentStep,
-                      event: {
-                        ...currentStep?.event,
-                        eventType,
-                      },
-                    });
-                  }}
-                />
-              </Space>
-            </>
-          )}
-          {currentStep?.type === 'globalVar' && (
-            <>
-              <Space>
-                全局变量：
-                <GlobalVariableSelect
-                  style={{ width: 200 }}
-                  allowClear
-                  value={currentStep.globalVar?.vId}
-                  onChange={(vId) => {
-                    updateStep({
-                      ...currentStep,
-                      globalVar: {
-                        ...currentStep?.globalVar,
-                        vId,
-                      },
-                    });
-                  }}
-                />
-              </Space>
-            </>
-          )}
-          {currentStep?.type === 'openUrl' && (
-            <>
-              <Space>
-                打开地址：
-                <Input
-                  style={{ width: 400 }}
-                  placeholder={'请输入'}
-                  value={currentStep.url}
-                  onChange={(e) => {
-                    updateStep({
-                      ...currentStep,
-                      url: e.target.value,
-                    });
-                  }}
-                />
-              </Space>
-            </>
-          )}
-          {currentStep?.type === 'jumpUrl' && (
-            <>
-              <Space>
-                跳转地址：
-                <Input
-                  style={{ width: 400 }}
-                  placeholder={'请输入'}
-                  value={currentStep.url}
-                  onChange={(e) => {
-                    updateStep({
-                      ...currentStep,
-                      url: e.target.value,
-                    });
-                  }}
-                />
-              </Space>
-            </>
-          )}
-        </Space>
-        <Space
-          direction={'vertical'}
-          style={{
-            padding: '12px 16px',
-            overflowY: 'auto',
-            flex: isExpand ? 2 : undefined,
-            borderTop: '1px solid #e8e8e8',
-          }}
-        >
+        {currentStep && (
           <>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <span>[payload]</span>
-              <a onClick={() => setIsExpand(!isExpand)}>
-                {isExpand ? (
+            <Space direction={'vertical'} style={{ padding: '12px 16px', flex: 1 }}>
+              {currentStep?.type === 'event' && (
+                <>
                   <Space>
-                    收起
-                    <DownOutlined />
-                  </Space>
-                ) : (
-                  <Space>
-                    展开
-                    <UpOutlined />
-                  </Space>
-                )}
-              </a>
-            </div>
-            {isExpand && (
-              <>
-                <Space>
-                  参数类型：
-                  <PayloadTypeSelect
-                    style={{ width: 200 }}
-                    value={currentStep?.payloadType || 'default'}
-                    onChange={(payloadType: any) => {
-                      if (!currentStep) return;
-                      updateStep({
-                        ...currentStep,
-                        payload: undefined,
-                        payloadType,
-                      });
-                    }}
-                  />
-                </Space>
-                {['globalVar', 'custom'].includes(currentStep?.payloadType || '') && (
-                  <div
-                    style={{
-                      display: 'flex',
-                      gap: 8,
-                      alignItems: isPayloadObject ? 'flex-start' : 'center',
-                    }}
-                  >
-                    携带参数：
-                    {renderPayload(currentStep?.payloadType)}
-                  </div>
-                )}
-                <div style={{ display: 'flex', gap: 8 }}>
-                  解析函数：
-                  <Input.TextArea
-                    placeholder={'请输入'}
-                    value={currentStep?.payloadParser}
-                    style={{ flex: 1 }}
-                    autoSize={{
-                      minRows: 5,
-                      maxRows: 5,
-                    }}
-                    onChange={(e) => {
-                      currentStep &&
+                    目标组件：
+                    <InstanceSelect
+                      style={{ width: 200 }}
+                      value={currentStep.event?.id}
+                      onChange={(id: string = '') => {
                         updateStep({
                           ...currentStep,
-                          payloadParser: e.target.value,
+                          event: {
+                            ...currentStep?.event,
+                            id,
+                            eventType: undefined,
+                          },
                         });
-                    }}
-                  />
+                      }}
+                    />
+                  </Space>
+                  <Space>
+                    目标事件：
+                    <InstanceExposeSelect
+                      value={currentStep.event?.eventType}
+                      style={{ width: 200 }}
+                      insId={currentStep?.event?.id}
+                      onChange={(eventType: string = '') => {
+                        updateStep({
+                          ...currentStep,
+                          event: {
+                            ...currentStep?.event,
+                            eventType,
+                          },
+                        });
+                      }}
+                    />
+                  </Space>
+                </>
+              )}
+              {currentStep?.type === 'globalVar' && (
+                <>
+                  <Space>
+                    全局变量：
+                    <GlobalVariableSelect
+                      style={{ width: 200 }}
+                      allowClear
+                      value={currentStep.globalVar?.vId}
+                      onChange={(vId) => {
+                        updateStep({
+                          ...currentStep,
+                          globalVar: {
+                            ...currentStep?.globalVar,
+                            vId,
+                          },
+                        });
+                      }}
+                    />
+                  </Space>
+                </>
+              )}
+              {currentStep?.type === 'openUrl' && (
+                <>
+                  <Space>
+                    打开地址：
+                    <Input
+                      style={{ width: 400 }}
+                      placeholder={'请输入'}
+                      value={currentStep.url}
+                      onChange={(e) => {
+                        updateStep({
+                          ...currentStep,
+                          url: e.target.value,
+                        });
+                      }}
+                    />
+                  </Space>
+                </>
+              )}
+              {currentStep?.type === 'jumpUrl' && (
+                <>
+                  <Space>
+                    跳转地址：
+                    <Input
+                      style={{ width: 400 }}
+                      placeholder={'请输入'}
+                      value={currentStep.url}
+                      onChange={(e) => {
+                        updateStep({
+                          ...currentStep,
+                          url: e.target.value,
+                        });
+                      }}
+                    />
+                  </Space>
+                </>
+              )}
+            </Space>
+            <Space
+              direction={'vertical'}
+              style={{
+                padding: '12px 16px',
+                overflowY: 'auto',
+                flex: isExpand ? 2 : undefined,
+                borderTop: '1px solid #e8e8e8',
+              }}
+            >
+              <>
+                <div
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+                >
+                  <span>[payload]</span>
+                  <a onClick={() => setIsExpand(!isExpand)}>
+                    {isExpand ? (
+                      <Space>
+                        收起
+                        <DownOutlined />
+                      </Space>
+                    ) : (
+                      <Space>
+                        展开
+                        <UpOutlined />
+                      </Space>
+                    )}
+                  </a>
                 </div>
+                {isExpand && (
+                  <>
+                    <Space>
+                      参数类型：
+                      <PayloadTypeSelect
+                        style={{ width: 200 }}
+                        value={currentStep?.payloadType || 'default'}
+                        onChange={(payloadType: any) => {
+                          if (!currentStep) return;
+                          updateStep({
+                            ...currentStep,
+                            payload: undefined,
+                            payloadType,
+                          });
+                        }}
+                      />
+                    </Space>
+                    {['globalVar', 'custom'].includes(currentStep?.payloadType || '') && (
+                      <div
+                        style={{
+                          display: 'flex',
+                          gap: 8,
+                          alignItems: isPayloadObject ? 'flex-start' : 'center',
+                        }}
+                      >
+                        携带参数：
+                        {renderPayload(currentStep?.payloadType)}
+                      </div>
+                    )}
+                    <div style={{ display: 'flex', gap: 8 }}>
+                      解析函数：
+                      <Input.TextArea
+                        placeholder={'请输入'}
+                        value={currentStep?.payloadParser}
+                        style={{ flex: 1 }}
+                        autoSize={{
+                          minRows: 5,
+                          maxRows: 5,
+                        }}
+                        onChange={(e) => {
+                          currentStep &&
+                            updateStep({
+                              ...currentStep,
+                              payloadParser: e.target.value,
+                            });
+                        }}
+                      />
+                    </div>
+                  </>
+                )}
               </>
-            )}
+            </Space>
           </>
-        </Space>
+        )}
+        {!currentStep && <IEmpty />}
       </div>
     </Modal>
   );
