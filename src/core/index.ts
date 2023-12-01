@@ -13,6 +13,7 @@ export * from './modal';
 export * from './data';
 export * from './utils';
 export * from './style-processor';
+export * from './types';
 
 import {
   jsonNode,
@@ -25,6 +26,7 @@ import {
   globalVariable,
   runtime,
   currentVariables,
+  currentInstanceEvents,
 } from './data';
 import { BaseEvent, event, styleProcessor } from '.';
 
@@ -54,7 +56,9 @@ export class Engine {
   // 运行时
   public runtime = runtime;
   // 全局变量
-  public globalVariable = currentVariables;
+  public variables = currentVariables;
+  // 管理实例的事件
+  public instanceEvents = currentInstanceEvents;
 }
 
 export const engine = new Engine();

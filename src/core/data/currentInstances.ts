@@ -4,7 +4,7 @@
  * At 2023/10/31
  * By TangJiaHui
  */
-import { ExposeRule, StyleProcessorData, TriggerRule } from '..';
+import { ExposeRule, RegisterEvent, StyleProcessorData, TriggerRule } from '..';
 
 export type Instance = {
   id: string;
@@ -30,6 +30,8 @@ export type Instance = {
   handleSetStyleData: (styleData?: StyleProcessorData) => void;
   // 获取当前实例的大小位置信息
   getBoundingClientRect: () => DOMRect;
+  // 设置绑定事件
+  handleSetEvents: (events: RegisterEvent[]) => void;
 };
 
 interface CurrentInstances {
@@ -41,8 +43,13 @@ interface CurrentInstances {
   getAllInstance: () => Instance[];
   // 删除一个指定实例
   delete: (id?: string) => void;
+  // 获取页面实例
+  getPageInstance: () => Instance | undefined;
+  // 设置页面实例
+  setPageInstance: (pageIns?: Instance) => void;
 }
 
+let pageIns: Instance | undefined;
 const insList: Map<string, Instance> = new Map();
 export const currentInstances: CurrentInstances = {
   add(ins) {
@@ -58,5 +65,11 @@ export const currentInstances: CurrentInstances = {
     if (id) {
       insList.delete(id);
     }
+  },
+  getPageInstance() {
+    return pageIns;
+  },
+  setPageInstance(target?: Instance) {
+    pageIns = target;
   },
 };

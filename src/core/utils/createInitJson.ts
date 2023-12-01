@@ -9,7 +9,8 @@ export function createInitJson(): JsonNode[] {
   if (!component) {
     throw new Error('page component is not found.');
   }
-  return [createJsonNode(component)];
+  const pageJsonNode = createJsonNode(component);
+  return pageJsonNode ? [pageJsonNode] : [];
 }
 
 /**

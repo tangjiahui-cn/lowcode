@@ -9,4 +9,6 @@ export const EVENT = {
   SET_ATTRIBUTES: Symbol(),
   // 更新JSON编辑器
   JSON_EDITOR: Symbol(),
+  // 更新全局变量
+  GLOBAL_VAR: Symbol(),
 };

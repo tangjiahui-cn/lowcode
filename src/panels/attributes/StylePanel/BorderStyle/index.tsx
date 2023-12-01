@@ -185,7 +185,7 @@ export default function BorderStyle(props: IProps) {
         />
       </Space>
       <Space>
-        <div className={labelStyle}>右上角</div>
+        <div className={labelStyle}>右下角</div>
         <InputNumber
           style={{ width: valueWidth }}
           placeholder={'请输入'}

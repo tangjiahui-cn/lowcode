@@ -9,9 +9,16 @@ import { engine, Expose } from '..';
  */
 export function useExpose(exposeList: Expose[]) {
   useEffect(() => {
-    exposeList.forEach((expose) => engine.event.expose(expose));
+    const insId = exposeList?.[0]?.id;
+    exposeList.forEach((expose) => {
+      engine.event.expose(expose);
+      engine.instanceEvents.registerExpose(expose);
+    });
     return () => {
-      exposeList.forEach((expose) => engine.event.unExpose(expose));
+      exposeList.forEach((expose) => {
+        engine.event.unExpose(expose);
+      });
+      engine.instanceEvents.unRegisterExpose(insId);
     };
   }, []);
 }

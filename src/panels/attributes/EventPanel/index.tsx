@@ -4,7 +4,7 @@ import ExposeRulePanel from './ExposeRule';
 import TriggerRulePanel from './TriggerRule';
 
 /**
- * 事件面板
+ * 事件面板 (暂时废弃，后续考虑启用)
  */
 interface IProps {
   jsonNode?: JsonNode;

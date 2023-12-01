@@ -1,5 +1,5 @@
 /**
- * 事件系统
+ * 事件系统 (运行时事件管理)
  *
  * 说明：事件系统控制数据的传输。
  * （1）触发事件数据流:
@@ -28,57 +28,21 @@
  * At 2023/11/10
  * By TangJiaHui
  */
-import { MapEvent, BaseEventCallBack } from '..';
+import {
+  MapEvent,
+  BaseEventCallBack,
+  ExposeRule,
+  TriggerRule,
+  Expose,
+  Trigger,
+  RegisterEvent,
+  getFunctionFromString,
+  RegisterEventStep,
+  engine,
+  GlobalVariableType,
+} from '..';
+
 export type CallbackType = BaseEventCallBack;
-
-// 暴露规则
-export type ExposeRule = {
-  rId: string; // 规则id
-  id: string; // 实例id
-  name?: string; // 暴露规则名称
-  eventType?: string; // 暴露实例内部规则
-};
-
-// 触发规则 - 目标规则
-export type TriggerRuleTo = Omit<ExposeRule, 'rId' | 'id'> & {
-  targetId: string; // 目标规则记录id
-  rId?: string; // 规则id
-  id?: string; // 实例id
-};
-
-// 触发规则携带参数
-export type TriggerRulePayloadType = 0 | 1 | 2; // 0默认 1全局变量 2自定义
-export type TriggerRulePayload = {
-  type: TriggerRulePayloadType; // 携带参数类型
-  value: any;
-};
-
-// 组件改变 -> 修改全局变量 、修改下拉框
-// 重置按钮 -> 重置下拉框、修改全局变量
-
-// 触发规则
-export type TriggerRule = {
-  rId: string; // 规则id
-  id: string; // 实例id
-  name?: string; // 触发规则名称
-  eventType?: string; // 触发事件
-  payload?: string; // 携带参数
-  to?: TriggerRuleTo[]; // 发布到暴露事件
-};
-
-// 暴露事件
-export type Expose = {
-  id: string; // 实例id
-  eventType: string; // 暴露事件类型
-  callback: CallbackType; // 回调事件
-};
-
-// 触发事件
-export type Trigger = {
-  id: string; // 实例id
-  eventType: string; // 触发事件类型
-  payload?: any; // 触发内容
-};
 
 // 实例事件控制
 const instanceEvent = new MapEvent();
@@ -153,4 +117,121 @@ export const event = {
     // 发布到实例事件变更
     instanceEvent.notify(trigger.id, trigger.eventType, trigger.payload);
   },
+
+  // 注册绑定事件
+  registerEvent(events?: RegisterEvent[]) {
+    if (!events?.length) return;
+    // 监听实例触发事件
+    events.forEach((event) => {
+      instanceEvent.on(event.id, event.eventType, (payload) => {
+        event.steps?.forEach((step) => {
+          doneEventStep(step, payload);
+        });
+      });
+    });
+  },
+
+  // 取消注册绑定事件
+  unRegisterEvent(events?: RegisterEvent[]) {
+    if (!events?.length) return;
+    events.forEach((event) => {
+      instanceEvent.removeKey(event.id);
+    });
+  },
 };
+
+/**
+ * 判断数值类型
+ *
+ */
+function judgeValue(value: unknown): GlobalVariableType | undefined {
+  if (Number.isFinite(value)) {
+    return 'number';
+  }
+
+  if (typeof value === 'string') {
+    return 'string';
+  }
+
+  if (typeof value === 'object' && value) {
+    return 'object';
+  }
+
+  if (typeof value === 'boolean') {
+    return 'boolean';
+  }
+
+  return;
+}
+
+/**
+ * 处理 event-step
+ *
+ * @param step 注册事件的step
+ * @param payload 默认携带payload
+ */
+
+function doneEventStep(step: RegisterEventStep, payload: any) {
+  let newPayload = parsePayload(step, payload);
+
+  switch (step.type) {
+    case 'event': // 触发其他组件内事件
+      instanceEvent.notify(step.event?.id || '', step.event?.eventType || '', newPayload);
+      break;
+    case 'globalVar': // 修改全局变量
+      const globalVar = engine.variables.getGlobalVar(step?.globalVar?.vId);
+      let type = judgeValue(newPayload);
+      let value = newPayload;
+      if (!type) {
+        type = 'string';
+        value = '';
+      }
+      if (globalVar) {
+        globalVar.value = value;
+        globalVar.type = type;
+        engine.variables.registerGlobalVar(globalVar);
+      }
+      break;
+    case 'openUrl': // 打开新标签页
+      window.open(step.url);
+      break;
+    case 'jumpUrl': // 跳转地址
+      window.open(step.url, '_self');
+      break;
+  }
+}
+
+/**
+ * 解析参数函数
+ *
+ * @param payload 默认携带payload
+ * @param parserFuncString 解析器函数字符串
+ */
+
+function parsePayload(step: RegisterEventStep, defaultPayload: any): any {
+  let payload = step.payload;
+
+  if (!step?.payloadType || step?.payloadType === 'default') {
+    return defaultPayload;
+  }
+
+  // 传参是全局变量
+  if (step?.payloadType === 'globalVar') {
+    const vId = step?.payload;
+    payload = engine.variables.getGlobalVar(vId)?.value;
+  }
+
+  return parserDefaultPayload(payload, step.payloadParser);
+}
+
+// 解析值
+function parserDefaultPayload(payload: any, parserFuncString?: string) {
+  if (!parserFuncString) return payload;
+
+  try {
+    const func = getFunctionFromString(parserFuncString);
+    return func?.(payload);
+  } catch {
+    return payload;
+  }
+}

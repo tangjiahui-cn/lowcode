@@ -5,7 +5,8 @@
  * By TangJiaHui
  */
 import * as React from 'react';
-import { ExposeRule, RegisterComponent, TriggerRule, StyleProcessorData } from '..';
+import { ExposeRule, RegisterComponent, TriggerRule, StyleProcessorData, GlobalVariable } from '..';
+import { RegisterEvent } from '../../panels/attributes/NewEventPanel';
 
 // （简单事件系统）
 // 输入框 change  => 按钮 setValue
@@ -31,6 +32,12 @@ export type JsonNode<T = any> = {
   triggerRules?: TriggerRule[];
   // 暴露规则
   exposeRules?: ExposeRule[];
+
+  // 绑定事件
+  events?: RegisterEvent[];
+
+  // 组件变量
+  variable?: GlobalVariable[];
 
   // 父节点id
   parentId?: string;

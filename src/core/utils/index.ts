@@ -6,3 +6,4 @@ export * from './getChildDomRect';
 export * from './createOperateBox';
 export * from './genEventUuid';
 export * from './getVarUuid';
+export * from './getFunctionFromString';

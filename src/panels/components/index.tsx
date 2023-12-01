@@ -12,7 +12,7 @@ import GlobalVariable from './GlobalVariable';
  * By TangJiaHui
  */
 export default function () {
-  const [menuType, setMenuType] = useState<MenuType>(MenuType.globalVariable);
+  const [menuType, setMenuType] = useState<MenuType>(MenuType.componentList);
 
   return (
     <div style={{ display: 'flex', height: '100%', overflowY: 'hidden' }}>

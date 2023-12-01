@@ -11,11 +11,11 @@ export type StyleProcessBorder = {
   borderTopLeftRadius?: PartialNumber; // 左上角圆角
   borderTopRightRadius?: PartialNumber; // 右上角圆角
   borderBottomLeftRadius?: PartialNumber; // 左下角圆角
-  borderBottomRightRadius?: PartialNumber; // 右上角圆角
+  borderBottomRightRadius?: PartialNumber; // 右下角圆角
   borderTopLeftRadiusUnit?: BorderUnit; // 左上角圆角单位
   borderTopRightRadiusUnit?: BorderUnit; // 右上角圆角单位
   borderBottomLeftRadiusUnit?: BorderUnit; // 左下角圆角单位
-  borderBottomRightRadiusUnit?: BorderUnit; // 右上角圆角单位
+  borderBottomRightRadiusUnit?: BorderUnit; // 右下角圆角单位
 
   borderTopColor?: string; // 上边框颜色
   borderTopWidth?: PartialNumber; // 上边框宽度

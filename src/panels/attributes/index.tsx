@@ -3,18 +3,10 @@ import { EVENT } from '../../enum';
 import { Tabs } from 'antd';
 import { attributesEmptyStyle, attributesStyle } from './style';
 import { useRegisterGlobalEvent } from '../../hooks/useRegisterGlobalEvent';
-import EventPanel from './EventPanel';
+import EventPanel, { RegisterEvent } from './NewEventPanel';
 import StylePanel from './StylePanel';
 import BreadcrumbPanel from './BreadcrumbPanel';
-import {
-  engine,
-  ExposeRule,
-  Instance,
-  RegisterComponent,
-  StyleProcessorData,
-  TriggerRule,
-  JsonNode,
-} from '../../core';
+import { engine, Instance, RegisterComponent, StyleProcessorData, JsonNode } from '../../core';
 
 const tabOptions = [
   { label: '属性', key: '1' },
@@ -29,7 +21,7 @@ const tabOptions = [
  * By TangJiaHui
  */
 export default function Attributes() {
-  const [activeKey, setActiveKey] = useState<string>('1');
+  const [activeKey, setActiveKey] = useState<string>('3');
   // 组件模板（模板）
   const [component, setComponent] = useState<RegisterComponent | undefined>();
   // 当前jsonNode（保存状态）
@@ -52,13 +44,17 @@ export default function Attributes() {
     instance?.handleSetStyleData?.(styleData);
   }
 
-  function handleExposeRules(exposeRules: ExposeRule[]) {
-    instance?.handleSetExposeAttributes?.(exposeRules);
+  function handleEvents(events: RegisterEvent[]) {
+    instance?.handleSetEvents?.(events);
   }
 
-  function handleTriggerRules(triggerRules: TriggerRule[]) {
-    instance?.handleSetTriggerAttributes?.(triggerRules);
-  }
+  // function handleExposeRules(exposeRules: ExposeRule[]) {
+  //   instance?.handleSetExposeAttributes?.(exposeRules);
+  // }
+  //
+  // function handleTriggerRules(triggerRules: TriggerRule[]) {
+  //   instance?.handleSetTriggerAttributes?.(triggerRules);
+  // }
 
   useRegisterGlobalEvent(EVENT.SELECTED_COMPONENT, handleSelect);
 
@@ -76,9 +72,10 @@ export default function Attributes() {
       {activeKey === '3' && (
         <EventPanel
           jsonNode={jsonNode}
+          onChangeEvents={handleEvents}
           component={component}
-          onChangeExposeRules={handleExposeRules}
-          onChangeTriggerRules={handleTriggerRules}
+          // onChangeExposeRules={handleExposeRules}
+          // onChangeTriggerRules={handleTriggerRules}
         />
       )}
     </div>

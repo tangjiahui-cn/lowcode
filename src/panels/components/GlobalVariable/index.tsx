@@ -3,7 +3,8 @@ import { Empty, Space } from 'antd';
 import { DeleteOutlined, SettingOutlined } from '@ant-design/icons';
 import { headerStyle, itemStyle } from './style';
 import AddGlobalVariableDialog from './components/AddGlobalVariableDialog';
-import { GlobalVariable } from '../../../core';
+import { engine, GlobalVariable } from '../../../core';
+import { EVENT } from '../../../enum';
 
 /**
  * 全局变量管理页面
@@ -18,12 +19,14 @@ export default function () {
   const [visible, setVisible] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
 
-  function emitList(list: GlobalVariable[]) {
+  function emitList(list: GlobalVariable[], isSave = true) {
     setList(list);
-    save(list);
+    isSave && save(list);
+    engine.variables.registerGlobalVarList(list);
   }
 
   function handleDelete(item: GlobalVariable) {
+    engine.variables.unRegisterGlobalVar(item);
     emitList(list.filter((x) => x.vId !== item.vId));
   }
 
@@ -38,17 +41,29 @@ export default function () {
     setVisible(true);
   }
 
-  function load() {
-    const list = JSON.parse(localStorage['globalVar'] || '[]');
-    setList(list);
+  function save(list: GlobalVariable[]) {
+    const pageJsonNode = engine.jsonNode.get(engine.instance.getPageInstance()?.id);
+    if (pageJsonNode) {
+      pageJsonNode.variable = list;
+      engine.json.updateJsonNode(pageJsonNode);
+    }
   }
 
-  function save(list: GlobalVariable[]) {
-    localStorage['globalVar'] = JSON.stringify(list);
+  function init() {
+    emitList(engine.variables.getGlobalVarList(), false);
   }
 
   useEffect(() => {
-    load();
+    init();
+
+    function updateList(list: GlobalVariable[] = []) {
+      emitList(list, false);
+    }
+
+    engine.globalEvent.on(EVENT.GLOBAL_VAR, updateList);
+    return () => {
+      engine.globalEvent.remove(EVENT.GLOBAL_VAR, updateList);
+    };
   }, []);
 
   return (

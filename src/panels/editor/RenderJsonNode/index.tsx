@@ -19,7 +19,9 @@ import {
   createJsonNode,
   getComponentByCId,
   ContainerChildren,
-  // ContainerChildrenItem,
+  useRegisterEvents,
+  RegisterEvent,
+  useRegisterGlobalVar,
 } from '../../../core';
 
 const notifyScroll = throttle((payload) => {
@@ -372,6 +374,14 @@ export default function RenderJsonNode(props: IProps) {
           engine.globalEvent.notify(EVENT.JSON_EDITOR, engine.json.getJson());
         }
       },
+      handleSetEvents(events: RegisterEvent[]) {
+        if (!props?.jsonNode) return;
+        props.jsonNode.events = events;
+        // 只更新json中某个节点（不更新整个组件树）
+        engine.json.updateJsonNode(props?.jsonNode);
+        // 更新json编辑器
+        engine.globalEvent.notify(EVENT.JSON_EDITOR, engine.json.getJson());
+      },
       getExposeAttributes(): ExposeRule[] {
         return props?.jsonNode?.exposeRules || [];
       },
@@ -411,11 +421,21 @@ export default function RenderJsonNode(props: IProps) {
     unRegisterExposeRuleFn.current = registerExposeRules(props?.jsonNode);
     unRegisterTriggerRuleFn.current = registerTriggerRules(props?.jsonNode);
 
+    // 绑定全局实例
+    if (props?.jsonNode?.cId === 'i-page') {
+      engine.instance.setPageInstance(instanceRef.current);
+    }
+
     return () => {
       engine.instance.delete(instanceRef.current?.id);
       // 取消挂载事件规则
       unRegisterExposeRuleFn.current?.();
       unRegisterTriggerRuleFn.current?.();
+
+      // 取消绑定全局变量
+      if (props?.jsonNode?.cId === 'i-page') {
+        engine.instance.setPageInstance(undefined);
+      }
     };
   }, [props?.jsonNode]);
 
@@ -428,6 +448,11 @@ export default function RenderJsonNode(props: IProps) {
       engine.globalEvent.notify(EVENT.SELECTED_COMPONENT, props?.jsonNode);
     }
   }, [props?.jsonNode]);
+
+  // 注册全局变量
+  useRegisterGlobalVar(props?.jsonNode);
+  // 注册绑定事件
+  useRegisterEvents(props?.jsonNode);
 
   // 开启预览模式，清空状态
   useUpdateEffect(() => {

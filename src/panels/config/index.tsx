@@ -1,13 +1,11 @@
-import { Button, message, notification, Space } from 'antd';
+import { Button, message, Space, Switch } from 'antd';
 import { page } from './style';
 import { GithubOutlined, RocketTwoTone } from '@ant-design/icons';
-import { MODE } from '../../core';
-import ModeButtonGroup from '../../components-sys/ModeButtonGroup';
+import { createInitJson, engine, MODE } from '../../core';
 import { useState } from 'react';
 import { useUpdateEffect } from 'ahooks';
 import { cloneDeep } from 'lodash';
 import { EVENT } from '../../enum';
-import { engine, createInitJson } from '../../core';
 
 /**
  * 全局配置面板
@@ -41,14 +39,12 @@ export default function Config() {
 
     // 开发模式（重置状态）
     if (mode === MODE.DEV) {
-      notification.info({
-        message: (
-          <Space>
-            切换到<span style={{ color: '#f83434' }}>开发</span>模式
-          </Space>
-        ),
-        duration: 1.2,
-      });
+      message.info(
+        <Space>
+          切换到<span style={{ color: '#f83434' }}>开发</span>模式
+        </Space>,
+        1,
+      );
 
       engine.panel.editor?.setJson?.([]);
       setTimeout(() => engine.panel.editor.refreshJson());
@@ -57,14 +53,12 @@ export default function Config() {
 
     // 预览模式
     if (mode === MODE.PREVIEW) {
-      notification.info({
-        message: (
-          <Space>
-            切换到<span style={{ color: '#11e00c' }}>预览</span>模式
-          </Space>
-        ),
-        duration: 1.2,
-      });
+      message.info(
+        <Space>
+          切换到<span style={{ color: '#11e00c' }}>预览</span>模式
+        </Space>,
+        1,
+      );
       const jsonCopy: any[] = cloneDeep(engine.json.getJson());
       engine.panel?.editor?.setJson?.(jsonCopy);
       return;
@@ -80,9 +74,6 @@ export default function Config() {
       <Space style={{ userSelect: 'none' }}>
         <RocketTwoTone style={{ fontSize: 24 }} />
         <b style={{ fontSize: '1.5em' }}>低代码引擎</b>
-      </Space>
-      <ModeButtonGroup value={mode} onChange={setMode} />
-      <Space>
         <GithubOutlined
           onClick={handleJumpGithub}
           style={{
@@ -90,6 +81,17 @@ export default function Config() {
             verticalAlign: 'middle',
             paddingRight: 10,
             cursor: 'pointer',
+          }}
+        />
+      </Space>
+      {/*<ModeButtonGroup value={mode} onChange={setMode} />*/}
+      <Space>
+        <Switch
+          checked={mode === MODE.PREVIEW}
+          unCheckedChildren={'开发'}
+          checkedChildren={'预览'}
+          onChange={(checked) => {
+            setMode(checked ? MODE.PREVIEW : MODE.DEV);
           }}
         />
         <Button onClick={handleClear}>清空</Button>

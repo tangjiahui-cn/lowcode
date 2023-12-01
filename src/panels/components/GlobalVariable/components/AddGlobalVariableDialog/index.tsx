@@ -34,12 +34,11 @@ export default function AddGlobalVariableDialog(props: IProps) {
   }
 
   function getInitValue(type: GlobalVariableType) {
-    if (type === 'undefined') return undefined;
-    if (type === 'null') return null;
+    if (type === 'number') return 0;
     if (type === 'string') return '';
     if (type === 'boolean') return false;
     if (type === 'object') return {};
-    return undefined;
+    return '';
   }
 
   useEffect(() => {
@@ -53,11 +52,12 @@ export default function AddGlobalVariableDialog(props: IProps) {
           description: props?.data?.description,
         });
       } else {
-        setType('undefined');
+        const type = 'string';
+        setType(type);
         form.setFieldsValue({
           name: undefined,
-          type: 'undefined',
-          value: undefined,
+          type,
+          value: '',
           description: undefined,
         });
       }
@@ -93,11 +93,8 @@ export default function AddGlobalVariableDialog(props: IProps) {
             {
               validator(_, value) {
                 const type = form.getFieldValue('type');
-                if (['undefined', 'null', 'boolean']?.includes(type)) {
-                  return Promise.resolve();
-                }
-                if ([null, undefined, ''].includes(value)) {
-                  return Promise.reject('请选择值');
+                if (type === 'object' && !value) {
+                  return Promise.reject('请填写值');
                 }
                 return Promise.resolve();
               },
