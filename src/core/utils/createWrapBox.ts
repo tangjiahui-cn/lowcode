@@ -30,7 +30,7 @@ export function createWrapBox(
         ...getChildDomRect(container, child),
       });
     });
-  }, engine.globalVar.eventThrottleDelay);
+  }, engine.global.eventThrottleDelay);
 
   // 挂载wrap-box
   function mount() {
@@ -54,7 +54,7 @@ export function createWrapBox(
     engine.globalEvent.on(EVENT.SCROLL, resize);
 
     // 监听当前最大zIndex
-    mountDom && ((mountDom as any).style.zIndex = engine.globalVar.maxZIndex);
+    mountDom && ((mountDom as any).style.zIndex = engine.global.maxZIndex);
     engine.globalEvent.on(EVENT.SET_MAX_Z_INDEX, listenZIndex);
   }
 

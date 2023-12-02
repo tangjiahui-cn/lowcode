@@ -26,7 +26,7 @@ import {
 
 const notifyScroll = throttle((payload) => {
   engine.globalEvent.notify(EVENT.SCROLL, payload);
-}, engine.globalVar.eventThrottleDelay);
+}, engine.global.eventThrottleDelay);
 
 interface IProps {
   jsonNode: JsonNode;
@@ -43,7 +43,7 @@ interface IProps {
 let _parentJsonNode: JsonNode | undefined;
 export default function RenderJsonNode(props: IProps) {
   const { jsonNode } = props;
-  const isPreview = engine.globalVar.isPreview();
+  const isPreview = engine.global.isPreview();
 
   // 记录拖拽时经过组件的size信息
   const sizeInfo = useRef<DOMRect>();

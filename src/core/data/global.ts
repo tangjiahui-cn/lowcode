@@ -7,9 +7,9 @@ export enum MODE {
 }
 
 /**
- * 全局变量
+ * 全局配置
  */
-export interface GlobalVariableConfig {
+export interface GlobalConfig {
   mode: MODE; // 模式
   maxZIndex: number; // 最大zIndex
   eventThrottleDelay: number; // 触发事件节流延时
@@ -20,7 +20,7 @@ export interface GlobalVariableConfig {
   isPreview: () => boolean; // 是否是预览模式
 }
 
-export const globalVariable: GlobalVariableConfig = {
+export const global: GlobalConfig = {
   mode: MODE.DEV,
   maxZIndex: 0,
   eventThrottleDelay: 4,
@@ -30,19 +30,19 @@ export const globalVariable: GlobalVariableConfig = {
     if (!Number.isFinite(zIndex)) {
       return;
     }
-    if (zIndex < globalVariable.maxZIndex) {
+    if (zIndex < global.maxZIndex) {
       return;
     }
-    globalVariable.maxZIndex = zIndex;
+    global.maxZIndex = zIndex;
     engine.globalEvent.notify(EVENT.SET_MAX_Z_INDEX, zIndex);
   },
   setMode: (mode: MODE) => {
-    globalVariable.mode = mode;
+    global.mode = mode;
   },
   isDev() {
-    return globalVariable.mode === MODE.DEV;
+    return global.mode === MODE.DEV;
   },
   isPreview() {
-    return globalVariable.mode === MODE.PREVIEW;
+    return global.mode === MODE.PREVIEW;
   },
 };

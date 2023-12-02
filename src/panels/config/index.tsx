@@ -35,7 +35,7 @@ export default function Config() {
   }
 
   function handleChangeMode(mode: MODE) {
-    engine.globalVar.setMode(mode);
+    engine.global.setMode(mode);
 
     // 开发模式（重置状态）
     if (mode === MODE.DEV) {

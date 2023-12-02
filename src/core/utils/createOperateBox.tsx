@@ -34,7 +34,7 @@ export function createOperateBox(
         height: 0,
       });
     });
-  }, engine.globalVar.eventThrottleDelay);
+  }, engine.global.eventThrottleDelay);
 
   // 挂载 operate-box
   function mount() {

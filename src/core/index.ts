@@ -5,7 +5,7 @@
  * - 组件：模板
  * - 实例：运行时方法
  * - JSON：数据存储
- * - 事件系统：运行时流程、运行时规则定义、初始声明
+ * - 事件系统：定义运行时组件间的行为
  */
 
 export * from './hooks';
@@ -23,7 +23,7 @@ import {
   currentJson,
   currentPanels,
   currentSelectedInstance,
-  globalVariable,
+  global,
   runtime,
   currentVariables,
   currentInstanceEvents,
@@ -52,7 +52,7 @@ export class Engine {
   // 全局事件
   public globalEvent = new BaseEvent();
   // 配置项 - 全局变量
-  public globalVar = globalVariable;
+  public global = global;
   // 运行时
   public runtime = runtime;
   // 全局变量

@@ -44,7 +44,7 @@ export function getLayoutStyle(data: StyleProcessLayout): React.CSSProperties {
   if (isNumber(data?.width)) style.width = data.width + (data?.widthUnit || UNIT_DEFAULT);
   if (isNumber(data?.height)) style.height = data.height + (data?.heightUnit || UNIT_DEFAULT);
   if (isNumber(data?.zIndex)) {
-    engine.globalVar.setMaxZIndex((style.zIndex = data?.zIndex));
+    engine.global.setMaxZIndex((style.zIndex = data?.zIndex));
   }
 
   if (data?.padding) {

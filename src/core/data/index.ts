@@ -6,7 +6,7 @@ export * from './currentInstances';
 export * from './currentComponents';
 export * from './currentJson';
 export * from './currentPanels';
-export * from './globalVariable';
+export * from './global';
 export * from './runtime';
 export * from './currentVariables';
 export * from './currentInstanceEvents';

@@ -52,7 +52,7 @@ export function getEvent(
   injectEvent: DOMAttributes<any> = {},
   events: DOMAttributes<any> = {},
 ): any {
-  return engine.globalVar.isDev() ? injectEvent : events;
+  return engine.global.isDev() ? injectEvent : events;
 }
 
 // 模板组件类型
