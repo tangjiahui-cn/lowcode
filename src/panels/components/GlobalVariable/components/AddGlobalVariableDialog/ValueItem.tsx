@@ -9,8 +9,6 @@ interface IProps {
 }
 
 export default function (props: IProps) {
-  if (props?.type === 'null') return <div>null</div>;
-  if (props?.type === 'undefined') return <div>undefined</div>;
   if (props?.type === 'number') {
     return (
       <InputNumber
