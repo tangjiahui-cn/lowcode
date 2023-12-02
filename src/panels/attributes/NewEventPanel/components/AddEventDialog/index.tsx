@@ -9,7 +9,7 @@ import {
   RegisterEventStepType,
 } from '../../../../../core';
 import { genEventUuid } from '../../../../../core';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import AddEventStepButton from './components/AddEventStepButton';
 import { DeleteOutlined, DownOutlined, UpOutlined } from '@ant-design/icons';
 import InstanceExposeSelect from '../../../../../components-sys/InstanceExposeSelect';

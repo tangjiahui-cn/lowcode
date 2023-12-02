@@ -8,7 +8,7 @@ import {
 import AddOptionDialog from '../AddOptionDialog';
 import { useState } from 'react';
 import { css } from 'class-css';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 
 const disabledStyle = css({
   color: 'gray',
