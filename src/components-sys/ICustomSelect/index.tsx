@@ -118,6 +118,7 @@ export default function ICustomSelect(props: ICustomSelectProps) {
       filterOption={
         showSearch && isLocalSearch ? (filterOption ? getFilterOption : localSearchFn) : false
       }
+      onFocus={() => !isFirstSetRef?.current && query()} // 聚焦时查询（及时更新消息）
       onBlur={() => keyword !== '' && query('')}
       onSearch={showSearch && !isLocalSearch ? (k) => setKeyword(k) : undefined}
       onChange={(k, options?: any) => {

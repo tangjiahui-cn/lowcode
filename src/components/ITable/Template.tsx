@@ -1,9 +1,31 @@
 import { Table } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { useExpose, TemplateProps, engine } from '../../core';
+import { useListenState } from '../../hooks-sys/useListenState';
+
+// 数据源类型
+export type DataSource = {
+  type: 'custom' | 'api'; // 数据来源类型 （自定义、请求接口）
+  data?: any[]; // 自定义数据
+  api?: {
+    // 请求接口配置
+    url?: string; // 地址
+    method?: 'GET' | 'POST' | 'DELETE' | 'PUT'; // 请求方法
+    params?:
+      | {
+          // 参数
+          [K: string]: any;
+        }
+      | string; // 参数： 自定义值 | 全局变量id
+    paramsType?: 'custom' | 'globalVar'; // 参数类型： 自定义值 | 全局变量
+    parser?: string; // 结果解析函数
+  };
+};
 
 export interface Attributes {
   title: string; // 表格标题
+  columns: any[]; // 表格列
+  dataSource: DataSource; // 数据源
 }
 
 /**
@@ -12,12 +34,40 @@ export interface Attributes {
 export default function (props: TemplateProps<Attributes, HTMLDivElement>) {
   const domRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(false);
+  const [dataSource, setDataSource] = useState<any[]>([]);
 
-  function query(payload: any) {
+  const [attributes] = useListenState<Attributes | undefined>(props?.attributes);
+
+  function getParams() {
+    switch (attributes?.dataSource?.api?.paramsType) {
+      case 'globalVar':
+        return engine.variables.getGlobalVar(attributes?.dataSource?.api?.params as string)?.value;
+      case 'custom':
+      default:
+        return attributes?.dataSource?.api?.params || {};
+    }
+  }
+
+  useEffect(() => {
+    switch (attributes?.dataSource?.type) {
+      case 'api':
+        // 请求接口获取数据
+        let params: any = getParams();
+        query(params);
+        break;
+      case 'custom':
+      default:
+        setDataSource(attributes?.dataSource?.data || []);
+        break;
+    }
+  }, [attributes?.dataSource]);
+
+  function query(params: any) {
     // eslint-disable-next-line no-console
-    console.log('参数:', payload);
+    console.log('参数:', params);
     setLoading(true);
     setTimeout(() => {
+      setDataSource([{ key: '1', name: '请求接口获取数据' }]);
       setLoading(false);
     }, 300);
   }
@@ -39,19 +89,7 @@ export default function (props: TemplateProps<Attributes, HTMLDivElement>) {
       {props?.attributes?.title && (
         <h2 style={{ textAlign: 'center' }}>{props?.attributes?.title}</h2>
       )}
-      <Table
-        loading={loading}
-        dataSource={[{ key: '1', no: 1, name: 'T.J.H', age: 24, idCard: '340823199912341234' }]}
-        columns={[
-          { title: '序号', dataIndex: 'no' },
-          { title: '姓名', dataIndex: 'name' },
-          { title: '年龄', dataIndex: 'age' },
-          { title: '身份证号码', dataIndex: 'idCard' },
-        ]}
-        pagination={{
-          total: 30,
-        }}
-      />
+      <Table loading={loading} dataSource={dataSource} columns={attributes?.columns} />
     </div>
   );
 }

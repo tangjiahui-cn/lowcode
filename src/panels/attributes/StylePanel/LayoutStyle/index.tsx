@@ -112,6 +112,7 @@ export default function LayoutStyle(props: IProps) {
         <div className={labelStyle}>zIndex</div>
         <InputNumber
           placeholder={'auto'}
+          maxLength={8}
           value={value?.zIndex}
           onChange={(zIndex) =>
             emitChange({

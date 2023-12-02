@@ -3,10 +3,17 @@ import { EVENT } from '../../enum';
 import { Tabs } from 'antd';
 import { attributesEmptyStyle, attributesStyle } from './style';
 import { useRegisterGlobalEvent } from '../../hooks/useRegisterGlobalEvent';
-import EventPanel, { RegisterEvent } from './NewEventPanel';
+import EventPanel from './NewEventPanel';
 import StylePanel from './StylePanel';
 import BreadcrumbPanel from './BreadcrumbPanel';
-import { engine, Instance, RegisterComponent, StyleProcessorData, JsonNode } from '../../core';
+import {
+  RegisterEvent,
+  engine,
+  Instance,
+  RegisterComponent,
+  StyleProcessorData,
+  JsonNode,
+} from '../../core';
 
 const tabOptions = [
   { label: '属性', key: '1' },
@@ -20,8 +27,9 @@ const tabOptions = [
  * At 2023/10/31
  * By TangJiaHui
  */
+const INIT_ACTIVE = '1';
 export default function Attributes() {
-  const [activeKey, setActiveKey] = useState<string>('3');
+  const [activeKey, setActiveKey] = useState<string>(INIT_ACTIVE);
   // 组件模板（模板）
   const [component, setComponent] = useState<RegisterComponent | undefined>();
   // 当前jsonNode（保存状态）
@@ -30,6 +38,7 @@ export default function Attributes() {
   const [instance, setInstance] = useState<Instance | undefined>();
 
   function handleSelect(payload: JsonNode) {
+    setActiveKey(INIT_ACTIVE);
     setJsonNode(payload);
     setComponent(engine.component.getComponent(payload?.cId));
     setInstance(engine.instance.getInstance(payload?.id));
@@ -47,14 +56,6 @@ export default function Attributes() {
   function handleEvents(events: RegisterEvent[]) {
     instance?.handleSetEvents?.(events);
   }
-
-  // function handleExposeRules(exposeRules: ExposeRule[]) {
-  //   instance?.handleSetExposeAttributes?.(exposeRules);
-  // }
-  //
-  // function handleTriggerRules(triggerRules: TriggerRule[]) {
-  //   instance?.handleSetTriggerAttributes?.(triggerRules);
-  // }
 
   useRegisterGlobalEvent(EVENT.SELECTED_COMPONENT, handleSelect);
 

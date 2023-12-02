@@ -416,6 +416,12 @@ export default function RenderJsonNode(props: IProps) {
 
   useEffect(() => {
     instanceRef.current = getInstance();
+
+    // // 测试时（待删除）
+    // if (props?.jsonNode?.cId === 'i-table') {
+    //   instanceRef.current?.handleSelect?.();
+    // }
+
     engine.instance.add(instanceRef.current); // 注册当前实例
     // 注册事件规则
     unRegisterExposeRuleFn.current = registerExposeRules(props?.jsonNode);

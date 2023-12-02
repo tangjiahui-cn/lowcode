@@ -2,6 +2,7 @@ import { Input, message, Modal, Space } from 'antd';
 import InstanceSelect from '../../../../../components-sys/InstanceSelect';
 import React, { useEffect, useState } from 'react';
 import {
+  engine,
   PayloadType,
   RegisterEvent,
   RegisterEventStep,
@@ -135,6 +136,7 @@ export default function AddEventDialog(props: IProps) {
       open={props?.visible}
       title={`${props?.event?.eventType} 事件`}
       width={800}
+      zIndex={engine.global.maxZIndex}
       bodyStyle={{
         height: 450,
         overflowY: 'auto',
