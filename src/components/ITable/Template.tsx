@@ -63,13 +63,22 @@ export default function (props: TemplateProps<Attributes, HTMLDivElement>) {
   }, [attributes?.dataSource]);
 
   function query(params: any) {
+    const api = props?.attributes?.dataSource?.api;
     // eslint-disable-next-line no-console
     console.log('参数:', params);
     setLoading(true);
-    setTimeout(() => {
-      setDataSource([{ key: '1', name: '请求接口获取数据' }]);
-      setLoading(false);
-    }, 300);
+    engine.fetch
+      .start({
+        url: api?.url,
+        params: api?.params as any,
+        method: api?.method,
+      })
+      .then((res) => {
+        // eslint-disable-next-line no-console
+        console.log('请求结果：', res);
+        setDataSource(res);
+        setLoading(false);
+      });
   }
 
   useExpose([

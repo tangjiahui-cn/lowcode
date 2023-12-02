@@ -58,6 +58,7 @@ export default function ColumnsBlock(props: IProps) {
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }} key={column?.key}>
             <div>
               <Input
+                style={{ fontSize: 12 }}
                 placeholder={'请输入'}
                 defaultValue={column?.title}
                 onChange={(e) => {
@@ -68,6 +69,7 @@ export default function ColumnsBlock(props: IProps) {
             </div>
             <div>
               <Input
+                style={{ fontSize: 12 }}
                 placeholder={'请输入'}
                 defaultValue={column?.dataIndex}
                 onChange={(e) => {

@@ -10,3 +10,4 @@ export * from './global';
 export * from './runtime';
 export * from './currentVariables';
 export * from './currentInstanceEvents';
+export * from './fetch';

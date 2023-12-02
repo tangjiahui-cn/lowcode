@@ -27,6 +27,7 @@ import {
   runtime,
   currentVariables,
   currentInstanceEvents,
+  fetch,
 } from './data';
 import { BaseEvent, event, styleProcessor } from '.';
 
@@ -59,6 +60,8 @@ export class Engine {
   public variables = currentVariables;
   // 管理实例的事件
   public instanceEvents = currentInstanceEvents;
+  // 管理所有的接口请求
+  public fetch = fetch;
 }
 
 export const engine = new Engine();
