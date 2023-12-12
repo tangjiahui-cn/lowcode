@@ -32,11 +32,17 @@ function Template(props: TemplateProps<AttributesType, HTMLDivElement>) {
       {...props?.events}
       style={{
         ...engine.styleProcessor.getStyle(props?.styleData),
-        display: 'inline-block',
+        display: 'inline-table',
         overflow: 'hidden',
       }}
     >
-      <Button block style={engine.styleProcessor.getDisplayStyle(props?.styleData)}>
+      <Button
+        style={{
+          ...engine.styleProcessor.getDisplayStyle(props?.styleData),
+          height: '100%',
+          width: '100%',
+        }}
+      >
         {props?.attributes?.value || ' '}
       </Button>
     </div>
