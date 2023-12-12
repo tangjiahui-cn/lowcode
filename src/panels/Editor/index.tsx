@@ -39,7 +39,7 @@ export default function () {
           height: '100%',
           width: '100%',
           background: 'white',
-          overflow: 'hidden',
+          // overflow: 'hidden',
         }}
       >
         {/* 渲染json */}

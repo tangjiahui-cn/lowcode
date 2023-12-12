@@ -4,12 +4,13 @@ import { useEffect, useRef } from 'react';
 export default {
   cId: 'page',
   cType: cType.System,
-  name: '页面',
+  cName: '页面',
   icon: undefined,
   template: Template,
   attributesTemplate: Attributes,
 
   isPage: true,
+  isChildren: true,
 } as Component;
 
 function Template(props: TemplateProps<any>) {

@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react';
 export default {
   cId: 'table',
   cType: cType.Table,
-  name: '列表',
+  cName: '列表',
   icon: undefined,
   template: Template,
   attributesTemplate: Attributes,

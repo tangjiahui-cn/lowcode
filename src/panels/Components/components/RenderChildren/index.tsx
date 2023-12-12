@@ -27,7 +27,7 @@ export default function (props: IProps) {
                 props?.onDragStart?.(e, component);
               }}
             >
-              {component?.name}
+              {component?.cName}
             </div>
           );
         })

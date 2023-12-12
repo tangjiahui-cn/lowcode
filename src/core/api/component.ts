@@ -2,7 +2,8 @@ import * as React from 'react';
 import { Component, engine } from '@/core';
 
 export enum COMPONENT_KEY {
-  DRAG_NEW = '1',
+  DRAG_NEW = '1', // 新增节点
+  DRAG_MOVE = '2', // 拖拽节点
 }
 
 export const component = {

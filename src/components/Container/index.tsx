@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 export default {
   cId: 'container',
   cType: cType.Container,
-  name: '容器',
+  cName: '容器',
   icon: undefined,
   isChildren: true,
   template: Template,

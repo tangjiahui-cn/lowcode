@@ -5,14 +5,14 @@
  * By TangJiaHui
  */
 import React, { useEffect, useRef } from 'react';
-import { css } from 'class-css';
 import { throttle } from 'lodash';
-import { engine, EVENT } from '@/core';
+import { engine, EVENT, createWrapBox } from '..';
 
 interface Props {
   getContainer: () => HTMLElement | undefined; // 获取容器DOM的函数
   getTarget: () => HTMLElement | undefined; // 获取子DOM的函数
   style?: React.CSSProperties; // 包裹盒子样式
+  operate?: React.ReactNode; // 操作盒子
 }
 
 interface Operate {
@@ -32,7 +32,7 @@ export function useWrapBox(props: Props) {
   // 显示浮层
   function show() {
     // 获取可用的实例
-    (wrapBoxRef.current = getWrapBox(props)).show();
+    (wrapBoxRef.current ||= createWrapBox(props)).show();
   }
 
   // 浮层重置位置
@@ -46,109 +46,17 @@ export function useWrapBox(props: Props) {
     wrapBoxRef.current = undefined;
   }
 
-  // 监听窗口大小变化
   useEffect(() => {
     const throttleResize = throttle(resize, 8);
+    // 监听窗口大小变化
     window.addEventListener('resize', throttleResize);
-    engine.event.on(EVENT.scroll, throttleResize);
+    // 监听全局实例滚动事件
+    engine.event.on(EVENT.instanceScroll, throttleResize);
     return () => {
       window.removeEventListener('resize', throttleResize);
-      engine.event.remove(EVENT.scroll, throttleResize);
+      engine.event.remove(EVENT.instanceScroll, throttleResize);
     };
   }, []);
 
   return ref;
-}
-
-/**
- * 获取一个可用的wrapBox
- *
- * At 2023/12/11
- * By TangJiaHui
- */
-function getWrapBox(props: Props): Operate {
-  let mountDom: HTMLElement | undefined = undefined;
-  let container: HTMLElement | undefined = undefined;
-  let target: HTMLElement | undefined = undefined;
-
-  function lazyMount() {
-    if (container || target) {
-      return;
-    }
-    container = props?.getContainer?.();
-    target = props?.getTarget?.();
-    if (!container) {
-      throw new Error('container is not exist.');
-    }
-    if (!target) {
-      throw new Error('target is not exist.');
-    }
-    if (!mountDom) {
-      mountDom = document.createElement('div');
-    }
-  }
-
-  function resize() {
-    lazyMount();
-    if (mountDom) {
-      const info = getChildDomRect(container, target);
-      mountDom.className = css({
-        ...info,
-        position: 'absolute',
-        background: 'transparent',
-        border: '1px dashed blue',
-        boxSizing: 'border-box',
-        pointerEvents: 'none',
-        ...props?.style,
-      });
-    }
-  }
-
-  function show() {
-    resize();
-    if (mountDom) {
-      container?.appendChild?.(mountDom);
-    }
-  }
-
-  function hide() {
-    if (mountDom) {
-      container?.removeChild?.(mountDom);
-    }
-  }
-
-  return {
-    show,
-    hide,
-    resize,
-  };
-}
-
-/**
- * 获取子元素在容器元素中的大小位置信息
- *
- * At 2023/11/01
- * By TangJiaHui
- */
-export type DomType = HTMLElement | null | undefined;
-export function getChildDomRect(
-  containerDom: DomType,
-  childDom: DomType,
-): {
-  left: number;
-  top: number;
-  width: number;
-  height: number;
-} {
-  if (!containerDom || !childDom) {
-    throw new Error('dom is not exist');
-  }
-  const container: DOMRect = containerDom?.getBoundingClientRect?.();
-  const child: DOMRect = childDom?.getBoundingClientRect?.();
-  return {
-    left: child?.x - container?.x,
-    top: child.y - container?.y,
-    width: child.width,
-    height: child.height,
-  };
 }

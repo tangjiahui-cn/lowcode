@@ -4,10 +4,15 @@
  * At 2023/12/10
  * By tangJiaHui
  */
+import { StyleProcessorData } from '..';
 
-export type JsonNode = {
+export type JsonNode<Attributes = any> = {
   id: string; // 唯一id
+  cName?: string; // 组件名称
   cId: string; // 组件id
+
+  attributes?: Attributes; // 私有属性值
+  styleData?: StyleProcessorData; // 未处理样式对象（需要经过style-processor处理得到style）
 
   children?: JsonNode[];
 };
