@@ -1,14 +1,17 @@
-import { useEffect } from 'react';
-import { engine, JsonNode } from '..';
-
 /**
  * 注册jsonNode
+ *
+ * At 2023/12/11
+ * By TangJiaHui
  */
-export function useRegisterJsonNode(jsonNode?: JsonNode) {
+import { useEffect } from 'react';
+import { engine, JsonNode } from '@/core';
+
+export function useRegisterJsonNode(jsonNode: JsonNode) {
   useEffect(() => {
-    engine.jsonNode.add(jsonNode);
+    engine.jsonNode.register(jsonNode);
     return () => {
-      engine.jsonNode.remove(jsonNode?.id);
+      engine.instance.unRegister(jsonNode.id);
     };
   }, [jsonNode]);
 }
