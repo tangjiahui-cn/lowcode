@@ -14,9 +14,7 @@ import {
   instance,
   component,
   jsonNode,
-  instanceStack,
   panel,
-  selectedInstance,
   runtime,
 } from './data';
 
@@ -41,12 +39,8 @@ export const engine = {
   component,
   // jsonNode
   jsonNode,
-  // 鼠标经过实例栈
-  instanceStack,
   // 管理所有的面板
   panel,
-  // 当前选中实例
-  selectedInstance,
   // 运行时变量
   runtime,
   // 样式处理器（待重写）

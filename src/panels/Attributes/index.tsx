@@ -5,11 +5,12 @@ import EventPanel from './panels/EventPanel';
 import { useState } from 'react';
 import { Component, engine, Instance, JsonNode, useListenSelectJsonNode } from '@/core';
 import ParentBreadcrumb from './components/ParentBreadcrumb';
+import { emptyClass } from './style';
 
 const options = [
-  { label: '属性', value: '1' },
-  { label: '样式', value: '2' },
-  { label: '事件', value: '3' },
+  { label: '属性', key: '1' },
+  { label: '样式', key: '2' },
+  { label: '事件', key: '3' },
 ];
 
 export default function () {
@@ -35,11 +36,7 @@ export default function () {
       }}
     >
       <ParentBreadcrumb jsonNode={jsonNode} />
-      <Tabs activeKey={activeKey} onChange={setActiveKey}>
-        {options.map((option) => {
-          return <Tabs.TabPane key={option.value} tab={option.label} />;
-        })}
-      </Tabs>
+      <Tabs activeKey={activeKey} onChange={setActiveKey} items={options} />
       <div style={{ flex: 1, overflowY: 'auto' }}>
         {activeKey === '1' && (
           <AttributesPanel
@@ -64,6 +61,6 @@ export default function () {
       </div>
     </div>
   ) : (
-    <div>请选择一个组件</div>
+    <div className={emptyClass}>请选择一个组件</div>
   );
 }

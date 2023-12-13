@@ -88,29 +88,39 @@ export default function RenderJsonNode(props: RenderJsonNodeProps) {
 
   // 注册实例
   const instanceRef = useRegisterInstance(() => {
+    const id = props?.jsonNode?.id;
     return {
+      id,
       jsonNode,
-      id: props?.jsonNode?.id,
       parentId: props?.parentId,
       handleSelect() {
         // 不可重复选中
-        if (engine.selectedInstance.isSelected(instanceRef.current?.id)) {
+        if (engine.instance.isSelected(instanceRef.current?.id)) {
           return;
         }
         // 取消上一个选中元素，并设置新的选中元素
-        engine.selectedInstance.get()?.handleUnSelect?.();
-        engine.selectedInstance.set(instanceRef.current);
+        engine.instance.getSelected()?.forEach((ins) => ins.handleUnSelect());
+        engine.instance.setSelected(instanceRef.current ? [instanceRef.current] : []);
+        // 发布全局通知：选中JsonNode
         engine.api.editor.selectJsonNode(jsonNode);
         focusBox.current.show();
       },
       handleUnSelect() {
-        engine.selectedInstance.clear();
+        engine.instance.clearSelected();
         focusBox.current.hide();
       },
       handleHover() {
+        // 当前实例非选中,才可以设置当前选中实例
+        if (engine.instance.isNotCurrentHoverInstance(id)) {
+          engine.instance.setCurrentHoverInstance(instanceRef.current);
+        }
         hoverBox.current.show();
       },
       handleUnHover() {
+        // 当前实例选中,才可以清空选中实例
+        if (engine.instance.isCurrentHoverInstance(id)) {
+          engine.instance.clearCurrentHoverInstance();
+        }
         hoverBox.current.hide();
       },
       // 局部更新JsonNode
@@ -174,6 +184,8 @@ export default function RenderJsonNode(props: RenderJsonNodeProps) {
     nextTick(() => {
       const target = engine.instance.get(moveJsonNode.id);
       target?.handleSelect();
+      // 清空当前经过实例
+      engine.instance.getCurrentHoverInstance()?.handleUnHover?.();
     });
   }
 
@@ -208,16 +220,17 @@ export default function RenderJsonNode(props: RenderJsonNodeProps) {
           },
           onPointerEnter() {
             // 上一个栈顶元素取消经过
-            engine.instanceStack.getStackTop()?.handleUnHover?.();
+            engine.instance.getHoverStackTop()?.handleUnHover?.();
             // 新元素推入栈并经过
-            engine.instanceStack.push(instanceRef.current);
+            engine.instance.pushHoverStack(instanceRef.current);
+            // 栈顶元素经过
             instanceRef.current?.handleHover?.();
           },
           onPointerLeave() {
             // 推出栈顶元素并取消经过
-            engine.instanceStack.pop()?.handleUnHover?.();
+            engine.instance.popHoverStack()?.handleUnHover?.();
             // 新的栈顶元素经过
-            engine.instanceStack.getStackTop()?.handleHover?.();
+            engine.instance.getHoverStackTop()?.handleHover?.();
           },
           onPointerDown(e) {
             e.preventDefault();
