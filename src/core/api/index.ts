@@ -3,6 +3,8 @@ import { project } from './project';
 import { component } from './component';
 import { editor } from './editor';
 
+// api - 处理逻辑
+
 export const api = {
   global, // 全局配置Api
   project, // 项目面板Api

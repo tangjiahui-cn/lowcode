@@ -8,4 +8,7 @@ export const global = {
     // console.log('保存');
     console.log(engine.jsonNode.getPage(), engine.instance.getAll());
   },
+  preview () {
+    // 预览
+  }
 };

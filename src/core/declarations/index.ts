@@ -8,3 +8,4 @@
 export type * from './component';
 export type * from './instance';
 export type * from './jsonNode';
+export type * from './project';

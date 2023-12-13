@@ -6,8 +6,9 @@ import Header from './panels/Header';
 import Components from './panels/Components';
 import Attributes from './panels/Attributes';
 import Project from './panels/Project';
-import {registerComponents} from '@/components';
-import {createJsonNode, createPage, cType, engine} from '@/core';
+import { registerComponents } from '@/components';
+import { createJsonNode, createPage, cType, engine } from '@/core';
+import { useEffect } from 'react';
 
 /**
  * 支持功能：
@@ -34,7 +35,14 @@ import {createJsonNode, createPage, cType, engine} from '@/core';
  * (插件内部 notify: 触发引擎接口)
  */
 
+// 注册组件库
+registerComponents();
+
 function App() {
+  useEffect(() => {
+    // create;
+  }, []);
+
   return (
     <BasicLayout
       panels={{
@@ -48,30 +56,39 @@ function App() {
   );
 }
 
-registerComponents();
-
-setTimeout(() => {
-  engine.api.project.setPage([
-    {
-      ...createPage()?.[0],
-      children: [
-        createJsonNode({
-          cId: 'container',
-          cType: cType.Container,
-          cName: '容器',
-        }),
-        createJsonNode({
-          cId: 'button',
-          cType: cType.Base,
-          cName: '按钮',
-          defaultAttributes: {
-            value: '按 钮',
-          },
-        }),
-      ],
-    },
-  ]);
-  // engine.api.project.setPage(createPage());
-}, 300);
+engine.project.createProject('桩桩管理平台');
+// setTimeout(() => {
+//   engine.api.project.setPage([
+//     {
+//       ...createPage()?.[0],
+//       children: [
+//         createJsonNode({
+//           cId: 'container',
+//           cType: cType.Container,
+//           cName: '容器',
+//         }),
+//         createJsonNode({
+//           cId: 'button',
+//           cType: cType.Base,
+//           cName: '按钮',
+//           defaultAttributes: {
+//             value: '按 钮',
+//           },
+//         }),
+//         createJsonNode({
+//           cId: 'table',
+//           cType: cType.Table,
+//           cName: '表格',
+//         }),
+//         createJsonNode({
+//           cId: 'table',
+//           cType: cType.Table,
+//           cName: '表格',
+//         }),
+//       ],
+//     },
+//   ]);
+//   // engine.api.project.setPage(createPage());
+// }, 300);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(<App />);

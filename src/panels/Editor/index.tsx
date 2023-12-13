@@ -8,6 +8,7 @@
 import { engine, JsonNode, useListenPage } from '@/core';
 import { useEffect, useRef, useState } from 'react';
 import RenderJsonNode from './RenderJsonNode';
+import LayoutWrapper from './LayoutWrapper';
 
 export default function () {
   const domRef = useRef<HTMLDivElement>(null);
@@ -28,25 +29,27 @@ export default function () {
         width: '100%',
         height: '100%',
         padding: 24,
+        background: 'whitesmoke',
       }}
     >
-      {/* 渲染容器 */}
-      <div
-        ref={domRef}
-        style={{
-          position: 'relative',
-          minWidth: 200,
-          height: '100%',
-          width: '100%',
-          background: 'white',
-          // overflow: 'hidden',
-        }}
-      >
-        {/* 渲染json */}
-        {jsonNodes.map((jsonNode: JsonNode) => {
-          return <RenderJsonNode key={jsonNode.id} jsonNode={jsonNode} />;
-        })}
-      </div>
+      <LayoutWrapper>
+        {/* 渲染容器 */}
+        <div
+          ref={domRef}
+          style={{
+            position: 'relative',
+            minWidth: 200,
+            height: '100%',
+            width: '100%',
+            overflow: 'hidden',
+          }}
+        >
+          {/* 渲染json */}
+          {jsonNodes.map((jsonNode: JsonNode) => {
+            return <RenderJsonNode key={jsonNode.id} jsonNode={jsonNode} />;
+          })}
+        </div>
+      </LayoutWrapper>
     </div>
   );
 }

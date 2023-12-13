@@ -190,22 +190,16 @@ export default function RenderJsonNode(props: RenderJsonNodeProps) {
   }
 
   function isCanDrop() {
-    // 目标节点正在拖拽不能放置
-    if (engine.instance.isDragging(jsonNode?.id)) {
-      return false;
-    }
-
-    // 目标节点不支持children属性不能放置
-    if (!component?.isChildren) {
-      return false;
-    }
-
-    // 目标节点是自己的最近一级父容器节点不能放置（避免无意义操作）
-    if (engine.instance.isDraggingParent(jsonNode?.id)) {
-      return;
-    }
-
-    return true;
+    return !(
+      // 目标节点正在拖拽不能放置
+      (
+        engine.instance.isDragging(jsonNode?.id) ||
+        // 目标节点不支持children属性不能放置
+        !component?.isChildren ||
+        // 目标节点是自己的最近一级父容器节点不能放置（避免无意义操作）
+        engine.instance.isDraggingParent(jsonNode?.id)
+      )
+    );
   }
 
   return (

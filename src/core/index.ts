@@ -9,14 +9,9 @@
 export type * from './declarations';
 import { api } from './api';
 import { event } from './event';
+import { project } from './project';
 
-import {
-  instance,
-  component,
-  jsonNode,
-  panel,
-  runtime,
-} from './data';
+import { instance, component, jsonNode, panel, runtime } from './data';
 
 export { COMPONENT_KEY } from './api/component';
 export * from './enum';
@@ -44,5 +39,7 @@ export const engine = {
   // 运行时变量
   runtime,
   // 样式处理器（待重写）
-  styleProcessor
+  styleProcessor,
+  // 项目管理
+  project
 };

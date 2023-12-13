@@ -23,7 +23,7 @@ interface IProps {
 
 export default function BasicLayout(props: IProps) {
   const { Editor, Header, Components, Attributes, Project } = props?.panels;
-  const [activeKey, setActiveKey] = useState<string>('2');
+  const [activeKey, setActiveKey] = useState<string>('1');
 
   const menu = [
     { key: '1', label: '项目管理', value: Project, icon: FolderOutlined },

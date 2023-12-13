@@ -3,13 +3,16 @@ import Logo from './Logo';
 import { engine } from '@/core';
 
 export default function () {
-  function handleOpt(opt: 'save' | 'clear') {
+  function handleOpt(opt: 'save' | 'clear' | 'preview') {
     switch (opt) {
       case 'save':
         engine.api.global.save();
         break;
       case 'clear':
         engine.api.global.clear();
+        break;
+      case 'preview':
+        engine.api.global.preview();
         break;
     }
   }
@@ -27,9 +30,9 @@ export default function () {
       <Logo />
       <Space>
         <Button onClick={() => handleOpt('clear')}>清空</Button>
-        <Button onClick={() => handleOpt('clear')}>预览</Button>
-        <Button type={'primary'} onClick={() => handleOpt('save')}>
-          保存
+        <Button onClick={() => handleOpt('save')}>保存</Button>
+        <Button onClick={() => handleOpt('preview')} type={'primary'} >
+          开始演示
         </Button>
       </Space>
     </div>
