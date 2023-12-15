@@ -4,22 +4,9 @@
  * At 2023/12/11
  * By TangJiaHui
  */
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { throttle } from 'lodash';
-import { engine, EVENT, createWrapBox } from '..';
-
-interface Props {
-  getContainer: () => HTMLElement | undefined; // 获取容器DOM的函数
-  getTarget: () => HTMLElement | undefined; // 获取子DOM的函数
-  style?: React.CSSProperties; // 包裹盒子样式
-  operate?: React.ReactNode; // 操作盒子
-}
-
-interface Operate {
-  show: () => void;
-  hide: () => void;
-  resize: () => void;
-}
+import { engine, EVENT, createWrapBox, Props, Operate } from '..';
 
 export function useWrapBox(props: Props) {
   const wrapBoxRef = useRef<Operate>();
@@ -33,6 +20,7 @@ export function useWrapBox(props: Props) {
   function show() {
     // 获取可用的实例
     (wrapBoxRef.current ||= createWrapBox(props)).show();
+    engine.wrapBox.add(wrapBoxRef.current);
   }
 
   // 浮层重置位置
@@ -43,6 +31,7 @@ export function useWrapBox(props: Props) {
   // 隐藏浮层
   function hide() {
     wrapBoxRef.current?.hide?.();
+    engine.wrapBox.remove(wrapBoxRef.current);
     wrapBoxRef.current = undefined;
   }
 

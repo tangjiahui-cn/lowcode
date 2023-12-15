@@ -12,6 +12,7 @@ import React from 'react';
 export interface Props {
   getContainer: () => HTMLElement | undefined; // 获取容器DOM的函数
   getTarget: () => HTMLElement | undefined; // 获取子DOM的函数
+  getOperateContainer?: () => HTMLElement | undefined; // 获取操作盒子DOM的函数
   style?: React.CSSProperties; // 包裹盒子样式
   operate?: React.ReactNode; // 操作盒子
 }
@@ -27,13 +28,21 @@ export function createWrapBox(props: Props): Operate {
   let operateDom: HTMLElement | undefined = undefined;
   let container: HTMLElement | undefined = undefined;
   let target: HTMLElement | undefined = undefined;
+  let operateContainer: HTMLElement | undefined;
 
   function lazyMount() {
     if (container || target) {
       return;
     }
-    container = props?.getContainer?.();
+
     target = props?.getTarget?.();
+    container = props?.getContainer?.();
+    operateContainer =
+      props?.getOperateContainer?.() ||
+      container ||
+      document.getElementById('root') ||
+      document.body;
+
     if (!container) {
       throw new Error('container is not exist.');
     }
@@ -75,7 +84,11 @@ export function createWrapBox(props: Props): Operate {
       });
     }
     if (operateDom) {
-      info ||= getChildDomRect(container, target);
+      if (container === operateContainer) {
+        info ||= getChildDomRect(container, target);
+      } else {
+        info = getChildDomRect(operateContainer, target);
+      }
       operateDom.className = css({
         position: 'absolute',
         left: info.left,
@@ -92,7 +105,7 @@ export function createWrapBox(props: Props): Operate {
       container?.appendChild?.(mountDom);
     }
     if (operateDom) {
-      container?.appendChild?.(operateDom);
+      operateContainer?.appendChild?.(operateDom);
     }
   }
 
@@ -101,7 +114,7 @@ export function createWrapBox(props: Props): Operate {
       container?.removeChild?.(mountDom);
     }
     if (operateDom) {
-      container?.removeChild?.(operateDom);
+      operateContainer?.removeChild?.(operateDom);
     }
   }
 

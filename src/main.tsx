@@ -56,7 +56,7 @@ function App() {
   );
 }
 
-engine.project.createProject('桩桩管理平台');
+engine.project.fetchProject();
 // setTimeout(() => {
 //   engine.api.project.setPage([
 //     {

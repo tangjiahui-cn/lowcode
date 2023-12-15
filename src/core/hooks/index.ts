@@ -5,3 +5,5 @@ export * from './useWrapBox';
 export * from './useListenSelectJsonNode';
 export * from './useComponent';
 export * from './useInstance';
+export * from './useEditorMount';
+export * from './useListenProjectChange';

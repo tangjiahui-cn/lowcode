@@ -19,7 +19,7 @@ import {
   useWrapBox,
 } from '@/core';
 import { useRef } from 'react';
-import OperateBox from './components/OperateBox';
+import OperateBox from '../OperateBox';
 
 interface RenderJsonNodeProps {
   parentId?: string;
@@ -36,13 +36,15 @@ export default function RenderJsonNode(props: RenderJsonNodeProps) {
 
   // 鼠标经过盒子
   const hoverBox = useWrapBox({
-    getContainer: engine.panel.getEditorDom,
+    // getContainer: engine.panel.getEditorDom,
+    getContainer: () => document.body,
     getTarget: () => getDomRef.current?.(),
   });
 
   // 鼠标聚集盒子
   const focusBox = useWrapBox({
-    getContainer: engine.panel.getEditorDom,
+    // getContainer: engine.panel.getEditorDom,
+    getContainer: () => document.body,
     getTarget: () => getDomRef.current?.(),
     style: {
       border: '2px solid blue',

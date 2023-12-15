@@ -1,80 +1,179 @@
 /**
- * 项目管理
+ * 项目管理 (后续再转服务器存储)
  *
  * At 2023/12/13
  * By TangJiaHui
  */
-import { createPage, getUuid, JsonFile, Layout, Page, Project } from '..';
+import { createPage, engine, EVENT, getUuid, Layout, Page, Project } from '..';
 
 const EMPTY_PAGE_NAME = '未命名页面';
-const jsonFileTemp = new Map<string, JsonFile>(); // 创建本地JsonFile缓存
+const EMPTY_LAYOUT_NAME = '未命名布局';
 let projectData: Project | undefined;
+let currentPage: Page | Layout | undefined;
+
+const DEV_PROJECT_ID: string = 'dev';
 
 export const project = {
+  // 查看已加载的项目
+  getProject(): Project | undefined {
+    return projectData;
+  },
+  // 从远程取回一个项目
+  async fetchProject(projectId: string = '') {
+    if (__DEV__) {
+      projectId = DEV_PROJECT_ID;
+      const projectStr = localStorage.getItem(projectId);
+      projectData = projectStr ? JSON.parse(projectStr) : this.createProject('新项目');
+    }
+
+    // 从服务器获取
+    // ...
+
+    return projectData;
+  },
+  // 保存项目
+  async saveProject() {
+    if (!projectData) {
+      throw Error('项目不存在');
+    }
+    localStorage.setItem(projectData?.projectId, JSON.stringify(projectData));
+  },
   // 初始化一个空项目
   createProject(projectName: string) {
-    projectData = {
-      projectId: getUuid(),
+    let projectId: string = getUuid();
+    if (__DEV__) {
+      projectId = DEV_PROJECT_ID;
+    }
+    return {
+      projectId,
       projectName,
       layouts: [],
       pages: [this.createPage('/', '首页')],
     };
   },
-
+  /****************** 当前项操作（页面/布局） ******************/
+  // 设置当前使用（Page或Layout）
+  setCurrent(page: Page | Layout | undefined) {
+    currentPage = page;
+  },
+  // 获取当前使用（Page或Layout）
+  getCurrent(): Page | Layout | undefined {
+    return currentPage;
+  },
+  // 判断是否是Current
+  isCurrent(item?: Page | Layout): boolean {
+    if (!item || !currentPage) return false;
+    return (
+      (item as Page).pageId === (currentPage as Page).pageId ||
+      (item as Layout).layoutId === (currentPage as Layout).layoutId
+    );
+  },
+  // 清空当前项目内容
+  clearCurrentContent() {
+    if (currentPage) {
+      if ((currentPage as Page).pageId) {
+        currentPage.json = createPage();
+        this.updatePage(currentPage as Page);
+      }
+    }
+  },
+  // 清空当前页面
   /****************** 布局操作 ******************/
   // 获取当前所有布局
-  getAllLayouts(): Layout[] {
+  getAllLayout(): Layout[] {
     return projectData?.layouts || [];
+  },
+  // 获取一个布局
+  getLayout(layoutId?: string): Layout | undefined {
+    return projectData?.layouts?.find((layout) => layout.layoutId === layoutId);
+  },
+  // 判断是否是布局
+  isLayout(item?: Layout | Page) {
+    return !!(item as Layout)?.layoutId;
+  },
+  // 创建一个布局
+  createLayout(layoutName?: string): Layout {
+    return {
+      layoutName: layoutName || EMPTY_LAYOUT_NAME,
+      layoutId: getUuid(),
+      json: createPage(),
+    };
+  },
+  // 编辑布局
+  async updateLayout(layout: Layout) {
+    const target = this.getAllLayout().find((x) => x.layoutId === layout?.layoutId);
+    if (target) {
+      Object.assign(target, layout);
+    }
+  },
+  // 新增布局
+  async addLayout(layout: Layout) {
+    projectData?.layouts.push(layout);
+  },
+  // 删除布局
+  async deleteLayout(layoutId: string) {
+    if (!projectData) {
+      throw new Error('项目不存在');
+    }
+    if ((this.getCurrent() as Layout)?.layoutId === layoutId) {
+      this.setCurrent(undefined);
+    }
+    projectData.layouts = projectData.layouts.filter((x) => x.layoutId !== layoutId);
+    engine.event.notify(EVENT.projectChange, projectData);
   },
 
   /****************** 页面操作 ******************/
   // 获取当前所有页面
-  getAllPages(): Page[] {
+  getAllPage(): Page[] {
     return projectData?.pages || [];
+  },
+  // 判断是否是页面
+  isPage(item?: Layout | Page) {
+    return !!(item as Page)?.pageId;
   },
   // 创建一个新页面
   createPage(route: string, pageName?: string): Page {
-    const jsonFile = this.createJsonFile();
     return {
       route,
       pageName: pageName || EMPTY_PAGE_NAME,
       pageId: getUuid(),
-      jsonId: jsonFile.jsonId,
+      json: createPage(),
     };
   },
-
-  /****************** JsonFile操作 ******************/
-  // 创建一个新JsonFile
-  createJsonFile(): JsonFile {
-    const jsonFile: JsonFile = {
-      jsonId: getUuid(),
-      jsonData: createPage(),
-    };
-    jsonFileTemp.set(jsonFile.jsonId, jsonFile);
-    return jsonFile;
-  },
-  async getJsonFile(jsonId?: string): Promise<JsonFile | undefined> {
-    if (!jsonId) return undefined;
-    const tempFile = jsonFileTemp.get(jsonId);
-    if (tempFile) {
-      return tempFile;
+  // 编辑页面
+  async updatePage(page: Page) {
+    const target = this.getAllPage().find((x) => x.pageId === page?.pageId);
+    if (target) {
+      Object.assign(target, page);
     }
-
-    // 从远程服务器下载jsonFile
-    // ...
+  },
+  // 新增页面
+  async addPage(page: Page) {
+    projectData?.pages.push(page);
+  },
+  // 删除页面
+  async deletePage(pageId: string) {
+    if (!projectData) {
+      throw new Error('项目不存在');
+    }
+    if ((this.getCurrent() as Page)?.pageId === pageId) {
+      this.setCurrent(undefined);
+    }
+    projectData.pages = projectData.pages.filter((x) => x.pageId !== pageId);
+    engine.event.notify(EVENT.projectChange, projectData);
   },
 
-  /****************** 服务器远程操作 ******************/
-  // // 取回服务器项目文件
-  // getRemote() {
-  //
-  // },
-  // // 保存到服务器
-  // saveRemote () {
-  //
-  // },
-  // // 从服务删除
-  // deleteRemote () {
-  //
-  // }
+  /****************** 配置项操作 （缓存在本地） ******************/
+  saveExpandedKeys(expandedKeys: unknown[]) {
+    if (projectData) {
+      localStorage.setItem(DEV_PROJECT_ID + '_expandedKeys', JSON.stringify(expandedKeys));
+    }
+  },
+  getExpandedKeys(): string[] | undefined {
+    if (projectData) {
+      const res = localStorage.getItem(DEV_PROJECT_ID + '_expandedKeys');
+      return res ? JSON.parse(res) : undefined;
+    }
+    return;
+  },
 };

@@ -11,7 +11,7 @@ import { api } from './api';
 import { event } from './event';
 import { project } from './project';
 
-import { instance, component, jsonNode, panel, runtime } from './data';
+import { instance, component, jsonNode, panel, runtime, wrapBox } from './data';
 
 export { COMPONENT_KEY } from './api/component';
 export * from './enum';
@@ -41,5 +41,7 @@ export const engine = {
   // 样式处理器（待重写）
   styleProcessor,
   // 项目管理
-  project
+  project,
+  // 鼠标经过、聚焦盒子实例
+  wrapBox
 };

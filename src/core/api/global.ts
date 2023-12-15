@@ -1,14 +1,20 @@
 import { engine } from '..';
+import { message } from 'antd';
 
 export const global = {
   clear() {
-    // console.log('清空');
+    // 清空保存数据
+    engine.project.clearCurrentContent();
+    // 清空编辑器
+    const current = engine.project.getCurrent();
+    current && engine.api.project.setPage(current.json);
   },
   save() {
-    // console.log('保存');
-    console.log(engine.jsonNode.getPage(), engine.instance.getAll());
+    engine.project.saveProject().then(() => {
+      message.success('保存成功');
+    });
   },
-  preview () {
+  preview() {
     // 预览
-  }
+  },
 };

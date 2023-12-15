@@ -1,23 +1,3 @@
-import { FileFilled, FolderOpenFilled, FolderOutlined } from '@ant-design/icons';
-import { message, Tree, TreeDataNode } from 'antd';
-import { useState } from 'react';
-import { useEffectOnce } from 'react-use';
-import { engine, Layout, Page } from '@/core';
-
-type TreeNode = TreeDataNode & {
-  _isPage?: boolean; // 是否是页面
-  _isLayout?: boolean; // 是否是布局
-  _data?: Page | Layout; // 携带数据
-};
-
-function SwitchIcon(props: { expanded?: boolean; color?: string }) {
-  return props?.expanded ? (
-    <FolderOpenFilled style={{ fontSize: '1.125em', color: props?.color }} />
-  ) : (
-    <FolderOutlined style={{ fontSize: '1.125em', color: props?.color }} />
-  );
-}
-
 /**
  * Project 面板
  *
@@ -25,87 +5,260 @@ function SwitchIcon(props: { expanded?: boolean; color?: string }) {
  * By TangJiaHui
  * Description： 负责管理Project的所有页面与布局
  */
+import { DeleteOutlined, FileFilled, PlusOutlined, SettingOutlined } from '@ant-design/icons';
+import { Tree, TreeDataNode } from 'antd';
+import { useState } from 'react';
+import { useEffectOnce } from 'react-use';
+import {
+  engine,
+  EVENT,
+  JsonNode,
+  Layout,
+  Page,
+  useEditorMount,
+  useListenProjectChange,
+} from '@/core';
+import RenderLine from './components/RenderLine';
+import SwitchIcon from './components/SwitchIcon';
+import AddPageDialog from './components/AddPageDialog';
+import AddLayoutDialog from './components/AddLayoutDialog';
+import Dynamic from '@/common/Dynamic';
+
+type TreeNode = TreeDataNode & {
+  _isPage?: boolean; // 是否是页面
+  _isLayout?: boolean; // 是否是布局
+  _data?: Page | Layout; // 携带数据
+};
 export default function () {
   const [expandedKeys, setExpandedKeys] = useState<any[]>([]);
   const [selectedKeys, setSelectedKeys] = useState<any[]>([]);
   const [treeData, setTreeData] = useState<TreeNode[]>([]);
 
+  const [currentItem, setCurrentItem] = useState<Page | Layout>();
+  const [addLayoutVisible, setAddLayoutVisible] = useState(false);
+  const [addPageVisible, setAddPageVisible] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+
+  function handleAddLayout() {
+    setIsEdit(false);
+    setCurrentItem(undefined);
+    setAddLayoutVisible(true);
+  }
+
+  function handleEditLayout(layout: Layout) {
+    setIsEdit(true);
+    setCurrentItem(layout);
+    setAddLayoutVisible(true);
+  }
+
+  function handleDeleteLayout(layout: Layout) {
+    engine.project.deleteLayout(layout.layoutId);
+  }
+
+  function handleAddPage() {
+    setIsEdit(false);
+    setCurrentItem(undefined);
+    setAddPageVisible(true);
+  }
+
+  function handleEditPage(page: Page) {
+    setIsEdit(true);
+    setCurrentItem(page);
+    setAddPageVisible(true);
+  }
+
+  function handleDeletePage(page: Page) {
+    engine.project.deletePage(page.pageId);
+  }
+
+  // 显示/隐藏页面的layout
+  function handleShowLayoutWrapPage(page: Page) {
+    page.bindLayoutVisible = !page?.bindLayoutVisible;
+    engine.project.updatePage(page);
+    reGenTree();
+
+    // 当前页面变更布局
+    if (engine.project.isCurrent(page)) {
+      engine.wrapBox.clear();
+      engine.event.notify(EVENT.currentLayoutVisible, page.bindLayoutVisible);
+    }
+  }
+
   function getTreeData(pages: Page[], layouts: Layout[]): TreeNode[] {
     return [
       {
         key: 'layout',
-        title: '布局',
+        title: (
+          <RenderLine
+            label={'布局'}
+            options={[
+              {
+                label: <PlusOutlined />,
+                value: 'add',
+              },
+            ]}
+            onOperate={(value) => {
+              value === 'add' && handleAddLayout();
+            }}
+          />
+        ),
         selectable: false,
         switcherIcon: ({ expanded }) => <SwitchIcon expanded={expanded} color={'#f39a88'} />,
-        children: layouts.map((layout: Layout) => {
-          return {
-            _data: layout,
-            _isLayout: true,
-            key: layout.layoutId,
-            title: layout.layoutName,
-            switcherIcon: <FileFilled style={{ color: '#f39a88' }} />,
-          };
-        }),
+        children: layouts?.length
+          ? layouts.map((layout: Layout) => {
+              return {
+                _data: layout,
+                _isLayout: true,
+                key: layout.layoutId,
+                title: (
+                  <RenderLine
+                    label={layout.layoutName}
+                    options={[
+                      {
+                        label: (
+                          <Dynamic type={'scale'}>
+                            <DeleteOutlined />
+                          </Dynamic>
+                        ),
+                        value: 'del',
+                      },
+                      {
+                        label: (
+                          <Dynamic type={'rotate'}>
+                            <SettingOutlined />
+                          </Dynamic>
+                        ),
+                        value: 'edit',
+                      },
+                    ]}
+                    onOperate={(value) => {
+                      value === 'edit' && handleEditLayout(layout);
+                      value === 'del' && handleDeleteLayout(layout);
+                    }}
+                  />
+                ),
+                switcherIcon: <FileFilled style={{ color: '#f39a88' }} />,
+              };
+            })
+          : [
+              {
+                key: 'no_layout',
+                selectable: false,
+                title: <span style={{ color: '#b7b7b7' }}>暂无数据</span>,
+              },
+            ],
       },
       {
         key: 'page',
-        title: '页面',
+        title: (
+          <RenderLine
+            label={'页面'}
+            options={[{ label: <PlusOutlined />, value: 'add' }]}
+            onOperate={(value) => {
+              value === 'add' && handleAddPage();
+            }}
+          />
+        ),
         selectable: false,
         switcherIcon: ({ expanded }) => <SwitchIcon expanded={expanded} color={'#4aafee'} />,
-        children: pages.map((page: Page) => {
-          return {
-            _data: page,
-            _isPage: true,
-            key: page.pageId,
-            title: page.pageName,
-            switcherIcon: <FileFilled style={{ color: '#4aafee' }} />,
-          };
-        }),
+        children: pages?.length
+          ? pages.map((page: Page) => {
+              return {
+                _data: page,
+                _isPage: true,
+                key: page.pageId,
+                title: (
+                  <RenderLine
+                    label={page.pageName}
+                    options={[
+                      {
+                        custom: true,
+                        label: (
+                          <Dynamic type={'none'} style={{ fontSize: 16 }}>
+                            {page?.bindLayoutVisible ? (
+                              <a>L</a>
+                            ) : (
+                              <span style={{ color: '#9d9d9d' }}>L</span>
+                            )}
+                          </Dynamic>
+                        ),
+                        value: 'show-layout',
+                      },
+                      {
+                        label: (
+                          <Dynamic type={'scale'}>
+                            <DeleteOutlined />
+                          </Dynamic>
+                        ),
+                        value: 'del',
+                      },
+                      {
+                        label: (
+                          <Dynamic type={'rotate'}>
+                            <SettingOutlined />
+                          </Dynamic>
+                        ),
+                        value: 'edit',
+                      },
+                    ]}
+                    onOperate={(value) => {
+                      value === 'edit' && handleEditPage(page);
+                      value === 'del' && handleDeletePage(page);
+                      value === 'show-layout' && handleShowLayoutWrapPage(page);
+                    }}
+                  />
+                ),
+                switcherIcon: <FileFilled style={{ color: '#4aafee' }} />,
+              };
+            })
+          : [
+              {
+                key: 'no_page',
+                selectable: false,
+                title: <span style={{ color: '#b7b7b7' }}>暂无数据</span>,
+              },
+            ],
       },
     ];
   }
 
-  function handleSelectNode(treeNode: TreeNode) {
-    if (treeNode?._isPage) {
-      handleSelectPage(treeNode?._data as Page);
-    }
-    if (treeNode?._isLayout) {
-      handleSelectLayout(treeNode?._data as Layout);
-    }
-  }
-
-  // 选中一个页面
-  function handleSelectPage(page: Page) {
-    notifyEditorSetPage(page.jsonId);
-  }
-
-  // 选中一个布局
-  function handleSelectLayout(layout: Layout) {
-    notifyEditorSetPage(layout.jsonId);
-  }
-
-  // 发布编辑器页面变更通知
-  function notifyEditorSetPage(jsonId: string) {
-    engine.project.getJsonFile(jsonId).then((jsonFile) => {
-      if (!jsonFile?.jsonData) {
-        message.error('页面jsonData丢失');
-        return;
+  function handleSelect(page?: Page | Layout, isOnlyKeys?: boolean) {
+    if (!isOnlyKeys) {
+      engine.project.setCurrent(page);
+      engine.api.project.setPage(page?.json);
+      if ((page as Page)?.pageId) {
+        engine.event.notify(EVENT.currentLayoutVisible, (page as Page).bindLayoutVisible);
       }
-      // 通知编辑器区域更新
-      engine.api.project.setPage(jsonFile?.jsonData);
-    });
+    }
+    setSelectedKeys([(page as Layout)?.layoutId || (page as Page)?.pageId].filter(Boolean));
   }
+
+  // 刷新树
+  function reGenTree() {
+    const pages: Page[] = engine.project.getAllPage();
+    const layouts: Layout[] = engine.project.getAllLayout();
+    setTreeData(getTreeData(pages, layouts));
+    // 新增后默认选中一项
+    if (!engine.project.getCurrent()) {
+      handleSelect(pages?.[0] || layouts?.[0]);
+    } else {
+      handleSelect(engine.project.getCurrent(), true);
+    }
+  }
+
+  useListenProjectChange(() => {
+    reGenTree();
+  });
+
+  // 监听编辑器挂载
+  useEditorMount(() => {
+    const jsonNode: JsonNode[] = engine.project.getCurrent()?.json || [];
+    engine.api.project.setPage(jsonNode);
+  });
 
   useEffectOnce(() => {
-    const pages: Page[] = engine.project.getAllPages();
-    const layouts: Layout[] = engine.project.getAllLayouts();
-    setExpandedKeys([pages?.length && 'page', layouts?.length && 'layout'].filter(Boolean));
-    setTreeData(getTreeData(pages, layouts));
-
-    if (pages?.length) {
-      setSelectedKeys([pages?.[0]?.pageId]);
-      handleSelectPage(pages?.[0]);
-    }
+    reGenTree();
+    setExpandedKeys(engine.project.getExpandedKeys() || ['page']);
   });
 
   return (
@@ -118,13 +271,47 @@ export default function () {
         style={{ fontSize: 14 }}
         expandedKeys={expandedKeys}
         selectedKeys={selectedKeys}
-        onExpand={setExpandedKeys}
+        onExpand={(expandedKeys) => {
+          engine.project.saveExpandedKeys(expandedKeys);
+          setExpandedKeys(expandedKeys);
+        }}
         onSelect={(selectedKeys, info) => {
+          const node = info?.node;
           if (!selectedKeys?.length) {
             return;
           }
-          setSelectedKeys(selectedKeys);
-          handleSelectNode(info?.node);
+
+          handleSelect(node?._data as Page | Layout);
+        }}
+      />
+
+      {/* 新增/编辑页面对话框 */}
+      <AddPageDialog
+        visible={addPageVisible}
+        isEdit={isEdit}
+        data={currentItem as Page}
+        onCancel={() => setAddPageVisible(false)}
+        onOk={() => {
+          setAddPageVisible(false);
+          reGenTree();
+          if (!expandedKeys.includes('page')) {
+            setExpandedKeys(['page', ...expandedKeys]);
+          }
+        }}
+      />
+
+      {/* 新增/编辑布局对话框 */}
+      <AddLayoutDialog
+        visible={addLayoutVisible}
+        isEdit={isEdit}
+        data={currentItem as Layout}
+        onCancel={() => setAddLayoutVisible(false)}
+        onOk={() => {
+          setAddLayoutVisible(false);
+          reGenTree();
+          if (!expandedKeys.includes('layout')) {
+            setExpandedKeys(['layout', ...expandedKeys]);
+          }
         }}
       />
     </div>
