@@ -7,6 +7,7 @@
 
 const data = {
   maxZIndex: 1,
+  isDev: true,
 };
 
 export const runtime = {
@@ -18,4 +19,12 @@ export const runtime = {
       data.maxZIndex = zIndex;
     }
   },
+
+  // 是否开发环境
+  isDev() {
+    return data.isDev;
+  },
+  changePreview() {
+    data.isDev = false;
+  }
 };

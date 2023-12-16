@@ -22,6 +22,8 @@ export default function () {
     setLayoutVisible(!!(engine.project.getCurrent() as Page)?.bindLayoutVisible);
     setJsonNodes(page);
     setCurrent(engine.project.getCurrent());
+    // 发布全局通知：选中JsonNode
+    engine.api.editor.selectJsonNode(undefined);
   });
 
   useEffect(() => {

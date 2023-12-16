@@ -21,8 +21,9 @@ export default function () {
 
   useListenSelectJsonNode((jsonNode: JsonNode) => {
     setJsonNode(jsonNode);
-    setComponent(engine.component.get(jsonNode.cId));
-    setInstance(engine.instance.get(jsonNode.id));
+    setComponent(engine.component.get(jsonNode?.cId));
+    setInstance(engine.instance.get(jsonNode?.id));
+    setActiveKey('1');
   });
 
   return jsonNode ? (
@@ -57,7 +58,16 @@ export default function () {
             }}
           />
         )}
-        {activeKey === '3' && <EventPanel />}
+        {activeKey === '3' && (
+          <EventPanel
+            jsonNode={jsonNode}
+            onChangeEvents={(events) => {
+              jsonNode.events = events;
+              instance?.scopeUpdateJsonNode?.(jsonNode);
+            }}
+            component={component}
+          />
+        )}
       </div>
     </div>
   ) : (

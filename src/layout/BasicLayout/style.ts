@@ -35,6 +35,6 @@ export const bodyMidClass = css({
 });
 
 export const bodyRightClass = css({
-  flex: '0 0 300px',
+  flex: '0 0 350px',
   background: 'white',
 });

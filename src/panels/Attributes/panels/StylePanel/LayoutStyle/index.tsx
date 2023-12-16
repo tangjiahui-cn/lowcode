@@ -1,7 +1,7 @@
 /**
  * 布局样式
  */
-import { InputNumber, Select, Space } from 'antd';
+import { Input, InputNumber, Select, Space } from 'antd';
 import { css } from 'class-css';
 import { useEffect, useState } from 'react';
 import { parseCssValue, StyleProcessLayout, JsonNode } from '@/core';
@@ -118,6 +118,22 @@ export default function LayoutStyle(props: IProps) {
             emitChange({
               ...value,
               zIndex,
+            })
+          }
+        />
+      </Space>
+      <Space>
+        <div className={labelStyle}>flex</div>
+        <Input
+          placeholder={'请输入'}
+          maxLength={255}
+          allowClear
+          style={{ width: 155 }}
+          value={value?.flex}
+          onChange={(e) =>
+            emitChange({
+              ...value,
+              flex: e.target.value,
             })
           }
         />

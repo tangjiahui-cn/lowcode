@@ -24,10 +24,16 @@ export type TemplateProps<Attributes, E = any> = {
   // 原生事件
   events?: DOMAttributes<E>;
   // 子元素
-  children?: React.ReactNode | React.ReactNode[];
+  children?: React.ReactNode[];
 
   // 预处理样式
   styleData?: StyleProcessorData;
+};
+
+// 组件定义事件类型
+export type ComEvent<T = string> = {
+  eventType: T; // 事件类型
+  eventName: string; // 事件名称（用于事件面板下拉展示）
 };
 
 // 组件类型
@@ -44,6 +50,10 @@ export type Component<Attributes = any> = {
 
   // 默认值
   defaultAttributes?: Attributes;
+
+  /********** 事件系统 *********/
+  triggerEvents?: ComEvent[]; // 组件触发事件
+  exposeEvents?: ComEvent[]; // 组件暴露事件
 
   // 模板
   template?: React.FunctionComponent<TemplateProps<any>>; // 组件模板

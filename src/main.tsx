@@ -6,10 +6,11 @@ import Header from './panels/Header';
 import Components from './panels/Components';
 import Attributes from './panels/Attributes';
 import Project from './panels/Project';
-import { registerComponents } from '@/components';
 import { engine } from '@/core';
 import { useEffect } from 'react';
-
+import { registerComponents } from '@/components';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import Preview from './page-preview';
 /**
  * 支持功能：
  * - 项目管理器（支持路由、布局管理）
@@ -91,4 +92,14 @@ engine.project.fetchProject();
 //   // engine.api.project.setPage(createPage());
 // }, 300);
 
-ReactDOM.createRoot(document.getElementById('root')!).render(<App />);
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <App />,
+  },
+  {
+    path: 'preview',
+    element: <Preview />
+  },
+]);
+ReactDOM.createRoot(document.getElementById('root')!).render(<RouterProvider router={router} />);

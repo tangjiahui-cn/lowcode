@@ -16,7 +16,7 @@ export const editor = {
     engine.event.notify(EVENT.instanceScroll);
   },
   // 选中jsonNode
-  selectJsonNode(jsonNode: JsonNode) {
+  selectJsonNode(jsonNode?: JsonNode) {
     engine.event.notify(EVENT.selectJsonNode, jsonNode);
   },
 };

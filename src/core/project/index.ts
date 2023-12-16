@@ -71,9 +71,12 @@ export const project = {
   // 清空当前项目内容
   clearCurrentContent() {
     if (currentPage) {
-      if ((currentPage as Page).pageId) {
-        currentPage.json = createPage();
+      currentPage.json = createPage();
+      if (this.isPage(currentPage)) {
         this.updatePage(currentPage as Page);
+      }
+      if (this.isLayout(currentPage)) {
+        this.updateLayout(currentPage as Layout);
       }
     }
   },
@@ -126,6 +129,22 @@ export const project = {
   // 获取当前所有页面
   getAllPage(): Page[] {
     return projectData?.pages || [];
+  },
+  // 通过路由获取页面
+  async getPageByRoute(route: string): Promise<Page | undefined> {
+    return projectData?.pages?.find((x) => x.route === route);
+  },
+  // 通过pageId获取页面
+  async getPageByPageId(pageId: string): Promise<Page | undefined> {
+    return projectData?.pages?.find((x) => x.pageId === pageId);
+  },
+  // 通过pageId批量获取页面
+  async getPagesByPageIds(pageIds: string[]): Promise<(Page | undefined)[]> {
+    return Promise.all(
+      pageIds.map((pageId) => {
+        return this.getPageByPageId(pageId);
+      }),
+    );
   },
   // 判断是否是页面
   isPage(item?: Layout | Page) {

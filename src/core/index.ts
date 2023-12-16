@@ -11,7 +11,7 @@ import { api } from './api';
 import { event } from './event';
 import { project } from './project';
 
-import { instance, component, jsonNode, panel, runtime, wrapBox } from './data';
+import { instance, component, jsonNode, panel, runtime, wrapBox, variables, fetch } from './data';
 
 export { COMPONENT_KEY } from './api/component';
 export * from './enum';
@@ -43,5 +43,9 @@ export const engine = {
   // 项目管理
   project,
   // 鼠标经过、聚焦盒子实例
-  wrapBox
+  wrapBox,
+  // 全局变量
+  variables,
+  // 请求接口方法
+  fetch,
 };

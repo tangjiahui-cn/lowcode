@@ -7,3 +7,5 @@ export * from './useComponent';
 export * from './useInstance';
 export * from './useEditorMount';
 export * from './useListenProjectChange';
+export * from './useExpose';
+export * from './useRegisterEvents';

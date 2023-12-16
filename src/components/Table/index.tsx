@@ -1,6 +1,6 @@
-import { Component, cType, TemplateProps } from '@/core';
-import { Table } from 'antd';
-import { useEffect, useRef } from 'react';
+import { Component, cType } from '@/core';
+import Attributes from './Attributes';
+import Template from './Template';
 
 export default {
   cId: 'table',
@@ -8,23 +8,6 @@ export default {
   cName: '列表',
   icon: undefined,
   template: Template,
-  attributesTemplate: Attributes,
+  attributeTemplate: Attributes,
+  exposeEvents: [{ eventName: '查询列表', eventType: 'query' }],
 } as Component;
-
-function Template(props: TemplateProps<any>) {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    props?.getDomFn?.(() => ref.current);
-  }, []);
-
-  return (
-    <div ref={ref} {...(props?.events as any)}>
-      <Table columns={[{ title: '姓名' }, { title: '性别' }, { title: '年龄' }]} />
-    </div>
-  );
-}
-
-function Attributes() {
-  return <div>属性设置</div>;
-}

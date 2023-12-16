@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 dependencies:
   '@ant-design/icons':
     specifier: ^5.2.6
@@ -19,7 +15,7 @@ dependencies:
     version: 1.6.2
   class-css:
     specifier: ^1.0.24
-    version: 1.0.24(@types/node@18.18.8)(typescript@5.2.2)
+    version: 1.0.24(typescript@5.2.2)
   classnames:
     specifier: ^2.3.2
     version: 2.3.2
@@ -35,6 +31,9 @@ dependencies:
   react-dom:
     specifier: ^18.2.0
     version: 18.2.0(react@18.2.0)
+  react-router-dom:
+    specifier: ^6.21.0
+    version: 6.21.0(react-dom@18.2.0)(react@18.2.0)
   react-use:
     specifier: ^17.4.0
     version: 17.4.0(react-dom@18.2.0)(react@18.2.0)
@@ -123,7 +122,7 @@ devDependencies:
     version: 5.2.2
   vite:
     specifier: ^4.4.5
-    version: 4.5.0(@types/node@18.18.8)
+    version: 4.5.0
 
 packages:
 
@@ -962,6 +961,11 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
+  /@remix-run/router@1.14.0:
+    resolution: {integrity: sha512-WOHih+ClN7N8oHk9N4JUiMxQJmRVaOxcg8w7F/oHUXzJt920ekASLI/7cYX8XkntDWRhLZtsk6LbGrkgOAvi5A==}
+    engines: {node: '>=14.0.0'}
+    dev: false
+
   /@sphinxxxx/color-conversion@2.2.2:
     resolution: {integrity: sha512-XExJS3cLqgrmNBIP3bBw6+1oQ1ksGjFh0+oClDKFYpCCqx/hlqwWO5KO/S63fzUo67SxI9dMrF0y5T/Ey7h8Zw==}
     dev: false
@@ -1051,6 +1055,7 @@ packages:
     resolution: {integrity: sha512-OLGBaaK5V3VRBS1bAkMVP2/W9B+H8meUfl866OrMNQqt7wDgdpWPp5o6gmIc9pB+lIQHSq4ZL8ypeH1vPxcPaQ==}
     dependencies:
       undici-types: 5.26.5
+    dev: true
 
   /@types/normalize-package-data@2.4.3:
     resolution: {integrity: sha512-ehPtgRgaULsFG8x0NeYJvmyH1hmlfsNLujHe9dQEia/7MAJYdzMSi19JtchUHjmBA6XC/75dK55mzZH+RyieSg==}
@@ -1229,7 +1234,7 @@ packages:
       '@babel/plugin-transform-react-jsx-source': 7.22.5(@babel/core@7.23.2)
       '@types/babel__core': 7.20.3
       react-refresh: 0.14.0
-      vite: 4.5.0(@types/node@18.18.8)
+      vite: 4.5.0
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -1664,12 +1669,12 @@ packages:
     resolution: {integrity: sha512-yWOKkZNm6R7/Ab8+IuKEDlRLfKCo17NgPwG1laadJL1H7UtREucfdu9xwtMbBWd8P9sLBl6bJB87uJiI2plhJg==}
     dev: false
 
-  /class-css-stringify@1.0.24(@types/node@18.18.8)(typescript@5.2.2):
+  /class-css-stringify@1.0.24(typescript@5.2.2):
     resolution: {integrity: sha512-80rl3gid4hX7nd2UeGLbOQN7J/OMkyvKKCeh3khtRcHZZ9QQnfyNsC3W+bgmgVp5A9nDEk2ghrsXv79FWB4Ujg==}
     dependencies:
       '@types/react': 18.2.33
-      class-css: 1.0.24(@types/node@18.18.8)(typescript@5.2.2)
-      ts-node: 10.9.1(@types/node@18.18.8)(typescript@5.2.2)
+      class-css: 1.0.24(typescript@5.2.2)
+      ts-node: 10.9.1(typescript@5.2.2)
     transitivePeerDependencies:
       - '@swc/core'
       - '@swc/wasm'
@@ -1677,12 +1682,12 @@ packages:
       - typescript
     dev: false
 
-  /class-css@1.0.24(@types/node@18.18.8)(typescript@5.2.2):
+  /class-css@1.0.24(typescript@5.2.2):
     resolution: {integrity: sha512-yHuQRg8fKOcKk2CQSIXHwp95KB1ph18t2RRLyzmuzhXiqMkaZx/neatSNTACnKh+Ad1VxaA23kQ94bGJpB04Zw==}
     dependencies:
       class-css-cache: 1.0.24
       class-css-hash: 1.0.16
-      class-css-stringify: 1.0.24(@types/node@18.18.8)(typescript@5.2.2)
+      class-css-stringify: 1.0.24(typescript@5.2.2)
     transitivePeerDependencies:
       - '@swc/core'
       - '@swc/wasm'
@@ -4785,6 +4790,29 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
+  /react-router-dom@6.21.0(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-1dUdVj3cwc1npzJaf23gulB562ESNvxf7E4x8upNJycqyUm5BRRZ6dd3LrlzhtLaMrwOCO8R0zoiYxdaJx4LlQ==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      react: '>=16.8'
+      react-dom: '>=16.8'
+    dependencies:
+      '@remix-run/router': 1.14.0
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      react-router: 6.21.0(react@18.2.0)
+    dev: false
+
+  /react-router@6.21.0(react@18.2.0):
+    resolution: {integrity: sha512-hGZ0HXbwz3zw52pLZV3j3+ec+m/PQ9cTpBvqjFQmy2XVUWGn5MD+31oXHb6dVTxYzmAeaiUBYjkoNz66n3RGCg==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      react: '>=16.8'
+    dependencies:
+      '@remix-run/router': 1.14.0
+      react: 18.2.0
+    dev: false
+
   /react-universal-interface@0.6.2(react@18.2.0)(tslib@2.6.2):
     resolution: {integrity: sha512-dg8yXdcQmvgR13RIlZbTRQOoUrDciFVoSBZILwjE2LFISxZZ8loVJKAkuzswl5js8BHda79bIb2b84ehU8IjXw==}
     peerDependencies:
@@ -5467,7 +5495,7 @@ packages:
     resolution: {integrity: sha512-Z86EW+fFFh/IFB1fqQ3/+7Zpf9t2ebOAxNI/V6Wo7r5gqiqtxmgTlQ1qbqQcjLKYeSHPTsEmvlJUDg/EuL0uHQ==}
     dev: false
 
-  /ts-node@10.9.1(@types/node@18.18.8)(typescript@5.2.2):
+  /ts-node@10.9.1(typescript@5.2.2):
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
     hasBin: true
     peerDependencies:
@@ -5486,7 +5514,6 @@ packages:
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
-      '@types/node': 18.18.8
       acorn: 8.11.2
       acorn-walk: 8.3.0
       arg: 4.1.3
@@ -5610,6 +5637,7 @@ packages:
 
   /undici-types@5.26.5:
     resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
+    dev: true
 
   /universalify@2.0.1:
     resolution: {integrity: sha512-gptHNQghINnc/vTGIk0SOFGFNXw7JVrlRUtConJRlvaw6DuX0wO5Jeko9sWrMBhh+PsYAZ7oXAiOnf/UKogyiw==}
@@ -5663,7 +5691,7 @@ packages:
       '@sphinxxxx/color-conversion': 2.2.2
     dev: false
 
-  /vite@4.5.0(@types/node@18.18.8):
+  /vite@4.5.0:
     resolution: {integrity: sha512-ulr8rNLA6rkyFAlVWw2q5YJ91v098AFQ2R0PRFwPzREXOUJQPtFUG0t+/ZikhaOCDqFoDhN6/v8Sq0o4araFAw==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -5691,7 +5719,6 @@ packages:
       terser:
         optional: true
     dependencies:
-      '@types/node': 18.18.8
       esbuild: 0.18.20
       postcss: 8.4.31
       rollup: 3.29.4
@@ -5863,3 +5890,7 @@ packages:
     resolution: {integrity: sha512-9bnSc/HEW2uRy67wc+T8UwauLuPJVn28jb+GtJY16iiKWyvmYJRXVT4UamsAEGQfPohgr2q4Tq0sQbQlxTfi1g==}
     engines: {node: '>=12.20'}
     dev: true
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false

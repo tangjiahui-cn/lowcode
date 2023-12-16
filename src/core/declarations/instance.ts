@@ -8,6 +8,7 @@ import { JsonNode } from '..';
 
 export type Instance = {
   id: string; // 实例id
+  cName?: string; // 组件模板名称
   parentId?: string; // 父jsonNode的id
   jsonNode: JsonNode; // 当前实例对应jsonNode
   handleSelect: () => void; // 选中元素

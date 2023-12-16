@@ -14,6 +14,7 @@ import {
   nextTick,
   useComponent,
   useListenState,
+  useRegisterEvents,
   useRegisterInstance,
   useRegisterJsonNode,
   useWrapBox,
@@ -94,11 +95,15 @@ export default function RenderJsonNode(props: RenderJsonNodeProps) {
   // 注册JsonNode
   useRegisterJsonNode(props.jsonNode);
 
+  // 注册绑定事件
+  useRegisterEvents(props?.jsonNode);
+
   // 注册实例
   const instanceRef = useRegisterInstance(() => {
     const id = props?.jsonNode?.id;
     return {
       id,
+      cName: component?.cName,
       jsonNode: props?.jsonNode,
       parentId: props?.parentId,
       handleSelect() {
@@ -228,83 +233,85 @@ export default function RenderJsonNode(props: RenderJsonNodeProps) {
         id={jsonNode?.id}
         styleData={jsonNode?.styleData}
         getDomFn={(fn) => (getDomRef.current = fn)}
-        events={{
-          onScroll() {
-            engine.api.editor.instanceScroll();
-          },
-          onPointerEnter() {
-            // 上一个栈顶元素取消经过
-            engine.instance.getHoverStackTop()?.handleUnHover?.();
-            // 新元素推入栈并经过
-            engine.instance.pushHoverStack(instanceRef.current);
-            // 栈顶元素经过
-            instanceRef.current?.handleHover?.();
-          },
-          onPointerLeave() {
-            // 推出栈顶元素并取消经过
-            engine.instance.popHoverStack()?.handleUnHover?.();
-            // 新的栈顶元素经过
-            engine.instance.getHoverStackTop()?.handleHover?.();
-          },
-          onPointerDown(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            instanceRef.current?.handleSelect?.();
-          },
-          onDragOver(e) {
-            if (!isCanDrop()) {
-              return;
-            }
-            e.preventDefault();
-            e.stopPropagation();
-          },
-          onDrop(e) {
-            if (!isCanDrop()) {
-              return;
-            }
+        events={
+          engine.runtime.isDev()
+            ? {
+                onScroll() {
+                  engine.api.editor.instanceScroll();
+                },
+                onPointerEnter() {
+                  // 上一个栈顶元素取消经过
+                  engine.instance.getHoverStackTop()?.handleUnHover?.();
+                  // 新元素推入栈并经过
+                  engine.instance.pushHoverStack(instanceRef.current);
+                  // 栈顶元素经过
+                  instanceRef.current?.handleHover?.();
+                },
+                onPointerLeave() {
+                  // 推出栈顶元素并取消经过
+                  engine.instance.popHoverStack()?.handleUnHover?.();
+                  // 新的栈顶元素经过
+                  engine.instance.getHoverStackTop()?.handleHover?.();
+                },
+                onPointerDown(e) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  instanceRef.current?.handleSelect?.();
+                },
+                onDragOver(e) {
+                  if (!isCanDrop()) {
+                    return;
+                  }
+                  e.preventDefault();
+                  e.stopPropagation();
+                },
+                onDrop(e) {
+                  if (!isCanDrop()) {
+                    return;
+                  }
 
-            // 新增节点
-            const addDataStr = e.dataTransfer.getData(COMPONENT_KEY.DRAG_NEW);
-            if (addDataStr) {
-              add(addDataStr);
-            }
+                  // 新增节点
+                  const addDataStr = e.dataTransfer.getData(COMPONENT_KEY.DRAG_NEW);
+                  if (addDataStr) {
+                    add(addDataStr);
+                  }
 
-            // 移动节点
-            const moveDataStr = e.dataTransfer.getData(COMPONENT_KEY.DRAG_MOVE);
-            if (moveDataStr) {
-              move(moveDataStr);
-            }
+                  // 移动节点
+                  const moveDataStr = e.dataTransfer.getData(COMPONENT_KEY.DRAG_MOVE);
+                  if (moveDataStr) {
+                    move(moveDataStr);
+                  }
 
-            e.stopPropagation();
-            e.preventDefault();
-          },
-          onDragEnter(e) {
-            instanceRef.current?.handleHover();
-            e.stopPropagation();
-            e.preventDefault();
-          },
-          onDragLeave(e) {
-            instanceRef.current?.handleUnHover();
-            e.stopPropagation();
-            e.preventDefault();
-          },
-        }}
+                  e.stopPropagation();
+                  e.preventDefault();
+                },
+                onDragEnter(e) {
+                  instanceRef.current?.handleHover();
+                  e.stopPropagation();
+                  e.preventDefault();
+                },
+                onDragLeave(e) {
+                  instanceRef.current?.handleUnHover();
+                  e.stopPropagation();
+                  e.preventDefault();
+                },
+              }
+            : {}
+        }
         attributes={jsonNode?.attributes}
       >
-        {isShowLayoutChildren ? (
-          <>{context.children}</>
-        ) : (
-          jsonNode?.children?.map((child) => {
-            return (
-              <RenderJsonNode
-                isCannotSelect={props?.isCannotSelect}
-                parentId={jsonNode?.id}
-                jsonNode={child}
-                key={child?.id}
-              />
-            );
-          })
-        )}
+        {isShowLayoutChildren
+          ? [context.children]
+          : jsonNode?.children?.map((child) => {
+              return (
+                <RenderJsonNode
+                  isCannotSelect={props?.isCannotSelect}
+                  parentId={jsonNode?.id}
+                  jsonNode={child}
+                  key={child?.id}
+                />
+              );
+            })}
       </component.template>
     )
   );

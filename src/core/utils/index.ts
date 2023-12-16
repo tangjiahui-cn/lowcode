@@ -4,3 +4,6 @@ export * from './getChildDomRect';
 export * from './createWrapBox';
 export * from './nextTick';
 export * from './getUuid';
+export * from './getEvent';
+export * from './getFunctionFromString';
+export * from './getUrlParams';

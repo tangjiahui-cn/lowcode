@@ -1,5 +1,5 @@
 import { Input } from 'antd';
-import { AttributesProps, Component, cType, engine, TemplateProps } from '@/core';
+import { AttributesProps, Component, cType, engine, getEvent, TemplateProps } from '@/core';
 import { useEffect, useRef } from 'react';
 
 interface AttributesType {
@@ -26,17 +26,15 @@ function Template(props: TemplateProps<AttributesType, HTMLDivElement>) {
   return (
     <div
       ref={ref}
-      {...props?.events}
+      {...getEvent(props?.events)}
       style={{
-        ...engine.styleProcessor.getStyle(props?.styleData),
         height: '100%',
         width: '400px',
         display: 'inline-block',
         verticalAlign: 'middle',
         background: 'whitesmoke',
         overflow: 'hidden',
-        color: '#a4a4a4',
-        fontSize: 18,
+        ...engine.styleProcessor.getStyle(props?.styleData),
       }}
     >
       {props?.children || (
@@ -48,6 +46,8 @@ function Template(props: TemplateProps<AttributesType, HTMLDivElement>) {
             width: '100%',
             height: '100%',
             border: '1px dashed #e8e8e8',
+            fontSize: 18,
+            color: '#a4a4a4',
           }}
         >
           子元素 - 占位

@@ -6,6 +6,7 @@
  */
 import { Component, JsonNode } from '@/core';
 import { useEffect, useState } from 'react';
+import IEmpty from '@/common/IEmpty';
 
 interface IProps {
   jsonNode: JsonNode;
@@ -28,8 +29,10 @@ export default function (props: IProps) {
 
   return (
     <div style={{ width: '100%', height: '100%' }}>
-      {props?.component?.attributeTemplate && (
+      {props?.component?.attributeTemplate ? (
         <props.component.attributeTemplate attributes={attributes} onChange={handleChange} />
+      ) : (
+        <IEmpty />
       )}
     </div>
   );

@@ -15,6 +15,11 @@ export const global = {
     });
   },
   preview() {
+    if (!engine.project.getAllPage()?.length) {
+      message.warn('请先添加一个页面');
+      return;
+    }
     // 预览
+    window.open('/preview?route=/');
   },
 };
