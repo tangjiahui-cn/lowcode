@@ -23,6 +23,7 @@ import SwitchIcon from './components/SwitchIcon';
 import AddPageDialog from './components/AddPageDialog';
 import AddLayoutDialog from './components/AddLayoutDialog';
 import Dynamic from '@/common/Dynamic';
+import ITipDialog from '@/common/ITipDialog';
 
 type TreeNode = TreeDataNode & {
   _isPage?: boolean; // 是否是页面
@@ -52,7 +53,13 @@ export default function () {
   }
 
   function handleDeleteLayout(layout: Layout) {
-    engine.project.deleteLayout(layout.layoutId);
+    ITipDialog.open({
+      title: '提醒',
+      content: '是否删除布局?',
+      onOk(close) {
+        engine.project.deleteLayout(layout.layoutId).then(close);
+      },
+    });
   }
 
   function handleAddPage() {
@@ -68,7 +75,13 @@ export default function () {
   }
 
   function handleDeletePage(page: Page) {
-    engine.project.deletePage(page.pageId);
+    ITipDialog.open({
+      title: '提醒',
+      content: '是否删除页面？',
+      onOk(close) {
+        engine.project.deletePage(page.pageId).then(close);
+      },
+    });
   }
 
   // 显示/隐藏页面的layout
@@ -170,37 +183,39 @@ export default function () {
                 title: (
                   <RenderLine
                     label={page.pageName}
-                    options={[
-                      {
-                        custom: true,
-                        label: (
-                          <Dynamic type={'none'} style={{ fontSize: 16 }}>
-                            {page?.bindLayoutVisible ? (
-                              <a>L</a>
-                            ) : (
-                              <span style={{ color: '#9d9d9d' }}>L</span>
-                            )}
-                          </Dynamic>
-                        ),
-                        value: 'show-layout',
-                      },
-                      {
-                        label: (
-                          <Dynamic type={'scale'}>
-                            <DeleteOutlined />
-                          </Dynamic>
-                        ),
-                        value: 'del',
-                      },
-                      {
-                        label: (
-                          <Dynamic type={'rotate'}>
-                            <SettingOutlined />
-                          </Dynamic>
-                        ),
-                        value: 'edit',
-                      },
-                    ]}
+                    options={
+                      [
+                        page.bindLayoutId && {
+                          custom: true,
+                          label: (
+                            <Dynamic type={'scale'} style={{ fontSize: 16 }}>
+                              {page?.bindLayoutVisible ? (
+                                <a>L</a>
+                              ) : (
+                                <span style={{ color: '#9d9d9d' }}>L</span>
+                              )}
+                            </Dynamic>
+                          ),
+                          value: 'show-layout',
+                        },
+                        {
+                          label: (
+                            <Dynamic type={'scale'}>
+                              <DeleteOutlined />
+                            </Dynamic>
+                          ),
+                          value: 'del',
+                        },
+                        {
+                          label: (
+                            <Dynamic type={'rotate'}>
+                              <SettingOutlined />
+                            </Dynamic>
+                          ),
+                          value: 'edit',
+                        },
+                      ].filter(Boolean) as any[]
+                    }
                     onOperate={(value) => {
                       value === 'edit' && handleEditPage(page);
                       value === 'del' && handleDeletePage(page);
@@ -226,10 +241,12 @@ export default function () {
     if (!isOnlyKeys) {
       engine.project.setCurrent(page);
       engine.api.project.setPage(page?.json);
-      if ((page as Page)?.pageId) {
-        engine.event.notify(EVENT.currentLayoutVisible, (page as Page).bindLayoutVisible);
-      }
     }
+
+    if ((page as Page)?.pageId) {
+      engine.event.notify(EVENT.currentLayoutVisible, (page as Page).bindLayoutVisible);
+    }
+
     setSelectedKeys([(page as Layout)?.layoutId || (page as Page)?.pageId].filter(Boolean));
   }
 

@@ -24,7 +24,7 @@ export type TemplateProps<Attributes, E = any> = {
   // 原生事件
   events?: DOMAttributes<E>;
   // 子元素
-  children?: React.ReactNode[];
+  children?: React.ReactNode | React.ReactNode[];
 
   // 预处理样式
   styleData?: StyleProcessorData;
@@ -40,6 +40,7 @@ export type Component<Attributes = any> = {
   // 特殊标识
   isPage?: boolean; // 是否是页面
   isChildren?: boolean; // 是否可以存放子元素
+  isLayoutChildren?: boolean; // 是布局页面中用来占位子元素的组件
 
   // 默认值
   defaultAttributes?: Attributes;

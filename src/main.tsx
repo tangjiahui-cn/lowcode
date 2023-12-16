@@ -7,7 +7,7 @@ import Components from './panels/Components';
 import Attributes from './panels/Attributes';
 import Project from './panels/Project';
 import { registerComponents } from '@/components';
-import { createJsonNode, createPage, cType, engine } from '@/core';
+import { engine } from '@/core';
 import { useEffect } from 'react';
 
 /**

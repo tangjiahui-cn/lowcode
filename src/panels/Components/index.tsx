@@ -19,19 +19,31 @@ export default function () {
   const [list, setList] = useState<Option[]>([]);
 
   useEffect(() => {
-    setList([
-      { cType: cType.Base, name: '基础组件', children: engine.component.getAllByCType(cType.Base) },
-      {
-        cType: cType.Container,
-        name: '容器组件',
-        children: engine.component.getAllByCType(cType.Container),
-      },
-      {
-        cType: cType.Table,
-        name: '列表组件',
-        children: engine.component.getAllByCType(cType.Table),
-      },
-    ]);
+    const isLayout = engine.project.isLayout(engine.project.getCurrent());
+    setList(
+      [
+        {
+          cType: cType.Base,
+          name: '基础组件',
+          children: engine.component.getAllByCType(cType.Base),
+        },
+        {
+          cType: cType.Container,
+          name: '容器组件',
+          children: engine.component.getAllByCType(cType.Container),
+        },
+        {
+          cType: cType.Table,
+          name: '列表组件',
+          children: engine.component.getAllByCType(cType.Table),
+        },
+        isLayout && {
+          cType: cType.LayoutChildren,
+          name: '容器占位组件',
+          children: engine.component.getAllByCType(cType.LayoutChildren),
+        },
+      ].filter(Boolean) as any[],
+    );
   }, []);
 
   return (

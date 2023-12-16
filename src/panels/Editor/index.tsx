@@ -5,13 +5,14 @@
  * By TangJiaHui
  * Description: 用来编辑可视化页面
  */
-import { engine, EVENT, JsonNode, Page, useListenPage } from '@/core';
+import { engine, EVENT, JsonNode, Layout, Page, useListenPage } from '@/core';
 import { useEffect, useRef, useState } from 'react';
 import RenderJsonNode from './components/RenderJsonNode';
 import LayoutWrapper from './components/LayoutWrapper';
 
 export default function () {
   const domRef = useRef<HTMLDivElement>(null);
+  const [current, setCurrent] = useState<Page | Layout>();
   const [jsonNodes, setJsonNodes] = useState<JsonNode[]>([]);
   const [layoutVisible, setLayoutVisible] = useState(false);
 
@@ -20,6 +21,7 @@ export default function () {
     engine.jsonNode.init(page);
     setLayoutVisible(!!(engine.project.getCurrent() as Page)?.bindLayoutVisible);
     setJsonNodes(page);
+    setCurrent(engine.project.getCurrent());
   });
 
   useEffect(() => {
@@ -28,10 +30,14 @@ export default function () {
     // 编辑器mount发布通知
     engine.event.notify(EVENT.editorMount);
 
+    function changeLayoutVisible(visible?: boolean) {
+      setLayoutVisible(!!visible);
+    }
+
     // 监听布局显示/隐藏
-    engine.event.on(EVENT.currentLayoutVisible, setLayoutVisible);
+    engine.event.on(EVENT.currentLayoutVisible, changeLayoutVisible);
     return () => {
-      engine.event.remove(EVENT.currentLayoutVisible, setLayoutVisible);
+      engine.event.remove(EVENT.currentLayoutVisible, changeLayoutVisible);
     };
   }, []);
 
@@ -44,7 +50,7 @@ export default function () {
         padding: 24,
       }}
     >
-      <LayoutWrapper showLayout={layoutVisible}>
+      <LayoutWrapper showLayout={layoutVisible} current={current}>
         {/* 渲染容器 */}
         <div
           ref={domRef}

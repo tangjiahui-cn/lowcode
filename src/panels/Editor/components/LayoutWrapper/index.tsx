@@ -4,13 +4,18 @@
  * At 2023/12/13
  * By TangJiaHui
  */
-import { Divider, Menu, Tag } from 'antd';
-import { DingtalkOutlined, HomeOutlined, SettingFilled } from '@ant-design/icons';
-import { useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { engine, JsonNode, Layout, Page } from '@/core';
 import RenderJsonNode from '@/panels/Editor/components/RenderJsonNode';
 
+export const layoutChildrenContext = createContext<{
+  children?: React.ReactNode;
+}>({
+  children: undefined,
+});
+
 interface LayoutWrapperProps {
+  current?: Page | Layout;
   showLayout?: boolean; // 显示布局
   children?: any;
 }
@@ -18,24 +23,40 @@ interface LayoutWrapperProps {
 export default function LayoutWrapper(props: LayoutWrapperProps) {
   const [jsonNodes, setJsonNodes] = useState<JsonNode[]>([]);
 
+  function renderChildren(children: JsonNode[], isCannotSelect?: boolean): React.ReactElement {
+    return (
+      <>
+        {children.map((jsonNode: JsonNode) => {
+          return (
+            <RenderJsonNode key={jsonNode.id} jsonNode={jsonNode} isCannotSelect={isCannotSelect} />
+          );
+        })}
+      </>
+    );
+  }
+
   useEffect(() => {
     if (props?.showLayout) {
       const current = engine.project.getCurrent();
       if (!current) return;
-      const bindLayoutId = engine.project.isPage(current) ? (current as Page)?.bindLayoutId : undefined;
+      const bindLayoutId = engine.project.isPage(current)
+        ? (current as Page)?.bindLayoutId
+        : undefined;
       const jsonNodes = engine.project.getLayout(bindLayoutId)?.json || [];
       setJsonNodes(jsonNodes);
     }
   }, [props?.showLayout]);
 
-  return (
-    <>
-      {props?.children}
-      {/*/!* 渲染json *!/*/}
-      {/*{jsonNodes.map((jsonNode: JsonNode) => {*/}
-      {/*  return <RenderJsonNode key={jsonNode.id} jsonNode={jsonNode} />;*/}
-      {/*})}*/}
-    </>
+  if (engine.project.isLayout(props?.current)) {
+    return props?.children;
+  }
+
+  return props?.showLayout ? (
+    <layoutChildrenContext.Provider value={{ children: props?.children }}>
+      {renderChildren(jsonNodes, true)}
+    </layoutChildrenContext.Provider>
+  ) : (
+    props?.children
   );
   // return props?.showLayout ? (
   //   <div

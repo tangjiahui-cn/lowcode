@@ -1,7 +1,6 @@
-import { Input, Menu } from 'antd';
+import { Input } from 'antd';
 import { AttributesProps, Component, cType, engine, TemplateProps } from '@/core';
 import { useEffect, useRef } from 'react';
-import { DingtalkOutlined } from '@ant-design/icons';
 
 interface AttributesType {
   value: string; // 按钮内容
@@ -9,15 +8,12 @@ interface AttributesType {
 
 export default {
   cId: 'layoutChildren',
-  cType: cType.Base,
+  cType: cType.LayoutChildren,
   cName: 'Layout-children',
   icon: undefined,
   template: Template,
   attributeTemplate: Attributes,
-
-  defaultAttributes: {
-    value: '按 钮',
-  },
+  isLayoutChildren: true,
 } as Component<AttributesType>;
 
 function Template(props: TemplateProps<AttributesType, HTMLDivElement>) {
@@ -35,17 +31,28 @@ function Template(props: TemplateProps<AttributesType, HTMLDivElement>) {
         ...engine.styleProcessor.getStyle(props?.styleData),
         height: '100%',
         width: '400px',
-        display: 'inline-flex',
+        display: 'inline-block',
         verticalAlign: 'middle',
         background: 'whitesmoke',
-        border: '1px dashed #e8e8e8',
-        alignItems: 'center',
-        justifyContent: 'center',
+        overflow: 'hidden',
         color: '#a4a4a4',
-        fontSize: 18
+        fontSize: 18,
       }}
     >
-      子元素 - 占位
+      {props?.children || (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '100%',
+            height: '100%',
+            border: '1px dashed #e8e8e8',
+          }}
+        >
+          子元素 - 占位
+        </div>
+      )}
     </div>
   );
 }

@@ -26,6 +26,7 @@ export default function AddPageDialog(props: IProps) {
             pageName: values?.name,
             route: values?.route,
             bindLayoutId: values?.bindLayoutId,
+            bindLayoutVisible: !!values?.bindLayoutId
           })
           .then(props?.onOk);
       } else {
@@ -70,7 +71,7 @@ export default function AddPageDialog(props: IProps) {
           <Input placeholder={'请输入'} />
         </Form.Item>
         <Form.Item label={'布局'} name={'bindLayoutId'}>
-          <LayoutSelect style={{ width: '100%' }} />
+          <LayoutSelect allowClear style={{ width: '100%' }} />
         </Form.Item>
       </Form>
     </Modal>

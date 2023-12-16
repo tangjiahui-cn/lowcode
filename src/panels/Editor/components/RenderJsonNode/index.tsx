@@ -18,21 +18,27 @@ import {
   useRegisterJsonNode,
   useWrapBox,
 } from '@/core';
-import { useRef } from 'react';
+import { useContext, useRef } from 'react';
 import OperateBox from '../OperateBox';
+import { layoutChildrenContext } from '../LayoutWrapper';
 
 interface RenderJsonNodeProps {
   parentId?: string;
   jsonNode: JsonNode;
+  isCannotSelect?: boolean; // 是否可以选中
 }
 
 export default function RenderJsonNode(props: RenderJsonNodeProps) {
+  const context = useContext(layoutChildrenContext);
   // 获取当前节点DOM的函数
   const getDomRef = useRef<() => any>();
   // 当前实例的jsonNode
   const [jsonNode, setJsonNode] = useListenState(props?.jsonNode);
   // 对应的组件
   const component: Component | undefined = useComponent(props?.jsonNode);
+
+  const isShowLayoutChildren =
+    component?.isLayoutChildren && !engine.project.isLayout(engine.project.getCurrent());
 
   // 鼠标经过盒子
   const hoverBox = useWrapBox({
@@ -93,9 +99,12 @@ export default function RenderJsonNode(props: RenderJsonNodeProps) {
     const id = props?.jsonNode?.id;
     return {
       id,
-      jsonNode,
+      jsonNode: props?.jsonNode,
       parentId: props?.parentId,
       handleSelect() {
+        if (props?.isCannotSelect) {
+          return;
+        }
         // 不可重复选中
         if (engine.instance.isSelected(instanceRef.current?.id)) {
           return;
@@ -108,10 +117,16 @@ export default function RenderJsonNode(props: RenderJsonNodeProps) {
         focusBox.current.show();
       },
       handleUnSelect() {
+        if (props?.isCannotSelect) {
+          return;
+        }
         engine.instance.clearSelected();
         focusBox.current.hide();
       },
       handleHover() {
+        if (props?.isCannotSelect) {
+          return;
+        }
         // 当前实例非选中,才可以设置当前选中实例
         if (engine.instance.isNotCurrentHoverInstance(id)) {
           engine.instance.setCurrentHoverInstance(instanceRef.current);
@@ -119,6 +134,9 @@ export default function RenderJsonNode(props: RenderJsonNodeProps) {
         hoverBox.current.show();
       },
       handleUnHover() {
+        if (props?.isCannotSelect) {
+          return;
+        }
         // 当前实例选中,才可以清空选中实例
         if (engine.instance.isCurrentHoverInstance(id)) {
           engine.instance.clearCurrentHoverInstance();
@@ -136,7 +154,7 @@ export default function RenderJsonNode(props: RenderJsonNodeProps) {
         nextTick(focusBox.current.resize);
       },
     };
-  }, [jsonNode]);
+  }, [props]);
 
   // 在当前组件下新增一个组件
   function add(dataStr: string) {
@@ -193,7 +211,7 @@ export default function RenderJsonNode(props: RenderJsonNodeProps) {
 
   function isCanDrop() {
     return !(
-      // 目标节点正在拖拽不能放置
+      // 目标节点正在拖拽不能放置q
       (
         engine.instance.isDragging(jsonNode?.id) ||
         // 目标节点不支持children属性不能放置
@@ -273,9 +291,20 @@ export default function RenderJsonNode(props: RenderJsonNodeProps) {
         }}
         attributes={jsonNode?.attributes}
       >
-        {jsonNode?.children?.map((child) => {
-          return <RenderJsonNode parentId={jsonNode?.id} jsonNode={child} key={child?.id} />;
-        })}
+        {isShowLayoutChildren ? (
+          <>{context.children}</>
+        ) : (
+          jsonNode?.children?.map((child) => {
+            return (
+              <RenderJsonNode
+                isCannotSelect={props?.isCannotSelect}
+                parentId={jsonNode?.id}
+                jsonNode={child}
+                key={child?.id}
+              />
+            );
+          })
+        )}
       </component.template>
     )
   );
