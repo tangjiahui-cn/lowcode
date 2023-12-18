@@ -1,6 +1,6 @@
 import React from 'react';
 import { UNIT_DEFAULT, PartialNumber, isNumber } from '.';
-import { engine } from '../index';
+import { engine } from '..';
 
 // 布局处理类型
 export type StyleProcessLayout = {
@@ -9,6 +9,7 @@ export type StyleProcessLayout = {
   height?: PartialNumber; // 高度 (默认auto)
   heightUnit?: string; // 高度单位（默认px）
   zIndex?: PartialNumber; // z-index（默认auto）
+  flex?: string; // flex样式
 
   // 内边距
   padding?: PartialNumber | string; // 默认0
@@ -44,7 +45,10 @@ export function getLayoutStyle(data: StyleProcessLayout): React.CSSProperties {
   if (isNumber(data?.width)) style.width = data.width + (data?.widthUnit || UNIT_DEFAULT);
   if (isNumber(data?.height)) style.height = data.height + (data?.heightUnit || UNIT_DEFAULT);
   if (isNumber(data?.zIndex)) {
-    engine.global.setMaxZIndex((style.zIndex = data?.zIndex));
+    engine.runtime.setMaxZIndex((style.zIndex = data?.zIndex));
+  }
+  if (data?.flex) {
+    style.flex = data?.flex;
   }
 
   if (data?.padding) {

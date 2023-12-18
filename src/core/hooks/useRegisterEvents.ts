@@ -1,6 +1,5 @@
-import { JsonNode } from '../data';
 import { useEffect } from 'react';
-import { engine } from '..';
+import { engine, JsonNode } from '..';
 
 /**
  * 注册绑定事件函数

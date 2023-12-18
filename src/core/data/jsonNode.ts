@@ -1,49 +1,59 @@
 /**
- * 管理全局注册的jsonNode
+ * 管理jsonNode
+ *
+ * At 2023/12/11
+ * By TangJiaHui
  */
-import { JsonNode } from '..';
+import { JsonNode } from '@/core';
 
-const map = new Map<string, JsonNode>();
+// 存储每个实例的jsonNode
+const data = new Map<string, JsonNode>();
+// 存储当前操作页面的jsonNode
+const currentPage: {
+  current: JsonNode[];
+} = {
+  current: [],
+};
+
+// 管理每个实例的jsonNode
 export const jsonNode = {
-  // 新增一个node
-  add(node?: JsonNode) {
-    if (node) {
-      map.set(node.id, node);
-    }
+  // 初始化页面jsonNode
+  init(page: JsonNode[]) {
+    currentPage.current = page;
   },
-  //删除一个node
-  remove(id?: string) {
-    if (id) {
-      map.delete(id);
-    }
-  },
-  // 获取注册的所有jsonNode
-  getAll(): JsonNode[] {
-    return [...map.values()];
-  },
-  // 获取一个node
-  get(id?: string): JsonNode | undefined {
-    return id ? map.get(id) : undefined;
-  },
-  // 清空全部node
+  // 清空
   clear() {
-    map.clear();
+    currentPage.current = [];
+    data.clear();
   },
-  // 获取上一级父节点
-  getParent(id?: string): JsonNode | undefined {
-    return jsonNode.get(id);
+  // 注册一个jsonNode
+  register(jsonNode: JsonNode) {
+    data.set(jsonNode.id, jsonNode);
   },
-  // 获取全部的父节点（从上一级父节点到最外层父节点）
-  getParents(id?: string): JsonNode[] {
-    let node: JsonNode | undefined = jsonNode.get(id);
-    let parents: JsonNode[] = [];
-    while ((node = jsonNode.get(node?.parentId))) {
-      parents.push(node);
+  // 取消注册一个jsonNode
+  unRegister(id?: string) {
+    data.delete(id || '');
+  },
+  // 根据id获取jsonNode
+  get(id?: string): JsonNode | undefined {
+    return data.get(id || '');
+  },
+  // 获取当前页面page
+  getPage(): JsonNode[] {
+    return currentPage.current;
+  },
+  // 更新jsonNode
+  update(id?: string, jsonNode?: JsonNode) {
+    if (!id) {
+      throw new Error('id is not exist');
     }
-    return parents;
-  },
-  // 获取全部的父节点（从最外侧到当前节点）
-  getParentsFromOuter(id?: string): JsonNode[] {
-    return jsonNode?.getParents(id).reverse();
+    if (!jsonNode) {
+      throw new Error('jsonNode is not exist');
+    }
+    const src = this.get(id);
+    if (!src) {
+      throw new Error('source jsonNode is not exist');
+    }
+    Object.assign(src, jsonNode);
   },
 };

@@ -12,13 +12,13 @@ export function useExpose(exposeList: Expose[]) {
     const insId = exposeList?.[0]?.id;
     exposeList.forEach((expose) => {
       engine.event.expose(expose);
-      engine.instanceEvents.registerExpose(expose);
+      engine.event.registerExpose(expose);
     });
     return () => {
       exposeList.forEach((expose) => {
         engine.event.unExpose(expose);
       });
-      engine.instanceEvents.unRegisterExpose(insId);
+      engine.event.unRegisterExpose(insId);
     };
   }, []);
 }

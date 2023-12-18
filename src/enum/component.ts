@@ -1,6 +1,0 @@
-export enum CType {
-  BASE = 'base', // 基础组件
-  DISPLAY = 'display', // 展示类组件
-  LAYOUT = 'layout', // 布局组件
-  SYS = 'sys', // 系统级组件（禁止开发者、用户参与页面级设计）
-}

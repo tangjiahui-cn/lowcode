@@ -4,21 +4,23 @@
  * At 2023/10/31
  * By TangJiaHui
  */
-import IPage from './IPage';
-import ISelect from './ISelect';
-import IButton from './IButton';
-import ITextArea from './ITextArea';
-import IContainer from './IContainer';
-import ITable from './ITable';
-import IText from './IText';
-import { engine } from '../core';
+import { engine } from '@/core';
+import Page from './Page';
+import Button from './Button';
+import Menu from './Menu';
+import Container from './Container';
+import Table from './Table';
+import LayoutChildren from './LayoutChildren';
+import Text from './Text';
+import TextArea from './TextArea';
 
 export function registerComponents() {
-  engine.component.add(IPage);
-  engine.component.add(IButton);
-  engine.component.add(ISelect);
-  engine.component.add(ITextArea);
-  engine.component.add(IContainer);
-  engine.component.add(ITable);
-  engine.component.add(IText);
+  engine.component.register(Page);
+  engine.component.register(Button);
+  engine.component.register(Menu);
+  engine.component.register(LayoutChildren);
+  engine.component.register(Container);
+  engine.component.register(Table);
+  engine.component.register(Text);
+  engine.component.register(TextArea);
 }

@@ -4,7 +4,7 @@
  * At 2023/11/01
  * By TangJiaHui
  */
-export type DomType = HTMLDivElement | null | undefined;
+export type DomType = HTMLElement | null | undefined;
 export function getChildDomRect(
   containerDom: DomType,
   childDom: DomType,
