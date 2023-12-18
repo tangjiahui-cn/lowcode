@@ -48,10 +48,6 @@ export default function () {
     >
       <LayoutWrapper current={page} showLayout={page?.bindLayoutVisible}>
         {renderPage(page)}
-        {/*<input*/}
-        {/*  onPointerDown={console.log}*/}
-        {/*  onInput={console.log}*/}
-        {/*/>*/}
       </LayoutWrapper>
     </div>
   );
