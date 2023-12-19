@@ -6,7 +6,7 @@
  */
 import { Space } from 'antd';
 import { useEffect, useState } from 'react';
-import { Component, cType, engine } from '@/core';
+import { Component, COMPONENT_KEY, cType, engine } from '@/core';
 import RenderChildren from './components/RenderChildren';
 
 interface Option {
@@ -56,7 +56,14 @@ export default function () {
               <RenderChildren
                 components={option.children}
                 onDragStart={(e, component) => {
-                  engine.api.component.startDrag(e, component);
+                  const img = engine.component.getDragImage(component.cId);
+                  e.dataTransfer.setDragImage(img, 0, 0);
+                  e.dataTransfer.setData(
+                    COMPONENT_KEY.DRAG_NEW,
+                    JSON.stringify({
+                      cId: component.cId,
+                    }),
+                  );
                 }}
               />
             </Space>

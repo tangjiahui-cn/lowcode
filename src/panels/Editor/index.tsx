@@ -5,7 +5,7 @@
  * By TangJiaHui
  * Description: 用来编辑可视化页面
  */
-import { engine, EVENT, JsonNode, Layout, Page, useListenPage } from '@/core';
+import { engine, JsonNode, Layout, notify, Page, useHook } from '@/core';
 import { useEffect, useRef, useState } from 'react';
 import RenderJsonNode from './components/RenderJsonNode';
 import LayoutWrapper from './components/LayoutWrapper';
@@ -16,31 +16,21 @@ export default function () {
   const [jsonNodes, setJsonNodes] = useState<JsonNode[]>([]);
   const [layoutVisible, setLayoutVisible] = useState(false);
 
-  useListenPage(function (page: JsonNode[]) {
+  useHook('set-jsonNodes', (page) => {
     engine.wrapBox.clear();
     engine.jsonNode.init(page);
     setLayoutVisible(!!(engine.project.getCurrent() as Page)?.bindLayoutVisible);
     setJsonNodes(page);
     setCurrent(engine.project.getCurrent());
     // 发布全局通知：选中JsonNode
-    engine.api.editor.selectJsonNode(undefined);
+    notify('select-json-node', undefined);
   });
+
+  useHook('change-layout-visible', setLayoutVisible);
 
   useEffect(() => {
     engine.panel.setEditorDom(domRef.current);
-
-    // 编辑器mount发布通知
-    engine.event.notify(EVENT.editorMount);
-
-    function changeLayoutVisible(visible?: boolean) {
-      setLayoutVisible(!!visible);
-    }
-
-    // 监听布局显示/隐藏
-    engine.event.on(EVENT.currentLayoutVisible, changeLayoutVisible);
-    return () => {
-      engine.event.remove(EVENT.currentLayoutVisible, changeLayoutVisible);
-    };
+    notify('editor-mount');
   }, []);
 
   return (

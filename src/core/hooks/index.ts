@@ -9,3 +9,4 @@ export * from './useEditorMount';
 export * from './useListenProjectChange';
 export * from './useExpose';
 export * from './useRegisterEvents';
+export * from './useWindowResize';

@@ -3,7 +3,7 @@ import AttributesPanel from './panels/AttributesPanel';
 import StylePanel from './panels/StylePanel';
 import EventPanel from './panels/EventPanel';
 import { useState } from 'react';
-import { Component, engine, Instance, JsonNode, useListenSelectJsonNode } from '@/core';
+import { Component, engine, Instance, JsonNode, useHook } from '@/core';
 import ParentBreadcrumb from './components/ParentBreadcrumb';
 import { emptyClass } from './style';
 
@@ -19,7 +19,7 @@ export default function () {
   const [instance, setInstance] = useState<Instance>();
   const [activeKey, setActiveKey] = useState<string>('1');
 
-  useListenSelectJsonNode((jsonNode: JsonNode) => {
+  useHook('select-json-node', (jsonNode) => {
     setJsonNode(jsonNode);
     setComponent(engine.component.get(jsonNode?.cId));
     setInstance(engine.instance.get(jsonNode?.id));

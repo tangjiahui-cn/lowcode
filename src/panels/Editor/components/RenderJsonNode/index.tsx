@@ -12,6 +12,7 @@ import {
   Instance,
   JsonNode,
   nextTick,
+  notify,
   useComponent,
   useListenState,
   useRegisterEvents,
@@ -118,7 +119,7 @@ export default function RenderJsonNode(props: RenderJsonNodeProps) {
         engine.instance.getSelected()?.forEach((ins) => ins.handleUnSelect());
         engine.instance.setSelected(instanceRef.current ? [instanceRef.current] : []);
         // 发布全局通知：选中JsonNode
-        engine.api.editor.selectJsonNode(jsonNode);
+        notify('select-json-node', jsonNode);
         focusBox.current.show();
       },
       handleUnSelect() {
@@ -237,7 +238,7 @@ export default function RenderJsonNode(props: RenderJsonNodeProps) {
           engine.runtime.isDev()
             ? {
                 onScroll() {
-                  engine.api.editor.instanceScroll();
+                  notify('instance-scroll');
                 },
                 onPointerEnter() {
                   // 上一个栈顶元素取消经过

@@ -4,12 +4,13 @@
  * At 2023/12/11
  * By TangJiaHui
  */
-import { useEffect, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import { throttle } from 'lodash';
-import { engine, EVENT, createWrapBox, Props, Operate } from '..';
+import { engine, createWrapBox, Props, Operate, useHook, useWindowResize } from '..';
 
 export function useWrapBox(props: Props) {
   const wrapBoxRef = useRef<Operate>();
+  const isShowRef = useRef(false);
   const ref = useRef<Operate>({
     show,
     hide,
@@ -18,6 +19,7 @@ export function useWrapBox(props: Props) {
 
   // 显示浮层
   function show() {
+    isShowRef.current = true;
     // 获取可用的实例
     (wrapBoxRef.current ||= createWrapBox(props)).show();
     engine.wrapBox.add(wrapBoxRef.current);
@@ -25,27 +27,21 @@ export function useWrapBox(props: Props) {
 
   // 浮层重置位置
   function resize() {
+    if (!isShowRef.current) return;
     wrapBoxRef.current?.resize?.();
   }
 
   // 隐藏浮层
   function hide() {
+    isShowRef.current = false;
     wrapBoxRef.current?.hide?.();
     engine.wrapBox.remove(wrapBoxRef.current);
     wrapBoxRef.current = undefined;
   }
 
-  useEffect(() => {
-    const throttleResize = throttle(resize, 8);
-    // 监听窗口大小变化
-    window.addEventListener('resize', throttleResize);
-    // 监听全局实例滚动事件
-    engine.event.on(EVENT.instanceScroll, throttleResize);
-    return () => {
-      window.removeEventListener('resize', throttleResize);
-      engine.event.remove(EVENT.instanceScroll, throttleResize);
-    };
-  }, []);
+  const throttleResize = useCallback(throttle(resize, 10), []);
 
+  useHook('instance-scroll', throttleResize);
+  useWindowResize(throttleResize);
   return ref;
 }

@@ -7,13 +7,11 @@
  * * Component: 定义组件模板
  */
 export type * from './declarations';
-import { api } from './api';
 import { event } from './event';
 import { project } from './project';
 
 import { instance, component, jsonNode, panel, runtime, wrapBox, variables, fetch } from './data';
 
-export { COMPONENT_KEY } from './api/component';
 export * from './enum';
 export * from './event';
 export * from './declarations';
@@ -21,11 +19,10 @@ export * from './hooks';
 export * from './hooks-common';
 export * from './utils';
 export * from './style-processor';
+export * from './behavior';
 import { styleProcessor } from './style-processor';
 
 export const engine = {
-  // 内部api
-  api,
   // 全局事件
   event,
   // 运行时实例

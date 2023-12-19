@@ -9,15 +9,7 @@ import { DeleteOutlined, FileFilled, PlusOutlined, SettingOutlined } from '@ant-
 import { Tree, TreeDataNode } from 'antd';
 import { useState } from 'react';
 import { useEffectOnce } from 'react-use';
-import {
-  engine,
-  EVENT,
-  JsonNode,
-  Layout,
-  Page,
-  useEditorMount,
-  useListenProjectChange,
-} from '@/core';
+import { engine, JsonNode, Layout, notify, Page, useHook, useListenProjectChange } from '@/core';
 import RenderLine from './components/RenderLine';
 import SwitchIcon from './components/SwitchIcon';
 import AddPageDialog from './components/AddPageDialog';
@@ -93,7 +85,7 @@ export default function () {
     // 当前页面变更布局
     if (engine.project.isCurrent(page)) {
       engine.wrapBox.clear();
-      engine.event.notify(EVENT.currentLayoutVisible, page.bindLayoutVisible);
+      notify('change-layout-visible', page.bindLayoutVisible);
     }
   }
 
@@ -240,11 +232,11 @@ export default function () {
   function handleSelect(page?: Page | Layout, isOnlyKeys?: boolean) {
     if (!isOnlyKeys) {
       engine.project.setCurrent(page);
-      engine.api.project.setPage(page?.json);
+      notify('set-jsonNodes', page?.json);
     }
 
     if ((page as Page)?.pageId) {
-      engine.event.notify(EVENT.currentLayoutVisible, (page as Page).bindLayoutVisible);
+      notify('change-layout-visible', (page as Page).bindLayoutVisible);
     }
 
     setSelectedKeys([(page as Layout)?.layoutId || (page as Page)?.pageId].filter(Boolean));
@@ -268,9 +260,9 @@ export default function () {
   });
 
   // 监听编辑器挂载
-  useEditorMount(() => {
-    const jsonNode: JsonNode[] = engine.project.getCurrent()?.json || [];
-    engine.api.project.setPage(jsonNode);
+  useHook('editor-mount', () => {
+    const jsonNodes: JsonNode[] = engine.project.getCurrent()?.json || [];
+    notify('set-jsonNodes', jsonNodes);
   });
 
   useEffectOnce(() => {
