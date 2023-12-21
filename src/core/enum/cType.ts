@@ -10,5 +10,5 @@ export enum cType {
   Base, // 原子组件
   Container, // 容器组件
   Table, // 列表组件
-  LayoutChildren, // 布局占位符组件
+  Layout, // 布局专用组件
 }

@@ -1,7 +1,7 @@
 import { AttributesProps, useListenState } from '@/core';
 import { AttributesType } from './Template';
 import { css } from 'class-css';
-import { Space } from 'antd';
+import { Input, Space } from 'antd';
 import Dynamic from '@/common/Dynamic';
 import { DeleteOutlined, SettingOutlined } from '@ant-design/icons';
 import AddTabDialog from './components/AddTabDialog';
@@ -52,7 +52,20 @@ export default function Attributes(props: AttributesProps<AttributesType>) {
 
   return (
     <div>
-      <div style={{ border: '1px solid #e8e8e8' }}>
+      <div style={{ display: 'flex', gap: 8, whiteSpace: 'nowrap', alignItems: 'center' }}>
+        标题：
+        <Input
+          placeholder={'请输入'}
+          value={attributes?.title}
+          onChange={(e) => {
+            emitChange({
+              ...attributes,
+              title: e.target.value,
+            });
+          }}
+        />
+      </div>
+      <div style={{ border: '1px solid #e8e8e8', marginTop: 16 }}>
         <div
           style={{
             padding: '8px 12px 4px',
@@ -60,7 +73,7 @@ export default function Attributes(props: AttributesProps<AttributesType>) {
             alignItems: 'center',
             justifyContent: 'space-between',
             borderBottom: '1px solid #e8e8e8',
-            background: '#efefef'
+            background: '#efefef',
           }}
         >
           Tab页

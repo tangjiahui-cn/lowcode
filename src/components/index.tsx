@@ -13,6 +13,8 @@ import Table from './Table';
 import LayoutChildren from './LayoutChildren';
 import Text from './Text';
 import TextArea from './TextArea';
+import Title from './Title';
+import ISelect from './ISelect';
 
 export function registerComponents() {
   engine.component.register(Page);
@@ -23,4 +25,6 @@ export function registerComponents() {
   engine.component.register(Table);
   engine.component.register(Text);
   engine.component.register(TextArea);
+  engine.component.register(Title);
+  engine.component.register(ISelect);
 }

@@ -46,7 +46,7 @@ export default function () {
         height: '100%',
       }}
     >
-      <LayoutWrapper current={page} showLayout={page?.bindLayoutVisible}>
+      <LayoutWrapper current={page} showLayout>
         {renderPage(page)}
       </LayoutWrapper>
     </div>

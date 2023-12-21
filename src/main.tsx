@@ -6,6 +6,8 @@ import Header from './panels/Header';
 import Components from './panels/Components';
 import Attributes from './panels/Attributes';
 import Project from './panels/Project';
+import ComponentTree from './panels/ComponentTree';
+import Var from './panels/Var';
 import { engine } from '@/core';
 import { useEffect } from 'react';
 import { registerComponents } from '@/components';
@@ -86,6 +88,8 @@ function App() {
         Components,
         Attributes,
         Project,
+        ComponentTree,
+        Var,
       }}
     />
   );

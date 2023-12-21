@@ -19,6 +19,7 @@ export * from './hooks';
 export * from './hooks-common';
 export * from './utils';
 export * from './style-processor';
+export * from './data';
 export * from './behavior';
 import { styleProcessor } from './style-processor';
 
