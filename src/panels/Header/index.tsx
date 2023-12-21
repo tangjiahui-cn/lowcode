@@ -1,6 +1,7 @@
 import { Space, Button, message } from 'antd';
 import Logo from './Logo';
 import { engine, notify } from '@/core';
+import EXAMPLE from '@/example.json';
 
 export default function () {
   function saveLocal(text: string, filename = '低代码项目.json') {
@@ -12,8 +13,14 @@ export default function () {
     saveLink.click();
   }
 
-  function handleOpt(opt: 'export' | 'save' | 'clear' | 'preview') {
+  function handleOpt(opt: 'reset' | 'export' | 'save' | 'clear' | 'preview') {
     switch (opt) {
+      case 'reset':
+        localStorage.clear();
+        engine.project.fetchProject(undefined, EXAMPLE as any).then(() => {
+          notify('refresh-project', true);
+        });
+        break;
       case 'export': // 保存到本地
         const json = JSON.stringify(engine.project.getProject());
         saveLocal(json);
@@ -53,6 +60,7 @@ export default function () {
     >
       <Logo />
       <Space>
+        <Button onClick={() => handleOpt('reset')}>重置示例</Button>
         <Button onClick={() => handleOpt('export')}>导出</Button>
         <Button onClick={() => handleOpt('clear')}>清空</Button>
         <Button onClick={() => handleOpt('save')}>保存</Button>

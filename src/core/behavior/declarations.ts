@@ -4,4 +4,5 @@ export type BehaviorId =
   | 'change-layout-visible' // layout显隐
   | 'select-json-node' // 选中jsonNode
   | 'editor-mount' // 编辑器挂载
-  | 'instance-scroll'; // 实例滚动
+  | 'instance-scroll' // 实例滚动
+  | 'refresh-project'; // 刷新项目

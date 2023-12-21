@@ -5,6 +5,7 @@
  * By TangJiaHui
  */
 import { createPage, engine, EVENT, getUuid, Layout, Page, Project } from '..';
+import { cloneDeep } from 'lodash';
 
 const EMPTY_PAGE_NAME = '未命名页面';
 const EMPTY_LAYOUT_NAME = '未命名布局';
@@ -27,7 +28,11 @@ export const project = {
     if (__DEV__) {
       projectId = DEV_PROJECT_ID;
       const projectStr = localStorage.getItem(projectId);
-      projectData = projectStr ? JSON.parse(projectStr) : replacePj || this.createProject('新项目');
+      projectData = projectStr
+        ? JSON.parse(projectStr)
+        : replacePj
+        ? cloneDeep(replacePj)
+        : this.createProject('新项目');
     }
 
     // 从服务器获取
