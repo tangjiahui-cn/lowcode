@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import {useExpose, TemplateProps, engine} from '@/core';
+import { useExpose, TemplateProps, engine } from '@/core';
 
 export interface AttributesType {
   value: string;

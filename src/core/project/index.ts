@@ -18,12 +18,16 @@ export const project = {
   getProject(): Project | undefined {
     return projectData;
   },
+  // 从json文件导入一个项目
+  importFromJson(jsonText: any) {
+    projectData = jsonText;
+  },
   // 从远程取回一个项目
-  async fetchProject(projectId: string = '') {
+  async fetchProject(projectId: string = '', replacePj: Project) {
     if (__DEV__) {
       projectId = DEV_PROJECT_ID;
       const projectStr = localStorage.getItem(projectId);
-      projectData = projectStr ? JSON.parse(projectStr) : this.createProject('新项目');
+      projectData = projectStr ? JSON.parse(projectStr) : replacePj || this.createProject('新项目');
     }
 
     // 从服务器获取

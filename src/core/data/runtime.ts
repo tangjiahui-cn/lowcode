@@ -26,5 +26,5 @@ export const runtime = {
   },
   changePreview() {
     data.isDev = false;
-  }
+  },
 };

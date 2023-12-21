@@ -3,8 +3,21 @@ import Logo from './Logo';
 import { engine, notify } from '@/core';
 
 export default function () {
-  function handleOpt(opt: 'save' | 'clear' | 'preview') {
+  function saveLocal(text: string, filename = '低代码项目.json') {
+    const blob = new Blob([text]);
+    const saveLink = document.createElement('a');
+    saveLink.href = URL.createObjectURL(blob);
+    // 设置 download 属性
+    saveLink.download = filename;
+    saveLink.click();
+  }
+
+  function handleOpt(opt: 'export' | 'save' | 'clear' | 'preview') {
     switch (opt) {
+      case 'export': // 保存到本地
+        const json = JSON.stringify(engine.project.getProject());
+        saveLocal(json);
+        break;
       case 'save': // 保存项目
         engine.project.saveProject().then(() => {
           message.success('保存成功');
@@ -40,6 +53,7 @@ export default function () {
     >
       <Logo />
       <Space>
+        <Button onClick={() => handleOpt('export')}>导出</Button>
         <Button onClick={() => handleOpt('clear')}>清空</Button>
         <Button onClick={() => handleOpt('save')}>保存</Button>
         <Button onClick={() => handleOpt('preview')} type={'primary'}>

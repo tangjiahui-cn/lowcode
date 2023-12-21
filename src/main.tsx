@@ -13,6 +13,7 @@ import { useEffect } from 'react';
 import { registerComponents } from '@/components';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Preview from './page-preview';
+import EXAMPLE from './example.json';
 
 /**
  * 低代码平台 （用来设计中台管理系统）
@@ -95,7 +96,7 @@ function App() {
   );
 }
 
-engine.project.fetchProject();
+engine.project.fetchProject(undefined, EXAMPLE as any);
 
 const router = createBrowserRouter([
   {

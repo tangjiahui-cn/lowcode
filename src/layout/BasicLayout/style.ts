@@ -31,7 +31,7 @@ export const bodyLeftClass = css({
 
 export const bodyMidClass = css({
   flex: 1,
-  overflow: 'hidden'
+  overflow: 'hidden',
 });
 
 export const bodyRightClass = css({

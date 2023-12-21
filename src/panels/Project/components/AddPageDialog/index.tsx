@@ -26,7 +26,7 @@ export default function AddPageDialog(props: IProps) {
             pageName: values?.name,
             route: values?.route,
             bindLayoutId: values?.bindLayoutId,
-            bindLayoutVisible: !!values?.bindLayoutId
+            bindLayoutVisible: !!values?.bindLayoutId,
           })
           .then(props?.onOk);
       } else {
