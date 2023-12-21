@@ -286,7 +286,7 @@ export default function () {
 
     hook('refresh-project', refresh);
     return () => {
-      unHook('refresh-project');
+      unHook('refresh-project', refresh);
     };
   });
 
