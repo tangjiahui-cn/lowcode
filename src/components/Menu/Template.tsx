@@ -48,7 +48,7 @@ export default function Template(props: TemplateProps<AttributesType, HTMLDivEle
       }),
     );
 
-    const params = getUrlParams(location.search);
+    const params = getUrlParams(location.hash || location.search);
     const { route = '' } = params;
     const target = options?.find((x: any) => x?.route === route) || options?.[0];
     if (target) {

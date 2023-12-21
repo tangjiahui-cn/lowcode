@@ -36,7 +36,7 @@ export default function () {
           return;
         }
         // 预览
-        window.open('/preview?route=/');
+        window.open('/#/preview?route=/');
         break;
     }
   }

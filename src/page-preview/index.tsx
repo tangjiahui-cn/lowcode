@@ -20,7 +20,7 @@ export default function () {
 
   useEffect(() => {
     engine.runtime.changePreview();
-    const params = getUrlParams(window.location.search);
+    const params = getUrlParams(window.location.hash);
     const { route = '/' } = params;
     changeRoute(route);
 

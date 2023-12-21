@@ -11,7 +11,7 @@ import Var from './panels/Var';
 import { engine } from '@/core';
 import { useEffect } from 'react';
 import { registerComponents } from '@/components';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { RouterProvider, createHashRouter } from 'react-router-dom';
 import Preview from './page-preview';
 import EXAMPLE from './example.json';
 
@@ -98,7 +98,7 @@ function App() {
 
 engine.project.fetchProject(undefined, EXAMPLE as any);
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: '/',
     element: <App />,
