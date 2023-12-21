@@ -9,17 +9,7 @@ import { DeleteOutlined, FileFilled, PlusOutlined, SettingOutlined } from '@ant-
 import { Tree, TreeDataNode } from 'antd';
 import { useState } from 'react';
 import { useEffectOnce } from 'react-use';
-import {
-  engine,
-  hook,
-  JsonNode,
-  Layout,
-  notify,
-  Page,
-  unHook,
-  useHook,
-  useListenProjectChange,
-} from '@/core';
+import { engine, JsonNode, Layout, notify, Page, useHook, useListenProjectChange } from '@/core';
 import RenderLine from './components/RenderLine';
 import SwitchIcon from './components/SwitchIcon';
 import AddPageDialog from './components/AddPageDialog';
@@ -253,13 +243,12 @@ export default function () {
   }
 
   // 刷新树
-  // isFresh: 是否更新editor面板
-  function reGenTree(isFresh?: boolean) {
+  function reGenTree() {
     const pages: Page[] = engine.project.getAllPage();
     const layouts: Layout[] = engine.project.getAllLayout();
     setTreeData(getTreeData(pages, layouts));
     // 新增后默认选中一项
-    if (isFresh || !engine.project.getCurrent()) {
+    if (!engine.project.getCurrent()) {
       handleSelect(pages?.[0] || layouts?.[0]);
     } else {
       handleSelect(engine.project.getCurrent(), true);
@@ -277,17 +266,8 @@ export default function () {
   });
 
   useEffectOnce(() => {
-    refresh();
-
-    function refresh(isFresh?: boolean) {
-      reGenTree(isFresh);
-      setExpandedKeys(engine.project.getExpandedKeys() || ['page']);
-    }
-
-    hook('refresh-project', refresh);
-    return () => {
-      unHook('refresh-project', refresh);
-    };
+    reGenTree();
+    setExpandedKeys(engine.project.getExpandedKeys() || ['page']);
   });
 
   return (

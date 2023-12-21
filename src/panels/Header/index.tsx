@@ -1,7 +1,8 @@
 import { Space, Button, message } from 'antd';
 import Logo from './Logo';
-import { engine, notify } from '@/core';
+import { engine, EVENT, Layout, notify, Page } from '@/core';
 import EXAMPLE from '@/example.json';
+import { cloneDeep } from 'lodash';
 
 export default function () {
   function saveLocal(text: string, filename = '低代码项目.json') {
@@ -17,9 +18,14 @@ export default function () {
     switch (opt) {
       case 'reset':
         localStorage.clear();
-        engine.project.fetchProject(undefined, EXAMPLE as any).then(() => {
-          notify('refresh-project', true);
-        });
+        const data = cloneDeep(EXAMPLE as any);
+        engine.project.setProject(data);
+        const pages: Page[] = engine.project.getAllPage();
+        const layouts: Layout[] = engine.project.getAllLayout();
+        const current: any = pages?.[0] || layouts?.[0];
+        notify('set-jsonNodes', current?.json);
+        engine.project.setCurrent(current);
+        engine.event.notify(EVENT.projectChange, data);
         break;
       case 'export': // 保存到本地
         const json = JSON.stringify(engine.project.getProject());
@@ -34,8 +40,7 @@ export default function () {
         // 清空保存数据
         engine.project.clearCurrentContent();
         // 清空编辑器
-        const current = engine.project.getCurrent();
-        notify('set-jsonNodes', current?.json);
+        notify('set-jsonNodes', engine.project.getCurrent());
         break;
       case 'preview': // 预览项目
         if (!engine.project.getAllPage()?.length) {

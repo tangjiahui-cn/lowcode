@@ -23,16 +23,21 @@ export const project = {
   importFromJson(jsonText: any) {
     projectData = jsonText;
   },
+  setProject(project: Project | undefined) {
+    projectData = project;
+  },
   // 从远程取回一个项目
   async fetchProject(projectId: string = '', replacePj: Project) {
     if (__DEV__) {
       projectId = DEV_PROJECT_ID;
       const projectStr = localStorage.getItem(projectId);
-      projectData = projectStr
-        ? JSON.parse(projectStr)
-        : replacePj
-        ? cloneDeep(replacePj)
-        : this.createProject('新项目');
+      this.setProject(
+        projectStr
+          ? JSON.parse(projectStr)
+          : replacePj
+          ? cloneDeep(replacePj)
+          : this.createProject('新项目'),
+      );
     }
 
     // 从服务器获取
