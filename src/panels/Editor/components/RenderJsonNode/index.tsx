@@ -74,6 +74,7 @@ export default function RenderJsonNode(props: RenderJsonNodeProps) {
           // 从父组件中删除当前组件
           const parentInstance = engine.instance.get(props?.parentId);
           if (parentInstance) {
+            notify('select-json-node');
             parentInstance.jsonNode.children = parentInstance.jsonNode.children?.filter(
               (x) => x.id !== jsonNode?.id,
             );
