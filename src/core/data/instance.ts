@@ -17,7 +17,14 @@ let hoverStackInstances: Instance[] = [];
 // 当前经过实例
 let currentHoverInstance: Instance | undefined;
 
+let pageIns: Instance | undefined;
 export const instance = {
+  getPageInstance() {
+    return pageIns;
+  },
+  setPageInstance(target?: Instance) {
+    pageIns = target;
+  },
   // 注册实例
   register(instance: Instance) {
     data.set(instance.id, instance);

@@ -6,6 +6,8 @@ import Header from './panels/Header';
 import Components from './panels/Components';
 import Attributes from './panels/Attributes';
 import Project from './panels/Project';
+import ComponentTree from './panels/ComponentTree';
+import Var from './panels/Var';
 import { engine } from '@/core';
 import { useEffect } from 'react';
 import { registerComponents } from '@/components';
@@ -52,45 +54,14 @@ function App() {
         Components,
         Attributes,
         Project,
+        ComponentTree,
+        Var,
       }}
     />
   );
 }
 
 engine.project.fetchProject();
-// setTimeout(() => {
-//   engine.api.project.setPage([
-//     {
-//       ...createPage()?.[0],
-//       children: [
-//         createJsonNode({
-//           cId: 'container',
-//           cType: cType.Container,
-//           cName: '容器',
-//         }),
-//         createJsonNode({
-//           cId: 'button',
-//           cType: cType.Base,
-//           cName: '按钮',
-//           defaultAttributes: {
-//             value: '按 钮',
-//           },
-//         }),
-//         createJsonNode({
-//           cId: 'table',
-//           cType: cType.Table,
-//           cName: '表格',
-//         }),
-//         createJsonNode({
-//           cId: 'table',
-//           cType: cType.Table,
-//           cName: '表格',
-//         }),
-//       ],
-//     },
-//   ]);
-//   // engine.api.project.setPage(createPage());
-// }, 300);
 
 const router = createBrowserRouter([
   {
@@ -99,7 +70,7 @@ const router = createBrowserRouter([
   },
   {
     path: 'preview',
-    element: <Preview />
+    element: <Preview />,
   },
 ]);
 ReactDOM.createRoot(document.getElementById('root')!).render(<RouterProvider router={router} />);

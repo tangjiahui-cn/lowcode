@@ -1,14 +1,12 @@
-import { Input } from 'antd';
-import { AttributesProps, Component, cType, engine, getEvent, TemplateProps } from '@/core';
+import { Component, cType, engine, getEvent, TemplateProps } from '@/core';
 import { useEffect, useRef } from 'react';
+import IEmpty from '@/common/IEmpty';
 
-interface AttributesType {
-  value: string; // 按钮内容
-}
+interface AttributesType {}
 
 export default {
   cId: 'layoutChildren',
-  cType: cType.LayoutChildren,
+  cType: cType.Layout,
   cName: 'Layout-children',
   icon: undefined,
   template: Template,
@@ -57,24 +55,6 @@ function Template(props: TemplateProps<AttributesType, HTMLDivElement>) {
   );
 }
 
-function Attributes(props: AttributesProps<AttributesType>) {
-  return (
-    <div>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        内容：
-        <Input
-          style={{ flex: 1 }}
-          placeholder={'请输入'}
-          value={props?.attributes?.value}
-          onChange={(e) => {
-            const value = e.target.value;
-            props?.onChange?.({
-              ...props?.attributes,
-              value,
-            });
-          }}
-        />
-      </div>
-    </div>
-  );
+function Attributes() {
+  return <IEmpty />;
 }

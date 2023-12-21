@@ -11,6 +11,7 @@ export interface IData {
 }
 
 export interface AttributesType {
+  title?: string;
   options: IData[];
 }
 
@@ -85,7 +86,7 @@ export default function Template(props: TemplateProps<AttributesType, HTMLDivEle
         }}
       >
         <DingtalkOutlined style={{ marginRight: 6 }} />
-        中后台管理系统
+        {props?.attributes?.title}
       </div>
       <Menu
         mode='inline'

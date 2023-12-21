@@ -21,6 +21,7 @@ export * from './hooks';
 export * from './hooks-common';
 export * from './utils';
 export * from './style-processor';
+export * from './data';
 import { styleProcessor } from './style-processor';
 
 export const engine = {

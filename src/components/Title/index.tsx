@@ -3,14 +3,15 @@ import Template, { AttributesType } from './Template';
 import Attributes from './Attributes';
 
 export default {
-  cId: 'menu',
-  cType: cType.Layout,
-  cName: '菜单',
+  cId: 'title',
+  cName: '标题',
   icon: undefined,
   template: Template,
   attributeTemplate: Attributes,
   defaultAttributes: {
-    title: '演示系统',
-    options: [{ key: '1', label: '首页', route: '/' }],
+    type: 'h1',
+    value: '一个标题',
   },
+  cType: cType.Base,
+  exposeEvents: [{ eventType: 'setValue', eventName: '修改值' }],
 } as Component<AttributesType>;

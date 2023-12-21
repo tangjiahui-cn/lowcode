@@ -38,9 +38,9 @@ export default function () {
           children: engine.component.getAllByCType(cType.Table),
         },
         isLayout && {
-          cType: cType.LayoutChildren,
-          name: '容器占位组件',
-          children: engine.component.getAllByCType(cType.LayoutChildren),
+          cType: cType.Layout,
+          name: '布局专用组件',
+          children: engine.component.getAllByCType(cType.Layout),
         },
       ].filter(Boolean) as any[],
     );

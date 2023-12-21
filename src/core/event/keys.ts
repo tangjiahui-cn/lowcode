@@ -9,4 +9,7 @@ export const EVENT = {
   // ----------- project --------
   projectChange: Symbol(), // 页面数据变更
   currentLayoutVisible: Symbol(), // 修改当前页面的布局显隐
+
+  // ----------- var --------
+  globalVar: Symbol(), // 全局变量
 };

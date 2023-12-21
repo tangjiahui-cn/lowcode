@@ -46,12 +46,8 @@ export default function () {
         height: '100%',
       }}
     >
-      <LayoutWrapper current={page} showLayout={page?.bindLayoutVisible}>
+      <LayoutWrapper current={page} showLayout>
         {renderPage(page)}
-        {/*<input*/}
-        {/*  onPointerDown={console.log}*/}
-        {/*  onInput={console.log}*/}
-        {/*/>*/}
       </LayoutWrapper>
     </div>
   );

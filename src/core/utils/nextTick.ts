@@ -6,5 +6,5 @@
  */
 
 export function nextTick(callback: () => void) {
-  setTimeout(callback);
+  setTimeout(callback, 20);
 }

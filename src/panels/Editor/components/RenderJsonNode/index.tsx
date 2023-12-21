@@ -9,6 +9,7 @@ import {
   COMPONENT_KEY,
   createJsonNode,
   engine,
+  EVENT,
   Instance,
   JsonNode,
   nextTick,
@@ -19,7 +20,7 @@ import {
   useRegisterJsonNode,
   useWrapBox,
 } from '@/core';
-import { useContext, useRef } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import OperateBox from '../OperateBox';
 import { layoutChildrenContext } from '../LayoutWrapper';
 
@@ -213,6 +214,21 @@ export default function RenderJsonNode(props: RenderJsonNodeProps) {
       engine.instance.getCurrentHoverInstance()?.handleUnHover?.();
     });
   }
+
+  // 注册全局变量
+  useEffect(() => {
+    const isPage = jsonNode?.cId === 'page';
+    // 绑定全局实例
+    if (isPage) {
+      engine.variables.registerGlobalVarList(jsonNode?.variable);
+      engine.event.notify(EVENT.globalVar, jsonNode?.variable);
+      engine.instance.setPageInstance(instanceRef.current);
+      return () => {
+        engine.variables.unRegisterGlobalVarList(jsonNode?.variable);
+        engine.instance.setPageInstance(undefined);
+      };
+    }
+  }, [jsonNode]);
 
   function isCanDrop() {
     return !(

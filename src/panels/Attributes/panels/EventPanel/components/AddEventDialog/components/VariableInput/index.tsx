@@ -43,6 +43,7 @@ export default function VariableInput(props: IProps) {
         value={value}
         onChange={(value) => {
           setValue(value);
+          props?.onChange?.(value);
         }}
       />
       <ICustomSelect

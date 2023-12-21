@@ -8,7 +8,6 @@ import * as styles from './style';
 import {
   ApartmentOutlined,
   AppstoreOutlined,
-  EditOutlined,
   FolderOutlined,
   FontColorsOutlined,
 } from '@ant-design/icons';
@@ -22,15 +21,14 @@ interface IProps {
 }
 
 export default function BasicLayout(props: IProps) {
-  const { Editor, Header, Components, Attributes, Project } = props?.panels;
+  const { Editor, Header, Components, Attributes, Project, ComponentTree, Var } = props?.panels;
   const [activeKey, setActiveKey] = useState<string>('1');
 
   const menu = [
     { key: '1', label: '项目管理', value: Project, icon: FolderOutlined },
     { key: '2', label: '组件库', value: Components, icon: AppstoreOutlined },
-    { key: '3', label: 'JSON编辑器', value: undefined, icon: EditOutlined },
-    { key: '4', label: '组件树', value: undefined, icon: ApartmentOutlined },
-    { key: '5', label: '全局变量', value: undefined, icon: FontColorsOutlined },
+    { key: '4', label: '组件树', value: ComponentTree, icon: ApartmentOutlined },
+    { key: '5', label: '全局变量', value: Var, icon: FontColorsOutlined },
   ];
 
   return (
@@ -42,6 +40,8 @@ export default function BasicLayout(props: IProps) {
           <div style={{ flex: 1, overflowY: 'auto', borderLeft: '1px solid #e8e8e8' }}>
             {activeKey === '1' && Project && <Project />}
             {activeKey === '2' && Components && <Components />}
+            {activeKey === '4' && ComponentTree && <ComponentTree />}
+            {activeKey === '5' && Var && <Var />}
           </div>
         </div>
         <div className={styles.bodyMidClass}>{Editor && <Editor />}</div>

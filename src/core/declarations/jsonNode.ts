@@ -4,7 +4,7 @@
  * At 2023/12/10
  * By tangJiaHui
  */
-import { RegisterEvent, StyleProcessorData } from '..';
+import { GlobalVariable, RegisterEvent, StyleProcessorData } from '..';
 
 export type JsonNode<Attributes = any> = {
   id: string; // 唯一id
@@ -16,6 +16,9 @@ export type JsonNode<Attributes = any> = {
 
   // 绑定事件
   events?: RegisterEvent[];
+
+  // 组件变量
+  variable?: GlobalVariable[];
 
   children?: JsonNode[];
 };
