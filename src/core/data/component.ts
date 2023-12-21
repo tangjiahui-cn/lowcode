@@ -22,6 +22,12 @@ export const component = {
   getPageComponent(): Component | undefined {
     return pageComponent;
   },
+  // 批量注册组件
+  registerSome(components: Component[]) {
+    components.forEach((component) => {
+      this.register(component);
+    });
+  },
   // 注册一个组件
   register(component: Component) {
     if (component.isPage) {

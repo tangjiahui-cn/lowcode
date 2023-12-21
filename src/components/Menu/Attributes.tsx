@@ -60,7 +60,7 @@ export default function Attributes(props: AttributesProps<AttributesType>) {
             alignItems: 'center',
             justifyContent: 'space-between',
             borderBottom: '1px solid #e8e8e8',
-            background: '#efefef'
+            background: '#efefef',
           }}
         >
           Tab页

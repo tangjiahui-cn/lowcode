@@ -6,11 +6,13 @@ import Header from './panels/Header';
 import Components from './panels/Components';
 import Attributes from './panels/Attributes';
 import Project from './panels/Project';
-import { engine } from '@/core';
-import { useEffect } from 'react';
-import { registerComponents } from '@/components';
+import { engine as oldEngine } from '@/core';
+import components from '@/components';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Preview from './page-preview';
+
+import { engine } from './engine';
+import { useEffect } from 'react';
 
 /**
  * 低代码平台 （用来设计中台管理系统）
@@ -71,13 +73,9 @@ import Preview from './page-preview';
  */
 
 // 注册组件库
-registerComponents();
+oldEngine.component.registerSome(components);
 
 function App() {
-  useEffect(() => {
-    // create;
-  }, []);
-
   return (
     <BasicLayout
       panels={{
@@ -91,7 +89,33 @@ function App() {
   );
 }
 
-engine.project.fetchProject();
+oldEngine.project.fetchProject();
+
+/************ 测试微内核架构 START ************/
+import defaultLayout from './default-layout';
+import { AttributesPlugin, ComponentsPlugin, EditorPlugin, HeaderPlugin } from '@/plugins';
+
+// 注册组件库
+engine.useComponents(components); // 加载组件库
+
+// 注册布局
+engine.useLayout(defaultLayout);
+
+// 注册插件
+engine.usePlugin(ComponentsPlugin);
+engine.usePlugin(HeaderPlugin);
+engine.usePlugin(EditorPlugin);
+engine.usePlugin(AttributesPlugin);
+
+function Test() {
+  useEffect(() => {
+    engine.render(document.getElementById('root') as any);
+  }, []);
+
+  return <></>;
+}
+
+/************ 测试微内核架构 END ************/
 
 const router = createBrowserRouter([
   {
@@ -99,8 +123,13 @@ const router = createBrowserRouter([
     element: <App />,
   },
   {
+    path: '/test',
+    element: <Test />,
+  },
+  {
     path: 'preview',
     element: <Preview />,
   },
 ]);
+
 ReactDOM.createRoot(document.getElementById('root')!).render(<RouterProvider router={router} />);

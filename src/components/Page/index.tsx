@@ -1,4 +1,4 @@
-import {Component, cType, engine, TemplateProps} from '@/core';
+import { Component, cType, engine, TemplateProps } from '@/core';
 import { useEffect, useRef } from 'react';
 
 export default {
@@ -30,7 +30,7 @@ function Template(props: TemplateProps<any>) {
         width: '100%',
         height: '100%',
         overflowY: 'auto',
-        ...engine.styleProcessor.getStyle(props?.styleData)
+        ...engine.styleProcessor.getStyle(props?.styleData),
       }}
     >
       {props?.children}

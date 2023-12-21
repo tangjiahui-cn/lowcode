@@ -10,8 +10,6 @@ export default {
   template: Template,
   attributeTemplate: Attributes,
   defaultAttributes: {
-    options: [
-      { key: '1', label: '首页', route: '/' },
-    ],
+    options: [{ key: '1', label: '首页', route: '/' }],
   },
 } as Component<AttributesType>;

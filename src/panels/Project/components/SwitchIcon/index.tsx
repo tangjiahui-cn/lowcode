@@ -8,9 +8,5 @@ import { FolderOpenFilled, FolderOutlined } from '@ant-design/icons';
 
 export default function SwitchIcon(props: { expanded?: boolean; color?: string }) {
   const style = { fontSize: '1.125em', color: props?.color };
-  return props?.expanded ? (
-    <FolderOpenFilled style={style} />
-  ) : (
-    <FolderOutlined style={style} />
-  );
+  return props?.expanded ? <FolderOpenFilled style={style} /> : <FolderOutlined style={style} />;
 }
