@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "cross-env mode=development vite --host=0.0.0.0",
     "build": "tsc && cross-env mode=development vite build",
+    "build:github-page": "npm run build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "preinstall": "husky install",
